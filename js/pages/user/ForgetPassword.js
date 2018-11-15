@@ -22,6 +22,8 @@ import HttpUtils from '../../utils/HttpUtils'
 import NavigatorUtils from '../../utils/NavigatorUtils'
 import {_verifySMSEdit, _getPasswordBack, _getEditPassword} from '../../servers/getData'
 import {Toast} from '../../utils/ToastUtils'
+import Icon from 'react-native-vector-icons/Entypo'
+
 
 export default class ForgetPassword extends Component {
     constructor(props) {
@@ -168,7 +170,7 @@ export default class ForgetPassword extends Component {
                 </TouchableOpacity>
             </View>
             <View style={styles.loginFoot}>
-                <Image style={styles.phone} source={require('../../../res/images/phone.png')}/>
+                <Icon name="old-phone" size={20} style={{marginRight: 20}} color="#0078DD"/>
                 <Text>客服热线：400-888-9383</Text>
             </View>
         </View>);
@@ -243,12 +245,8 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 40,
         flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    phone: {
-        width: 18,
-        height: 14,
-        marginRight: 20
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     info: {
         width: 300,

@@ -174,11 +174,11 @@ export default class HomePage extends Component<Props> {
             return (<View style={styles.list}>
                 <View style={styles.listContainer}>
                     <View style={styles.listTop}>
-                        <Image style={styles.leftIcon} source={require('../../res/images/file.png')}/>
+                        <Icon name="filetext1" size={22} color="#979797"/>
                         <Text style={styles.topTitle} onPress={() => {
                                 navigation.navigate("ListDetails")
                             }}>{item.list_num}</Text>
-                        <Image style={styles.rightArrow} source={require('../../res/images/right-arrow.png')}/>
+                            <Icon name="right" size={20} color="#888888"/>
                     </View>
                     <View style={styles.listBox}>
                         <View style={styles.item}>
@@ -208,10 +208,6 @@ export default class HomePage extends Component<Props> {
             const {navigation} = this.props;
 
             return (<View style={styles.container}>
-                {/* <TouchableOpacity onPress={()=>this.getLogistList(this)}>
-                <Text>1111111</Text>
-            </TouchableOpacity> */
-                }
                 <FlatList data={this.state.list} renderItem={(data) => this._renderItem(data)} keyExtractor={(item, index) => index.toString()}/>
             </View>);
         }
@@ -245,11 +241,8 @@ export default class HomePage extends Component<Props> {
         topTitle: {
             fontSize: 18,
             fontWeight: 'bold',
-            flex: 1
-        },
-        rightArrow: {
-            width: 16,
-            height: 16
+            flex: 1,
+            marginLeft: 10
         },
         listBox: {
             paddingLeft: 26,

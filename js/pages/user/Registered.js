@@ -15,7 +15,8 @@ import {
     Image,
     TextInput,
     TouchableOpacity,
-    Alert
+    Alert,
+    ScrollView
 } from 'react-native';
 import {StackActions, NavigationActions} from 'react-navigation';
 import StorageUtil from '../../utils/StorageUtil'
@@ -24,6 +25,7 @@ import NavigatorUtils from '../../utils/NavigatorUtils'
 import {_verifyPhone, _verifySMS, _verifyCode, _getRegistered} from '../../servers/getData'
 import CheckBox from 'react-native-check-box'
 import {Toast} from '../../utils/ToastUtils'
+import Icon from 'react-native-vector-icons/Entypo'
 
 export default class Login extends Component {
     constructor(props) {
@@ -110,7 +112,7 @@ export default class Login extends Component {
     }
     render() {
         const {navigation} = this.props;
-        return (<View style={styles.container}>
+        return (<ScrollView style={styles.container}>
             <View style={styles.loginBox}>
                 <Text style={styles.text}>手机号：</Text>
                 <TextInput autoCapitalize='none' style={styles.textInput} onChangeText={(username) => this.setState({username})} value={this.state.username}/>
@@ -125,28 +127,28 @@ export default class Login extends Component {
                 </View>
                 <Text style={styles.text}>密码：</Text>
                 <TextInput secureTextEntry={true} style={styles.textInput} onChangeText={(password) => this.setState({password})} value={this.state.password} onBlur={(password) => {
-                        if (password.length < 6) {
-                            Alert.alert('提示', '密码不少于6位数', [
-                                {
+                    if (password.length < 6) {
+                        Alert.alert('提示', '密码不少于6位数', [
+                            {
                                     text: '确定',
-                                    onPress: () => {}
-                                }
-                            ],)
-                        }
-                    }}/>
+                                onPress: () => {}
+                            }
+                        ],)
+                    }
+                }}/>
                 <Text style={styles.text}>确认密码：</Text>
                 <TextInput secureTextEntry={true} style={styles.textInput} onChangeText={(checkPass) => this.setState({checkPass})} value={this.state.checkPass}/>
                 <View style={styles.info}>
                     <CheckBox style={{
                             flex: 1
-                        }} onClick={() => {
-                            this.setState({
+                    }} onClick={() => {
+                        this.setState({
                                 isChecked: !this.state.isChecked
-                            })
-                        }} isChecked={this.state.isChecked} rightText={"我已阅读并同意"} checkedCheckBoxColor='#0078DD' uncheckedCheckBoxColor='#cbcbcb'/>
+                        })
+                    }} isChecked={this.state.isChecked} rightText={"我已阅读并同意"} checkedCheckBoxColor='#0078DD' uncheckedCheckBoxColor='#cbcbcb'/>
                     <TouchableOpacity onPress={() => {
-                            navigation.navigate('RegisteredAgreement')
-                        }}>
+                        navigation.navigate('RegisteredAgreement')
+                    }}>
                         <Text style={styles.fontBlue}>
                             《商城用户注册协议》
                         </Text>
@@ -160,10 +162,10 @@ export default class Login extends Component {
                             </Text>
                         </TouchableOpacity>)
                         : (<TouchableOpacity style={[
-                                styles.button, {
+                            styles.button, {
                                     backgroundColor: '#80bcee'
-                                }
-                            ]}>
+                            }
+                        ]}>
                             <Text style={styles.buttonText}>
                                 注册
                             </Text>
@@ -172,18 +174,18 @@ export default class Login extends Component {
             </View>
             <View style={styles.loginText}>
                 <TouchableOpacity onPress={() => {
-                        navigation.navigate('Login')
-                    }}>
+                    navigation.navigate('Login')
+                }}>
                     <Text>
                         已有账号，马上登陆
                     </Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.loginFoot}>
-                <Image style={styles.phone} source={require('../../../res/images/phone.png')}/>
+                <Icon name="old-phone" size={20} style={{marginRight: 20}} color="#0078DD"/>
                 <Text>客服热线：400-888-9383</Text>
             </View>
-        </View>);
+        </ScrollView>);
     }
 }
 
@@ -250,12 +252,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     loginFoot: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 40,
+        // position: 'absolute',
+        // left: 0,
+        // right: 0,
+        // bottom: 40,
+        marginTop: 40,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     phone: {
         width: 18,

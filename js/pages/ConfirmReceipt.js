@@ -7,7 +7,8 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
-    Alert
+    Alert,
+    ScrollView
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign'
 import ImagePicker from 'react-native-image-picker'
@@ -231,7 +232,7 @@ export default class ConfirmReceipt extends Component {
 
     render() {
         const {navigation} = this.props;
-        return (<View style={styles.container}>
+        return (<ScrollView style={styles.container}>
             <View style={styles.top}>
                 <Text style={styles.title}>装备卸货，上传信息</Text>
             </View>
@@ -240,7 +241,7 @@ export default class ConfirmReceipt extends Component {
                     ? this.renderFristStep()
                     : this.renderSecondStep()
             }
-        </View>);
+        </ScrollView>);
     }
 }
 
@@ -328,6 +329,8 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         backgroundColor: '#F9F9F9',
         borderRadius: 4,
-        fontSize: 18
+        fontSize: 18,
+        borderColor: '#F9F9F9',
+        borderWidth: 1
     }
 });
