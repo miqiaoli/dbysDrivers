@@ -7,7 +7,10 @@ import {
     Image,
     TouchableOpacity,
     TextInput,
-    Alert
+    Alert,
+    ScrollView,
+    dismissKeyboard,
+    TouchableWithoutFeedback
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign'
 import ImagePicker from 'react-native-image-picker'
@@ -228,16 +231,18 @@ export default class Delivery extends Component {
 
     render() {
         const {navigation} = this.props;
-        return (<View style={styles.container}>
+        return (<ScrollView style={styles.container}>
             <View style={styles.top}>
                 <Text style={styles.title}>装货完毕，上传信息</Text>
             </View>
+            <TouchableWithoutFeedback onPress={()=> {dismissKeyboard()}}>
             {
                 this.state.step == 1
                     ? this.renderFristStep()
                     : this.renderSecondStep()
             }
-        </View>);
+        </TouchableWithoutFeedback>
+        </ScrollView>);
     }
 }
 
@@ -325,6 +330,8 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         backgroundColor: '#F9F9F9',
         borderRadius: 4,
-        fontSize: 18
+        fontSize: 18,
+        borderColor: '#F9F9F9',
+        borderWidth: 1
     }
 });

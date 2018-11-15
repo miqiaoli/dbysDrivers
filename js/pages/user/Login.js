@@ -24,6 +24,7 @@ import HttpUtils from '../../utils/HttpUtils'
 import NavigatorUtils from '../../utils/NavigatorUtils'
 import {_getLogin} from '../../servers/getData'
 import {Toast} from '../../utils/ToastUtils'
+import Icon from 'react-native-vector-icons/Entypo'
 
 type Props = {};
 export default class Login extends Component<Props> {
@@ -91,7 +92,7 @@ export default class Login extends Component<Props> {
                 </TouchableOpacity>
             </View>
             <View style={styles.loginFoot}>
-                <Image style={styles.phone} source={require('../../../res/images/phone.png')}/>
+                <Icon name="old-phone" size={20} style={{marginRight: 20}} color="#0078DD"/>
                 <Text>客服热线：400-888-9383</Text>
             </View>
         </View>);
@@ -154,7 +155,8 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 40,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     phone: {
         width: 18,
