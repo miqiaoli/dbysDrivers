@@ -16,10 +16,12 @@ import {
     Button,
     TouchableOpacity,
     FlatList,
-    Alert
+    Alert,
+    RefreshControl,
+    ActivityIndicator
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen'
 import StorageUtil from '../utils/StorageUtil'
-import TabNavigator from 'react-native-tab-navigator'
 import {_getLogout, _tokenCheck, _getLogistList} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
@@ -63,11 +65,13 @@ export default class HomePage extends Component<Props> {
                 token: '',
                 page_start: 1,
                 page_limit: 15,
-                list: []
+                list: [],
+                isLoading: false
             }
         }
         componentDidMount() {
             this.checkToken()
+            SplashScreen.hide()
         }
         getLogout() {}
         /**
@@ -208,7 +212,21 @@ export default class HomePage extends Component<Props> {
             const {navigation} = this.props;
 
             return (<View style={styles.container}>
-                <FlatList data={this.state.list} renderItem={(data) => this._renderItem(data)} keyExtractor={(item, index) => index.toString()}/>
+                <FlatList data={this.state.list}
+                    renderItem={(data) => this._renderItem(data)}
+                    keyExtractor={(item, index) => index.toString()}
+                    refreshControl= {
+                        <RefreshControl
+                            title= {'Loading'}
+                            colors={['red']}
+                            tintColor={'orange'}
+                            refreshing = {this.state.isLoading}
+                            onRefresh = {() => {
+                                this.loadData(true)
+                            }}
+                        />
+                    }
+                />
             </View>);
         }
     }
