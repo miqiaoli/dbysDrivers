@@ -53,7 +53,7 @@
 		B6E96BCED91B4E5587C84E8D /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADF0D6DA9BA142D4B9EEBA7A /* FontAwesome5_Brands.ttf */; };
 		B730A178A4DA44E584136207 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37487AD9C6E64713BEF6BE55 /* EvilIcons.ttf */; };
 		C3B4D1307A934C62BD99B4D4 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8004F5379E4472ABB3FDAE5 /* libSplashScreen.a */; };
-		CCF67482219D9AA40028D83B /* Images-2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCF67481219D9AA40028D83B /* Images-2.xcassets */; };
+		CCF67503219DAB880028D83B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCF67502219DAB880028D83B /* Images.xcassets */; };
 		CFAF5E6D80B344709A960BCF /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3CEDE19B024D4026AD9EB307 /* Feather.ttf */; };
 		F471FBCCA78F4BA1840ACD5A /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 314F578D65A14A40B2642A26 /* Foundation.ttf */; };
 /* End PBXBuildFile section */
@@ -406,7 +406,7 @@
 		ADF0D6DA9BA142D4B9EEBA7A /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		B714B3EB4CF2450882A96645 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		C8004F5379E4472ABB3FDAE5 /* libSplashScreen.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libSplashScreen.a; sourceTree = "<group>"; };
-		CCF67481219D9AA40028D83B /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Images-2.xcassets"; path = "DbysDriver/Images-2.xcassets"; sourceTree = "<group>"; };
+		CCF67502219DAB880028D83B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DbysDriver/Images.xcassets; sourceTree = "<group>"; };
 		E12E2A05538B41979B4FB5C6 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		EC56ABECFDE24EB19604B2F4 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		ED3B7D7456464EB2926365C8 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
@@ -559,7 +559,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				CCF67481219D9AA40028D83B /* Images-2.xcassets */,
+				CCF67502219DAB880028D83B /* Images.xcassets */,
 			);
 			name = DbysDriver;
 			sourceTree = "<group>";
@@ -1238,11 +1238,11 @@
 				24ADBBDA5A15413787D869D2 /* FontAwesome5_Solid.ttf in Resources */,
 				F471FBCCA78F4BA1840ACD5A /* Foundation.ttf in Resources */,
 				8D04E217B5154C2F8AEDB5CB /* Ionicons.ttf in Resources */,
+				CCF67503219DAB880028D83B /* Images.xcassets in Resources */,
 				8D142B906C4C4A848E1B19AE /* MaterialCommunityIcons.ttf in Resources */,
 				4943AF592C3F445482A062F7 /* MaterialIcons.ttf in Resources */,
 				5B262A0EF7EE4D74A3C0A74C /* Octicons.ttf in Resources */,
 				A8F64B576A374761BF520A1A /* SimpleLineIcons.ttf in Resources */,
-				CCF67482219D9AA40028D83B /* Images-2.xcassets in Resources */,
 				1348290051254B9A856CF652 /* Zocial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
