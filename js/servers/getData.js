@@ -1,7 +1,8 @@
 
 
 // const baseURL = 'https://www.otimes.com/front';
-const baseURL = 'http://10.0.0.31/front';
+const baseURL = 'http://10.0.0.17/front';
+// const baseURL = 'http://10.0.0.31/front';
 
 // 登录
 export const _getLogin = baseURL+'/member/app/login.dbys';
@@ -28,7 +29,7 @@ export const _getEditPassword = baseURL+'/password/findPassword.dbys';
 
 // 物流司机端
 // 物流列表
-export const _getLogistList = baseURL+'/logist/seek_logist_list.dbys';
+export const _getLogistList = baseURL+'/logist/seek_logist_list_app.dbys';
 // 上传图片
 export const _getImgUrl = baseURL+'/logist/trans_logist_abnormalimg.dbys';
 // 待发货

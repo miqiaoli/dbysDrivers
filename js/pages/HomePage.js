@@ -42,7 +42,6 @@ export default class HomePage extends Component<Props> {
                     }, {
                             text: '确定',
                         onPress: () => {
-                            console.log(this.state);
                             fetch(_getLogout, {
                                     method: "POST",
                                 headers: {
@@ -64,8 +63,9 @@ export default class HomePage extends Component<Props> {
             this.state = {
                 token: '',
                 page_start: 1,
-                page_limit: 15,
+                page_limit: 5,
                 list: [],
+                counts: null,//总条数
                 isLoading: false
             }
         }
@@ -98,14 +98,49 @@ export default class HomePage extends Component<Props> {
             }
         }
         async getLogistList() {
-            console.log('getLogistList:' + this.state.token);
             let res = await HttpUtils.GET(_getLogistList, {
                 token: this.state.token,
                 page_start: this.state.page_start,
                 page_limit: this.state.page_limit
             });
             if (res) {
-                this.setState({list: res})
+                if(this.state.page_start === 1) {
+                    this.setState({list: res.data, counts: Math.ceil(res.count/this.state.page_limit)})
+
+                } else {
+                    this.setState({list: this.state.list.concat(res.data)})
+                }
+                console.log(this.state.list);
+            }
+        }
+        _onRefresh(){
+            this.setState({
+                page_start: 1
+            }, ()=> {
+                this.getLogistList()
+            });
+        }
+        genIndicator(page_start) {
+            let renderView;
+            if(page_start < this.state.counts) { //下拉刷新
+                renderView = (<View style={styles.indicatorContainer}>
+                    <ActivityIndicator style={styles.indicator} size="large" color="#0078DD"/>
+                    <Text>正在加载中。。。。</Text>
+                </View>)
+            } else { //下拉触底
+                renderView = (<View style={styles.indicatorContainer}>
+                    <Text>没有更多了</Text>
+                </View>)
+            }
+            return renderView
+        }
+        loadData(page_start){
+            if(page_start < this.state.counts) {
+                this.setState({
+                    page_start: page_start+1
+                }, ()=> {
+                    this.getLogistList()
+                });
             }
         }
         renderButton(item) {
@@ -215,17 +250,25 @@ export default class HomePage extends Component<Props> {
                 <FlatList data={this.state.list}
                     renderItem={(data) => this._renderItem(data)}
                     keyExtractor={(item, index) => index.toString()}
+                    ListEmptyComponent={this._createEmptyView}
                     refreshControl= {
                         <RefreshControl
                             title= {'Loading'}
                             colors={['red']}
-                            tintColor={'orange'}
+                            tintColor={'#0078DD'}
                             refreshing = {this.state.isLoading}
                             onRefresh = {() => {
-                                this.loadData(true)
+                                this._onRefresh()
                             }}
                         />
                     }
+                    ListFooterComponent = {()=>
+                        this.genIndicator(this.state.page_start)
+                    }
+                    onEndReachedThreshold='0.1'
+                    onEndReached = {() => {
+                        this.loadData(this.state.page_start)
+                    }}
                 />
             </View>);
         }
@@ -294,5 +337,11 @@ export default class HomePage extends Component<Props> {
         },
         button1Text: {
             color: '#3B55E7'
+        },
+        indicatorContainer: {
+            alignItems: 'center'
+        },
+        indicator: {
+            marginBottom:20
         }
     });

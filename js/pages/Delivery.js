@@ -41,7 +41,7 @@ export default class Delivery extends Component {
             step: 1,
             state: 2, //货物状态。2:确认提货；-2:无法提货
             stateArr: [{id: 2,name: '确认提货'},{id: -2,name: '无法提货'}],
-            abnormals_type: null, //异常状态选择。1：外包有异议；2：无装卸工；4：其他
+            abnormals_type: '', //异常状态选择。1：外包有异议；2：无装卸工；4：其他
             abnormals_describef: '',
             abnormals_describe: '',
             abnormalImgArr: [], //额外费用图片
@@ -84,10 +84,15 @@ export default class Delivery extends Component {
     }
     changeState(type, state) {
         if (type == 'abnormals_type') {
-            let obj=abnormalsTypeArr.find(function (item) {
-                return item.id === state
-            })
-            this.setState({[type]: state, abnormals_describef: obj.name})
+            if(this.state.abnormals_type == state) {
+                this.setState({[type]: '', abnormals_describef: ''})
+            } else {
+                let obj=abnormalsTypeArr.find(function (item) {
+                    return item.id === state
+                })
+                this.setState({[type]: state, abnormals_describef: obj.name})
+            }
+
         } else {
             this.setState({[type]: state})
         }
@@ -140,13 +145,13 @@ export default class Delivery extends Component {
             <View style={styles.inputContent}>
                 <Text style={styles.label}>图片上传：</Text>
                 <CameraBtnUtils onChangeCamera={(type, val) => {
-                        this.handleChangeImgPath(type, val)
-                    }}/>
+                    this.handleChangeImgPath(type, val)
+                }}/>
             </View>
             <View style={styles.inputContent}>
                 <TouchableOpacity style={styles.buttonOk} onPress={() => {
-                        this.nextStep()
-                    }}>
+                    this.nextStep()
+                }}>
                     <Text style={styles.buttonOkText}>
                         下一步
                     </Text>
@@ -173,7 +178,7 @@ export default class Delivery extends Component {
             ])
             return
         }
-        this.setState({step: 2})
+        this.setState({step: 2 , state: 2})
     }
     renderSecondStep() {
         return (<View style={styles.fromBox}>
@@ -197,12 +202,12 @@ export default class Delivery extends Component {
             <View style={styles.inputContent}>
                 <Text style={styles.label}>图片上传：</Text>
                 <CameraBtnUtils onChangeCamera={(type, val) => {
-                        this.handleChangeAbnormalImg(type, val)
-                    }}/>
+                    this.handleChangeAbnormalImg(type, val)
+                }}/>
             </View>
             <View style={styles.inputContent}>
                 <TouchableOpacity style={styles.buttonOk} onPress={() => {
-                        this.getOrderDoingDetails()
+                    this.getOrderDoingDetails()
                     }}>
                     <Text style={styles.buttonOkText}>
                         确定
@@ -235,13 +240,11 @@ export default class Delivery extends Component {
             <View style={styles.top}>
                 <Text style={styles.title}>装货完毕，上传信息</Text>
             </View>
-            <TouchableWithoutFeedback onPress={()=> {dismissKeyboard()}}>
             {
                 this.state.step == 1
                     ? this.renderFristStep()
                     : this.renderSecondStep()
             }
-        </TouchableWithoutFeedback>
         </ScrollView>);
     }
 }
@@ -311,12 +314,30 @@ const styles = StyleSheet.create({
         marginTop: 20,
         alignItems: 'center'
     },
+    buttonCancel: {
+        flex: 1,
+        paddingLeft: 14,
+        paddingRight: 14,
+        paddingTop: 15,
+        paddingBottom: 15,
+        borderWidth: 1,
+        borderColor: '#B2B2B2',
+        borderRadius: 5,
+        marginTop: 20,
+        marginRight: 20,
+        alignItems: 'center'
+
+    },
     buttonText: {
         color: '#B2B2B2'
     },
     buttonOkText: {
         fontSize: 18,
         color: '#fff'
+    },
+    buttonCancelText:{
+        fontSize: 18,
+        color: '#B2B2B2'
     },
     activeBtn: {
         borderColor: '#0078DD',
