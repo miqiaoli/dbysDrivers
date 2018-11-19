@@ -52,7 +52,7 @@ export default class Login extends Component<Props> {
             StorageUtil.set('token', res.token);
             StorageUtil.set('username', username);
             Toast.show('登录成功')
-            NavigatorUtils.resetToHomepage({navigation: this.props.navigation});
+            NavigatorUtils.resetToHomepage({navigation: this.props.navigation, token: res.token});
         }
     }
     componentWillUnmount() {

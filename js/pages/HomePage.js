@@ -20,7 +20,6 @@ import {
     RefreshControl,
     ActivityIndicator
 } from 'react-native';
-import SplashScreen from 'react-native-splash-screen'
 import StorageUtil from '../utils/StorageUtil'
 import {_getLogout, _tokenCheck, _getLogistList} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
@@ -70,32 +69,13 @@ export default class HomePage extends Component<Props> {
             }
         }
         componentDidMount() {
-            this.checkToken()
-            SplashScreen.hide()
-        }
-        getLogout() {}
-        /**
-     * 判断token是否有效，否则跳转登录页面
-     */
-        async checkToken() {
-            // NavigatorUtils.resetToLogin({navigation: this.props.navigation});
+            console.log('HomePage:' + this.props.navigation.state.params.token);
 
-            let token = await StorageUtil.get('token');
-            if (token) {
-                console.log('token:' + token);
-                this.setState({token: token})
-                this.props.navigation.setParams({
-                    headerToken: token
-                });
-                var loginState = await HttpUtils.POST(_tokenCheck, 'token=' + token)
-                if (loginState && loginState.state) {
-                    NavigatorUtils.resetToLogin({navigation: this.props.navigation});
-                } else {
-                    this.getLogistList()
-                }
-            } else {
-                NavigatorUtils.resetToLogin({navigation: this.props.navigation});
-            }
+            this.setState({
+                token: this.props.navigation.state.params.token
+            }, ()=> {
+                this.getLogistList()
+            })
         }
         async getLogistList() {
             let res = await HttpUtils.GET(_getLogistList, {
@@ -243,6 +223,7 @@ export default class HomePage extends Component<Props> {
                 </View>
             </View>)
         }
+
         render() {
             const {navigation} = this.props;
 

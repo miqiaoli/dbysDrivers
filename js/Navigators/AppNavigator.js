@@ -1,5 +1,6 @@
 import React from 'react'
 import {createStackNavigator} from 'react-navigation'
+import WelcomePage from '../pages/WelcomePage'
 import HomePage from '../pages/HomePage'
 import ListDetails from '../pages/ListDetails'
 import Login from '../pages/user/Login'
@@ -11,6 +12,9 @@ import ConfirmReceipt from '../pages/ConfirmReceipt'
 import Delivering from '../pages/Delivering'
 
 export const AppStackNavigator = createStackNavigator({
+    WelcomePage: {
+        screen: WelcomePage,
+    },
     HomePage: {
         screen: HomePage,
     },

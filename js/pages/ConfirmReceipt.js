@@ -223,7 +223,7 @@ export default class ConfirmReceipt extends Component {
                 {
                     text: '确定',
                     onPress: () => {
-                        NavigatorUtils.resetToHomepage({navigation: this.props.navigation});
+                        NavigatorUtils.resetToHomepage({navigation: this.props.navigation, token: param.token});
                     }
                 }
             ],)

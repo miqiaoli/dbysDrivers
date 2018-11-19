@@ -6,11 +6,13 @@ export default class NavigatorUtils {
      */
     static resetToHomepage(params) {
         const {navigation} = params;
+        const {token} = params;
         const resetAction = StackActions.reset({
             index: 0,
             actions: [
                 NavigationActions.navigate({
-                    routeName: "HomePage"
+                    routeName: "HomePage",
+                    params: { token: token }
                 })
             ]
         });
