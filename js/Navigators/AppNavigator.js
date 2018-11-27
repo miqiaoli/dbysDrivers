@@ -10,6 +10,7 @@ import RegisteredAgreement from '../pages/user/RegisteredAgreement'
 import Delivery from '../pages/Delivery'
 import ConfirmReceipt from '../pages/ConfirmReceipt'
 import Delivering from '../pages/Delivering'
+import LocationPage from '../pages/LocationPage'
 
 export const AppStackNavigator = createStackNavigator({
     WelcomePage: {
@@ -64,6 +65,12 @@ export const AppStackNavigator = createStackNavigator({
         screen: Delivering,
         navigationOptions: {
             title: "运输途中异常上报"
+        }
+    },
+    LocationPage: {
+        screen: LocationPage,
+        navigationOptions: {
+            title: "LocationPage"
         }
     }
 })
