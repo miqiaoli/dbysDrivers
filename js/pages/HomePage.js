@@ -109,7 +109,7 @@ export default class HomePage extends Component<Props> {
                 </View>)
             } else { //下拉触底
                 renderView = (<View style={styles.indicatorContainer}>
-                    <Text>没有更多了</Text>
+                    <Text> - </Text>
                 </View>)
             }
             return renderView
@@ -194,9 +194,7 @@ export default class HomePage extends Component<Props> {
                 <View style={styles.listContainer}>
                     <View style={styles.listTop}>
                         <Icon name="filetext1" size={22} color="#979797"/>
-                        <Text style={styles.topTitle} onPress={() => {
-                                navigation.navigate("ListDetails")
-                            }}>{item.list_num}</Text>
+                        <Text style={styles.topTitle}>{item.list_num}</Text>
                             <Icon name="right" size={20} color="#888888"/>
                     </View>
                     <View style={styles.listBox}>
@@ -228,6 +226,11 @@ export default class HomePage extends Component<Props> {
             const {navigation} = this.props;
 
             return (<View style={styles.container}>
+                <TouchableOpacity onPress={ ()=>{
+                    navigation.navigate('LocationPage')
+                  }}>
+                    <Text>定位</Text>
+                </TouchableOpacity>
                 <FlatList data={this.state.list}
                     renderItem={(data) => this._renderItem(data)}
                     keyExtractor={(item, index) => index.toString()}

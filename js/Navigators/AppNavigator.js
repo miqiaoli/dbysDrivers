@@ -10,10 +10,14 @@ import RegisteredAgreement from '../pages/user/RegisteredAgreement'
 import Delivery from '../pages/Delivery'
 import ConfirmReceipt from '../pages/ConfirmReceipt'
 import Delivering from '../pages/Delivering'
+import LocationPage from '../pages/LocationPage'
 
 export const AppStackNavigator = createStackNavigator({
     WelcomePage: {
         screen: WelcomePage,
+    },
+    LocationPage: {
+        screen: LocationPage,
     },
     HomePage: {
         screen: HomePage,
