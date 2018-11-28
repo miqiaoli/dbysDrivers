@@ -25,6 +25,7 @@ import {_getLogout, _tokenCheck, _getLogistList} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/AntDesign'
+// import { Geolocation } from "react-native-amap-geolocation"
 
 type Props = {};
 export default class HomePage extends Component<Props> {
@@ -68,6 +69,7 @@ export default class HomePage extends Component<Props> {
                 isLoading: false
             }
         }
+
         componentDidMount() {
             console.log('HomePage:' + this.props.navigation.state.params.token);
 
@@ -226,9 +228,15 @@ export default class HomePage extends Component<Props> {
             const {navigation} = this.props;
 
             return (<View style={styles.container}>
+<<<<<<< HEAD
                 <TouchableOpacity onPress={ ()=>{
                     navigation.navigate('LocationPage')
                   }}>
+=======
+                <TouchableOpacity onPress={ () => {
+                    navigation.navigate("LocationPage")
+                }}>
+>>>>>>> 442dd32315d8a530d9efd848e86c65ff6bc3d8cd
                     <Text>定位</Text>
                 </TouchableOpacity>
                 <FlatList data={this.state.list}

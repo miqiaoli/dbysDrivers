@@ -69,5 +69,11 @@ export const AppStackNavigator = createStackNavigator({
         navigationOptions: {
             title: "运输途中异常上报"
         }
+    },
+    LocationPage: {
+        screen: LocationPage,
+        navigationOptions: {
+            title: "LocationPage"
+        }
     }
 })
