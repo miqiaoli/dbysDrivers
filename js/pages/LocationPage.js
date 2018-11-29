@@ -7,8 +7,10 @@
  */
 
 import React, {Component} from 'react';
-<<<<<<< HEAD
-import {Platform, StyleSheet, Text, View, Button} from 'react-native';
+import {Platform, StyleSheet, Text, View, Button,
+    TouchableOpacity,
+    ToastAndroid,
+    PermissionsAndroid,} from 'react-native';
 import {Geolocation} from "react-native-amap-geolocation"
 
 export default class LocationPage extends Component {
@@ -17,7 +19,7 @@ export default class LocationPage extends Component {
   async componentDidMount() {
     await Geolocation.init({
       ios: "a421265fe274bd3e2863ac0fcefde36b",
-      android: "68b927bf24f7185ac2a06049c69c3148"
+      android: "c4031dcbefac117fb5e4948bfd093439"
     });
     Geolocation.setOptions({
       interval: 10000,
@@ -75,8 +77,152 @@ export default class LocationPage extends Component {
             <Text>{location[key]}</Text>
           </View>
         ))}
+
+        <View style={style.container}>
+              <TouchableOpacity style={style.button_view}
+                  onPress={this.requestReadPermission.bind(this)}>
+                  <Text style={style.button_text}>申请读写权限</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={style.button_view}
+                  onPress={this.requestCarmeraPermission.bind(this)}>
+                  <Text style={style.button_text}>申请相机权限</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={style.button_view}
+                  onPress={this.requestLocationPermission.bind(this)}>
+                  <Text style={style.button_text}>申请访问地址权限</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={style.button_view}
+                                onPress={this.checkPermission.bind(this)}>
+                  <Text style={style.button_text}>查询是否获取了读写权限</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={style.button_view}
+                                onPress={this.requestMultiplePermission.bind(this)}>
+                  <Text style={style.button_text}>一次申请所以权限</Text>
+              </TouchableOpacity>
+          </View>
       </View>
     );
+    }
+
+    show(data) {
+        ToastAndroid.show(data,ToastAndroid.SHORT)
+    }
+
+    /*
+    * 弹出提示框向用户请求某项权限。返回一个promise，最终值为用户是否同意了权限申请的布尔值。
+    * 其中rationale参数是可选的，其结构为包含title和message)的对象。
+    * 此方法会和系统协商，是弹出系统内置的权限申请对话框，
+    * 还是显示rationale中的信息以向用户进行解释。
+    * */
+    async requestReadPermission() {
+        try {
+            //返回string类型
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                    //第一次请求拒绝后提示用户你为什么要这个权限
+                    'title': '我要读写权限',
+                    'message': '没权限我不能工作，同意就好了'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                this.show("你已获取了读写权限")
+            } else {
+                this.show("获取读写权限失败")
+            }
+        } catch (err) {
+            this.show(err.toString())
+        }
+    }
+
+    async requestCarmeraPermission() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.CAMERA,
+                {
+                    //第一次请求拒绝后提示用户你为什么要这个权限
+                    'title': '我要相机权限',
+                    'message': '没权限我不能工作，同意就好了'
+                }
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                this.show("你已获取了相机权限")
+            } else {
+                this.show("获取相机失败")
+            }
+        } catch (err) {
+            this.show(err.toString())
+        }
+    }
+
+    async requestLocationPermission() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    //第一次请求拒绝后提示用户你为什么要这个权限
+                    'title': '我要地址查询权限',
+                    'message': '没权限我不能工作，同意就好了'
+                }
+            )
+
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                this.show("你已获取了地址查询权限")
+            } else {
+                this.show("获取地址查询失败")
+            }
+        } catch (err) {
+            this.show(err.toString())
+        }
+    }
+
+    checkPermission() {
+        try {
+            //返回Promise类型
+            const granted = PermissionsAndroid.check(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+            )
+            granted.then((data)=>{
+                this.show("是否获取读写权限"+data)
+            }).catch((err)=>{
+                this.show(err.toString())
+            })
+        } catch (err) {
+            this.show(err.toString())
+        }
+    }
+
+    async requestMultiplePermission() {
+        try {
+            const permissions = [
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                PermissionsAndroid.PERMISSIONS.CAMERA
+            ]
+            //返回得是对象类型
+            const granteds = await PermissionsAndroid.requestMultiple(permissions)
+            var data = "是否同意地址权限: "
+            if (granteds["android.permission.ACCESS_FINE_LOCATION"] === "granted") {
+                data = data + "是\n"
+            } else {
+                data = data + "否\n"
+            }
+            data = data+"是否同意相机权限: "
+            if (granteds["android.permission.CAMERA"] === "granted") {
+                data = data + "是\n"
+            } else {
+                data = data + "否\n"
+            }
+            data = data+"是否同意存储权限: "
+            if (granteds["android.permission.WRITE_EXTERNAL_STORAGE"] === "granted") {
+                data = data + "是\n"
+            } else {
+                data = data + "否\n"
+            }
+            this.show(data)
+        } catch (err) {
+            this.show(err.toString())
+        }
     }
 }
 
@@ -99,92 +245,21 @@ const style = StyleSheet.create({
     width: 120,
     paddingRight: 10,
     textAlign: "right"
-  }
-=======
-import {Platform, StyleSheet, Text, View, Button, FlatList} from 'react-native';
-import {Geolocation} from "react-native-amap-geolocation"
+  },
 
-// let points = []
-export default class HomePage extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            location: '',
-            points: []
-        }
-    }
-    async componentWillMount() {
-        await Geolocation.init({ios: "9bd6c82e77583020a73ef1af59d0c759", android: "043b24fe18785f33c491705ffe5b6935"})
-    }
-    componentDidMount() {
-
-        Geolocation.setOptions({interval: 8000, distanceFilter: 20})
-        Geolocation.addLocationListener(location => {
-            this.updateLocationState(location)
-            // setParams({location: location})
-            // this.setState({location});
-            // console.log(location)
-        })
-    }
-    render() {
-        const location = this.state.location
-        return (<View style={style.container}>
-            <View style={style.controls}>
-                <Button style={style.button} onPress={() => Geolocation.start()} title="开始定位"/>
-                <Button style={style.button} onPress={() => Geolocation.stop()} title="停止定位"/>
-            </View>
-            {
-                Object.keys(location).map(key => (<View style={style.item} key={key}>
-                    <Text style={style.label}>{key}</Text>
-                    <Text>{location[key]}</Text>
-                </View>))
-            }
-            <Text>点集合</Text>
-            <FlatList
-                data={this.state.points}
-                renderItem={({item}) => <View style={{}}>
-                    <View style={{flexDirection: 'row',flexWrap: 'wrap'}}>
-                        <Text>latitude: </Text>
-                        <Text>{item.latitude}</Text>
-                        <Text>timestamp: </Text>
-                        <Text>{item.timestamp}</Text>
-                        <Text>longitude: </Text>
-                        <Text>{item.longitude}</Text>
-                    </View>
-                </View>}
-            />
-        </View>);
-    }
-    updateLocationState(location) {
-        if (location) {
-            location.timestamp = new Date(location.timestamp).toLocaleString();
-            // points.push({latitude: location.latitude,longitude:location.longitude, timestamp: location.timestamp})
-            this.setState({location, points: [...this.state.points,location]});
-            console.log(location)
-            console.log(this.state.points)
-        }
-    }
-
-    startLocation = () => {
-        Geolocation.start();
-    };
-    stopLocation = () => {
-        Geolocation.stop();
-    };
-    getLastLocation = async () => {
-        this.updateLocationState(await Geolocation.getLastLocation())
-    };
-}
-
-const style = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F2F2F2'
+  container: {
+        // flex: 1,
+        padding: 10,
     },
-    controls: {},
-    button: {},
-    item: {},
-    label: {}
-
->>>>>>> 442dd32315d8a530d9efd848e86c65ff6bc3d8cd
+    button_view: {
+        margin:4,
+        borderRadius: 4,
+        backgroundColor: '#8d4dfc',
+        alignItems: 'center',
+    },
+    button_text: {
+        padding: 6,
+        fontSize: 16,
+        fontWeight: '600'
+    }
 });

@@ -148,11 +148,7 @@ android {
 }
 
 dependencies {
-<<<<<<< HEAD
     implementation project(':react-native-amap-geolocation')
-=======
-    compile project(':react-native-amap-geolocation')
->>>>>>> 442dd32315d8a530d9efd848e86c65ff6bc3d8cd
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-vector-icons')

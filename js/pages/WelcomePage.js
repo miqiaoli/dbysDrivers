@@ -38,7 +38,7 @@ export default class HomePage extends Component<Props> {
             // StorageUtil.remove('token');
 
             this.checkToken()
-            SplashScreen.hide()
+            // SplashScreen.hide()
         }
         /**
      * 判断token是否有效，否则跳转登录页面

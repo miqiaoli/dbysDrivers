@@ -5337,6 +5337,11 @@ react-lifecycles-compat@^3, react-lifecycles-compat@^3.0.4:
   resolved "http://registry.npm.taobao.org/react-lifecycles-compat/download/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha1-TxonOv38jzSIqMUWv9p4+HI1I2I=
 
+react-native-amap-geolocation@^0.3.2:
+  version "0.3.2"
+  resolved "http://registry.npm.taobao.org/react-native-amap-geolocation/download/react-native-amap-geolocation-0.3.2.tgz#99b208638dd7ff911e60d34b36ee1ffc0d9b82b5"
+  integrity sha1-mbIIY43X/5EeYNNLNu4f/A2bgrU=
+
 react-native-check-box@^2.1.6:
   version "2.1.6"
   resolved "http://registry.npm.taobao.org/react-native-check-box/download/react-native-check-box-2.1.6.tgz#dd77b0e07de39f39ddf945ac127438f91ffa8a30"
