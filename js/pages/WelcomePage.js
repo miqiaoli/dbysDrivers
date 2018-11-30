@@ -20,8 +20,7 @@ import {
     RefreshControl,
     ActivityIndicator
 } from 'react-native';
-import SplashScreen from 'react-native-splash-screen'
-import StorageUtil from '../utils/StorageUtil'
+// import SplashScreen from 'react-native-splash-screen'
 import {_getLogout, _tokenCheck, _getLogistList} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
@@ -30,35 +29,28 @@ type Props = {};
 export default class HomePage extends Component<Props> {
         constructor(props) {
             super(props)
-            this.state = {
-                token: ''
-            }
         }
         componentDidMount() {
-            // StorageUtil.remove('token');
+            // global.storage.clearMapForKey('user');
 
             this.checkToken()
-            SplashScreen.hide()
+            // SplashScreen.hide()
         }
         /**
      * 判断token是否有效，否则跳转登录页面
      */
         async checkToken() {
-            // NavigatorUtils.resetToLogin({navigation: this.props.navigation});
+            let user= await global.storage.load({
+                key:'user'
+            })
 
-            let token = await StorageUtil.get('token');
-            if (token) {
-                console.log('token:' + token);
-                this.setState({token: token})
-                this.props.navigation.setParams({
-                    headerToken: token
-                });
-                var loginState = await HttpUtils.POST(_tokenCheck, 'token=' + token)
+            let token = user.token;
+            if (user.token) {
+                var loginState = await HttpUtils.POST(_tokenCheck, 'token=' + user.token)
                 if (loginState && loginState.state) {
                     NavigatorUtils.resetToLogin({navigation: this.props.navigation});
                 } else {
-                    // this.getLogistList()
-                    NavigatorUtils.resetToHomepage({navigation: this.props.navigation, token: token});
+                    NavigatorUtils.resetToHomepage({navigation: this.props.navigation});
 
                 }
             } else {

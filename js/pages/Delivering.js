@@ -151,7 +151,7 @@ export default class Delivering extends Component {
                 {
                     text: '确定',
                     onPress: () => {
-                        NavigatorUtils.resetToHomepage({navigation: this.props.navigation, token: param.token});
+                        NavigatorUtils.resetToHomepage({navigation: this.props.navigation});
                     }
                 }
             ],)

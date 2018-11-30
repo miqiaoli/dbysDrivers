@@ -17,7 +17,6 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import StorageUtil from '../../utils/StorageUtil'
 import HttpUtils from '../../utils/HttpUtils'
 import NavigatorUtils from '../../utils/NavigatorUtils'
 import {_verifySMSEdit, _getPasswordBack, _getEditPassword} from '../../servers/getData'

@@ -5342,6 +5342,11 @@ react-native-amap-geolocation@^0.3.2:
   resolved "http://registry.npm.taobao.org/react-native-amap-geolocation/download/react-native-amap-geolocation-0.3.2.tgz#99b208638dd7ff911e60d34b36ee1ffc0d9b82b5"
   integrity sha1-mbIIY43X/5EeYNNLNu4f/A2bgrU=
 
+react-native-background-timer@^2.1.1:
+  version "2.1.1"
+  resolved "http://registry.npm.taobao.org/react-native-background-timer/download/react-native-background-timer-2.1.1.tgz#9a2489681ab2f8033c213c73272e9d4c47572cd5"
+  integrity sha1-miSJaBqy+AM8ITxzJy6dTEdXLNU=
+
 react-native-check-box@^2.1.6:
   version "2.1.6"
   resolved "http://registry.npm.taobao.org/react-native-check-box/download/react-native-check-box-2.1.6.tgz#dd77b0e07de39f39ddf945ac127438f91ffa8a30"
@@ -5404,6 +5409,11 @@ react-native-splash-screen@^3.1.1:
   version "3.1.1"
   resolved "http://registry.npm.taobao.org/react-native-splash-screen/download/react-native-splash-screen-3.1.1.tgz#1a4e46c9fdce53ff52af2a2cb4181788c4e30b30"
   integrity sha1-Gk5Gyf3OU/9SryostBgXiMTjCzA=
+
+react-native-storage@^0.2.3:
+  version "0.2.3"
+  resolved "http://registry.npm.taobao.org/react-native-storage/download/react-native-storage-0.2.3.tgz#294f034c6ecbd9e08cfe02fa24ecb9db7a861a1b"
+  integrity sha1-KU8DTG7L2eCM/gL6JOy523qGGhs=
 
 react-native-tab-navigator@^0.3.4:
   version "0.3.4"

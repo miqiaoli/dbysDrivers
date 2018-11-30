@@ -19,7 +19,6 @@ import {
     ScrollView
 } from 'react-native';
 import {StackActions, NavigationActions} from 'react-navigation';
-import StorageUtil from '../../utils/StorageUtil'
 import HttpUtils from '../../utils/HttpUtils'
 import NavigatorUtils from '../../utils/NavigatorUtils'
 import {_verifyPhone, _verifySMS, _verifyCode, _getRegistered} from '../../servers/getData'

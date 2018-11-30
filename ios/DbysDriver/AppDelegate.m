@@ -30,7 +30,7 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  [RNSplashScreen show];  //显示启动屏
+  // [RNSplashScreen show];  //显示启动屏
   return YES;
 }
 

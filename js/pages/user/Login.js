@@ -19,7 +19,6 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native';
-import StorageUtil from '../../utils/StorageUtil'
 import HttpUtils from '../../utils/HttpUtils'
 import NavigatorUtils from '../../utils/NavigatorUtils'
 import {_getLogin} from '../../servers/getData'
@@ -49,10 +48,16 @@ export default class Login extends Component<Props> {
 
         let res = await HttpUtils.POST(_getLogin, params);
         if (res) {
-            StorageUtil.set('token', res.token);
-            StorageUtil.set('username', username);
+            const user = {
+                token: res.token,
+                name: username
+            }
+            global.storage.save({
+                    key:'user',
+                    data: user
+                });
             Toast.show('登录成功')
-            NavigatorUtils.resetToHomepage({navigation: this.props.navigation, token: res.token});
+            NavigatorUtils.resetToHomepage({navigation: this.props.navigation});
         }
     }
     componentWillUnmount() {

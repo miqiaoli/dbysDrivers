@@ -7,14 +7,22 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, ScrollView,
+import {Platform, StyleSheet, Text, View, Button, AppState, ScrollView,
     TouchableOpacity,
     ToastAndroid,
     PermissionsAndroid,} from 'react-native';
 import {Geolocation} from "react-native-amap-geolocation"
+import BackgroundTimer from 'react-native-background-timer'
 
 export default class LocationPage extends Component {
-   state = { location: {} };
+   state = {
+       location: {},
+       locations: [],
+       timestamp: '',
+       startTime: '',
+       id: '',
+       appState: AppState.currentState
+    };
 
   async componentDidMount() {
     await Geolocation.init({
@@ -24,29 +32,83 @@ export default class LocationPage extends Component {
     Geolocation.setOptions({
       interval: 10000,
       distanceFilter: 10,
-      background: true,
+      // background: true,
       reGeocode: true
     });
+
+
+
+    BackgroundTimer.runBackgroundTimer(() => {
+    //code that will be called every 3 seconds
+        console.log('定时器');
+        this.setState({id: this.state.id ++})
+    },
+    3000);
+
+    global.storage
+      .load({
+        key: 'startTime'
+      })
+      .then(ret => {
+        this.setState({startTime: ret})
+      })
+      .catch(err => {
+          const time =  Date.now
+          global.storage.save({
+              key: 'startTime',
+              data:time
+            });
+            this.setState({startTime: time})
+      });
+
     Geolocation.addLocationListener(location => {
       console.log(222);
       this.updateLocationState(location)
 
     });
 
-      console.log(1111);
+      // console.log(1111);
       Geolocation.start();
   }
 
-  // componentWillUnmount() {
-  //   Geolocation.stop();
-  // }
-
+  componentWillUnmount() {
+    // Geolocation.stop();
+    this.timer && clearTimeout(this.timer);
+    console.log('location:componentWillUnmount');
+    this.setState = (state,callback)=>{
+     return;
+   };
+  }
   updateLocationState(location) {
     if (location) {
-      location.timestamp = new Date(location.timestamp).toLocaleString();
-      this.setState({ location });
-      console.log(location);
+        location.timestamp = Date.now();
+      // location.timestamp = new Date(location.timestamp).toLocaleString();
+      // this.setState({ location, locations: [...this.state.locations, location] });
+      if(location.timestamp!==this.state.timestamp) {
+          this.setState({ location, timestamp: location.timestamp});
+          console.log(location);
+          global.storage.save({
+              key: 'locationArr', // 注意:请不要在key中使用_下划线符号!
+              id: location.timestamp,
+              data: location,
+              expires: null
+            });
+        }
+      if(location.timestamp-this.state.startTime >3000) {
+          this.getLocations()
+      }
     }
+  }
+   getLocations() {
+        global.storage.getAllDataForKey('locationArr').then(users => {
+          console.log('users:' + users);
+        }).catch(err => {
+            console.warn(err.message);
+          });;
+  }
+  clearMapForKey() {
+      global.storage.clearMapForKey('locationArr');
+
   }
 
   startLocation = () => {
@@ -73,6 +135,7 @@ export default class LocationPage extends Component {
             title="停止定位"
           />
         </View>
+        <Text>{this.state.id}</Text>
         {Object.keys(location).map(key => (
           <View style={style.item} key={key}>
             <Text style={style.label}>{key}</Text>
@@ -81,6 +144,14 @@ export default class LocationPage extends Component {
         ))}
 
         <View style={style.container}>
+              <TouchableOpacity style={style.button_view}
+                  onPress={()=>this.getLocations()}>
+                  <Text style={style.button_text}>getLocations</Text>
+              </TouchableOpacity>
+                    <TouchableOpacity style={style.button_view}
+                        onPress={()=>this.clearMapForKey()}>
+                        <Text style={style.button_text}>clearMapForKey</Text>
+                    </TouchableOpacity>
               <TouchableOpacity style={style.button_view}
                   onPress={this.requestReadPermission.bind(this)}>
                   <Text style={style.button_text}>申请读写权限</Text>
