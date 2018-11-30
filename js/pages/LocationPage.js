@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button,
+import {Platform, StyleSheet, Text, View, Button, ScrollView,
     TouchableOpacity,
     ToastAndroid,
     PermissionsAndroid,} from 'react-native';
@@ -19,7 +19,7 @@ export default class LocationPage extends Component {
   async componentDidMount() {
     await Geolocation.init({
       ios: "a421265fe274bd3e2863ac0fcefde36b",
-      android: "c4031dcbefac117fb5e4948bfd093439"
+      android: "68b927bf24f7185ac2a06049c69c3148"
     });
     Geolocation.setOptions({
       interval: 10000,
@@ -31,8 +31,10 @@ export default class LocationPage extends Component {
       console.log(222);
       this.updateLocationState(location)
 
-    }
-    );
+    });
+
+      console.log(1111);
+      Geolocation.start();
   }
 
   // componentWillUnmount() {
@@ -58,7 +60,7 @@ export default class LocationPage extends Component {
     render() {
       const { location } = this.state;
     return (
-      <View style={style.body}>
+      <ScrollView style={style.body}>
         <View style={style.controls}>
           <Button
             style={style.button}
@@ -100,7 +102,7 @@ export default class LocationPage extends Component {
                   <Text style={style.button_text}>一次申请所以权限</Text>
               </TouchableOpacity>
           </View>
-      </View>
+      </ScrollView>
     );
     }
 

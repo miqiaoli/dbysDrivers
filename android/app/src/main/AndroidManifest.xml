@@ -55,7 +55,7 @@
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="c4031dcbefac117fb5e4948bfd093439" />
+            android:value="68b927bf24f7185ac2a06049c69c3148" />
         <service android:name="com.amap.api.location.APSService"></service>
     </application>
 
