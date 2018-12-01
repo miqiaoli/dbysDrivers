@@ -20,11 +20,12 @@ import {
     RefreshControl,
     ActivityIndicator
 } from 'react-native';
-import {_getLogout, _tokenCheck, _getLogistList} from '../servers/getData'
+import {_getLogout, _tokenCheck, _getLogistList, _saveLocation} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/AntDesign'
-// import { Geolocation } from "react-native-amap-geolocation"
+import { Geolocation } from "react-native-amap-geolocation"
+import BackgroundTimer from 'react-native-background-timer'
 
 type Props = {};
 export default class HomePage extends Component<Props> {
@@ -67,13 +68,13 @@ export default class HomePage extends Component<Props> {
             page_limit: 5,
             list: [],
             counts: null,//总条数
-            isLoading: false
+            isLoading: false,
+            location: {},
+            locations: [],
+            points: []
         }
     }
 
-      componentWillUnmount(){
-          console.log('homepage:componentWillUnmount');
-      }
     async componentDidMount() {
         let user= await global.storage.load({
             key:'user'
@@ -85,7 +86,53 @@ export default class HomePage extends Component<Props> {
         }, ()=> {
             this.getLogistList()
         })
+        // 初始化定位功能
+        await Geolocation.init({
+          ios: "a421265fe274bd3e2863ac0fcefde36b",
+          android: "68b927bf24f7185ac2a06049c69c3148"
+        });
+        Geolocation.setOptions({
+          interval: 10000,
+          distanceFilter: 10,
+          // background: true,
+          reGeocode: true
+        });
 
+        Geolocation.addLocationListener(location => {
+          console.log(222);
+          this.updateLocationState(location)
+        });
+
+        Geolocation.start();
+
+        // 开启后台定时器
+        BackgroundTimer.runBackgroundTimer(() => {
+            //code that will be called every 3 seconds
+            console.log('定时器');
+            if(this.state.locations.length > 1) {
+                console.log('sendData');
+                this.SaveLocations()
+            }
+        },
+        3000);
+    }
+    async SaveLocations() {
+        const params = "token=" + this.state.token + "&locations=" + JSON.stringify(this.state.locations);
+        var loginState = await HttpUtils.POST(_saveLocation, params, false)
+        if(loginState) {
+            this.setState({
+                locations: []
+            })
+        }
+    }
+    updateLocationState(location) {
+        if (location) {
+            location.timestamp = Date.now();
+            if(location.timestamp!==this.state.timestamp) {
+                this.setState({ location, locations: [...this.state.locations,location], points: [...this.state.locations,location]});
+                console.log(location);
+            }
+        }
     }
     async getLogistList() {
         let res = await HttpUtils.GET(_getLogistList, {
@@ -240,6 +287,20 @@ export default class HomePage extends Component<Props> {
             }}>
                 <Text>定位</Text>
             </TouchableOpacity>
+            <FlatList
+                data={this.state.points}
+                renderItem={({item}) => <View>
+                    <View style={{flexDirection: 'row',flexWrap: 'wrap'}}>
+                        <Text>latitude: </Text>
+                        <Text>{item.latitude}</Text>
+                        <Text>timestamp: </Text>
+                        <Text>{item.timestamp}</Text>
+                        <Text>longitude: </Text>
+                        <Text>{item.longitude}</Text>
+                    </View>
+                </View>}
+            />
+
             <FlatList data={this.state.list}
                 renderItem={(data) => this._renderItem(data)}
                 keyExtractor={(item, index) => item.list_num}

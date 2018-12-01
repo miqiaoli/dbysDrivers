@@ -2,7 +2,7 @@
 
 // const baseURL = 'https://www.otimes.com/front';
 // const baseURL = 'https://dbys.otimes.info/front';
-const baseURL = 'http://10.0.0.31/front';
+const baseURL = 'http://10.0.0.9:8080/front';
 
 // 登录
 export const _getLogin = baseURL+'/member/app/login.dbys';
@@ -38,3 +38,5 @@ export const _getOrderDoingDetails = baseURL+'/logist/trans_logist_abnormal.dbys
 export const _getOrderDoneDetails = baseURL+'/logist/trans_logist_end.dbys';
 // 运输中
 export const _getOrderWarningDetails = baseURL+'/logist/trans_logist_middle.dbys';
+// 上传定位点
+export const _saveLocation = baseURL+'/logist/saveLocation.dbys';

@@ -7,10 +7,12 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, AppState, ScrollView,
+import {Platform, StyleSheet, Text, View, Button, AppState, ScrollView,FlatList,
     TouchableOpacity,
     ToastAndroid,
     PermissionsAndroid,} from 'react-native';
+import {_saveLocation} from '../servers/getData'
+import HttpUtils from '../utils/HttpUtils'
 import {Geolocation} from "react-native-amap-geolocation"
 import BackgroundTimer from 'react-native-background-timer'
 
@@ -36,30 +38,16 @@ export default class LocationPage extends Component {
       reGeocode: true
     });
 
-
-
     BackgroundTimer.runBackgroundTimer(() => {
     //code that will be called every 3 seconds
         console.log('定时器');
         this.setState({id: this.state.id ++})
+        if(this.state.locations.length > 1) {
+            console.log('sendData');
+            this.SaveLocations()
+        }
     },
     3000);
-
-    global.storage
-      .load({
-        key: 'startTime'
-      })
-      .then(ret => {
-        this.setState({startTime: ret})
-      })
-      .catch(err => {
-          const time =  Date.now
-          global.storage.save({
-              key: 'startTime',
-              data:time
-            });
-            this.setState({startTime: time})
-      });
 
     Geolocation.addLocationListener(location => {
       console.log(222);
@@ -71,40 +59,49 @@ export default class LocationPage extends Component {
       Geolocation.start();
   }
 
+  async SaveLocations() {
+      const params = "token=821f17fe-7cdb-48b8-8bb6-cf3b0200d0b3" + "&locations=" + JSON.stringify(this.state.locations);
+      var loginState = await HttpUtils.POST(_saveLocation, params, false)
+      if(loginState) {
+          this.setState({
+              locations: []
+          })
+      }
+ }
+ updateLocationState(location) {
+   if (location) {
+       location.timestamp = Date.now();
+     // location.timestamp = new Date(location.timestamp).toLocaleString();
+     // this.setState({ location, locations: [...this.state.locations, location] });
+     if(location.timestamp!==this.state.timestamp) {
+         this.setState({ location, locations: [...this.state.locations,location]});
+         console.log(location);
+         // global.storage.save({
+         //     key: 'locationArr', // 注意:请不要在key中使用_下划线符号!
+         //     id: location.timestamp,
+         //     data: location,
+         //     expires: null
+         //   });
+       }
+         // this.getLocations(location.timestamp)
+   }
+ }
+
   componentWillUnmount() {
     // Geolocation.stop();
-    this.timer && clearTimeout(this.timer);
+    // this.timer && clearTimeout(this.timer);
     console.log('location:componentWillUnmount');
     this.setState = (state,callback)=>{
      return;
    };
   }
-  updateLocationState(location) {
-    if (location) {
-        location.timestamp = Date.now();
-      // location.timestamp = new Date(location.timestamp).toLocaleString();
-      // this.setState({ location, locations: [...this.state.locations, location] });
-      if(location.timestamp!==this.state.timestamp) {
-          this.setState({ location, timestamp: location.timestamp});
-          console.log(location);
-          global.storage.save({
-              key: 'locationArr', // 注意:请不要在key中使用_下划线符号!
-              id: location.timestamp,
-              data: location,
-              expires: null
-            });
-        }
-      if(location.timestamp-this.state.startTime >3000) {
-          this.getLocations()
-      }
-    }
-  }
-   getLocations() {
-        global.storage.getAllDataForKey('locationArr').then(users => {
-          console.log('users:' + users);
-        }).catch(err => {
-            console.warn(err.message);
-          });;
+
+   async getLocations(timer) {
+       let locations = await global.storage.getAllDataForKey('locationArr')
+       const params = "token=821f17fe-7cdb-48b8-8bb6-cf3b0200d0b3" + "&locations=" + JSON.stringify(locations);
+       var loginState = await HttpUtils.POST(_saveLocation, params)
+       // this.setState({startTime: timer})
+       // console.log('getLocations startTime yes:' + timer);
   }
   clearMapForKey() {
       global.storage.clearMapForKey('locationArr');
@@ -121,60 +118,70 @@ export default class LocationPage extends Component {
 
     render() {
       const { location } = this.state;
-    return (
-      <ScrollView style={style.body}>
-        <View style={style.controls}>
-          <Button
-            style={style.button}
-            onPress={this.startLocation}
-            title="开始定位"
-          />
-          <Button
-            style={style.button}
-            onPress={this.stopLocation}
-            title="停止定位"
-          />
-        </View>
-        <Text>{this.state.id}</Text>
-        {Object.keys(location).map(key => (
-          <View style={style.item} key={key}>
-            <Text style={style.label}>{key}</Text>
-            <Text>{location[key]}</Text>
-          </View>
-        ))}
+        return (
+          <ScrollView style={style.body}>
+              <View style={style.controls}>
+                  <Button
+                      style={style.button}
+                      onPress={this.startLocation}
+                      title="开始定位"
+                  />
+                  <Button
+                      style={style.button}
+                      onPress={this.stopLocation}
+                      title="停止定位"
+                  />
+              </View>
+              <Text>{this.state.id}</Text>
+              {Object.keys(location).map(key => (
+                  <View style={style.item} key={key}>
+                      <Text style={style.label}>{key}</Text>
+                      <Text>{location[key]}</Text>
+                  </View>
+              ))}
+              <Text>点集合</Text>
+              <FlatList
+                  data={this.state.locations}
+                  renderItem={({item}) => <View style={{}}>
+                      <View style={{flexDirection: 'row',flexWrap: 'wrap'}}>
+                          <Text>latitude: </Text>
+                          <Text>{item.latitude}</Text>
+                          <Text>timestamp: </Text>
+                          <Text>{item.timestamp}</Text>
+                          <Text>longitude: </Text>
+                          <Text>{item.longitude}</Text>
+                      </View>
+                  </View>}
+              />
 
-        <View style={style.container}>
-              <TouchableOpacity style={style.button_view}
-                  onPress={()=>this.getLocations()}>
-                  <Text style={style.button_text}>getLocations</Text>
-              </TouchableOpacity>
-                    <TouchableOpacity style={style.button_view}
-                        onPress={()=>this.clearMapForKey()}>
-                        <Text style={style.button_text}>clearMapForKey</Text>
-                    </TouchableOpacity>
-              <TouchableOpacity style={style.button_view}
-                  onPress={this.requestReadPermission.bind(this)}>
-                  <Text style={style.button_text}>申请读写权限</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={style.button_view}
-                  onPress={this.requestCarmeraPermission.bind(this)}>
-                  <Text style={style.button_text}>申请相机权限</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={style.button_view}
-                  onPress={this.requestLocationPermission.bind(this)}>
-                  <Text style={style.button_text}>申请访问地址权限</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={style.button_view}
-                                onPress={this.checkPermission.bind(this)}>
-                  <Text style={style.button_text}>查询是否获取了读写权限</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={style.button_view}
-                                onPress={this.requestMultiplePermission.bind(this)}>
-                  <Text style={style.button_text}>一次申请所以权限</Text>
-              </TouchableOpacity>
-          </View>
-      </ScrollView>
-    );
+              <View style={style.container}>
+                  <TouchableOpacity style={style.button_view}
+                      onPress={()=>this.getLocations()}>
+                      <Text style={style.button_text}>getLocations</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={style.button_view}
+                      onPress={()=>this.getLocations()}>
+                      <Text style={style.button_text}>getLocations</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={style.button_view}
+                      onPress={()=>this.clearMapForKey()}>
+                      <Text style={style.button_text}>clearMapForKey</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={style.button_view}
+                      onPress={this.requestCarmeraPermission.bind(this)}>
+                      <Text style={style.button_text}>申请相机权限</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={style.button_view}
+                      onPress={this.requestLocationPermission.bind(this)}>
+                      <Text style={style.button_text}>申请访问地址权限</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={style.button_view}
+                      onPress={this.requestMultiplePermission.bind(this)}>
+                      <Text style={style.button_text}>一次申请所以权限</Text>
+                  </TouchableOpacity>
+              </View>
+          </ScrollView>
+        );
     }
 
     show(data) {
@@ -187,27 +194,6 @@ export default class LocationPage extends Component {
     * 此方法会和系统协商，是弹出系统内置的权限申请对话框，
     * 还是显示rationale中的信息以向用户进行解释。
     * */
-    async requestReadPermission() {
-        try {
-            //返回string类型
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                {
-                    //第一次请求拒绝后提示用户你为什么要这个权限
-                    'title': '我要读写权限',
-                    'message': '没权限我不能工作，同意就好了'
-                }
-            )
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                this.show("你已获取了读写权限")
-            } else {
-                this.show("获取读写权限失败")
-            }
-        } catch (err) {
-            this.show(err.toString())
-        }
-    }
-
     async requestCarmeraPermission() {
         try {
             const granted = await PermissionsAndroid.request(
@@ -244,22 +230,6 @@ export default class LocationPage extends Component {
             } else {
                 this.show("获取地址查询失败")
             }
-        } catch (err) {
-            this.show(err.toString())
-        }
-    }
-
-    checkPermission() {
-        try {
-            //返回Promise类型
-            const granted = PermissionsAndroid.check(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-            )
-            granted.then((data)=>{
-                this.show("是否获取读写权限"+data)
-            }).catch((err)=>{
-                this.show(err.toString())
-            })
         } catch (err) {
             this.show(err.toString())
         }

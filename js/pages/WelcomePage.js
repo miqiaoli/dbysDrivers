@@ -20,7 +20,7 @@ import {
     RefreshControl,
     ActivityIndicator
 } from 'react-native';
-// import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen'
 import {_getLogout, _tokenCheck, _getLogistList} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
@@ -34,17 +34,20 @@ export default class HomePage extends Component<Props> {
             // global.storage.clearMapForKey('user');
 
             this.checkToken()
-            // SplashScreen.hide()
+            SplashScreen.hide()
         }
         /**
      * 判断token是否有效，否则跳转登录页面
      */
         async checkToken() {
-            let user= await global.storage.load({
-                key:'user'
-            })
-
-            let token = user.token;
+            let user;
+            try {
+                user= await global.storage.load({
+                    key:'user'
+                })
+            } catch(e) {
+                NavigatorUtils.resetToLogin({navigation: this.props.navigation});
+            }
             if (user.token) {
                 var loginState = await HttpUtils.POST(_tokenCheck, 'token=' + user.token)
                 if (loginState && loginState.state) {

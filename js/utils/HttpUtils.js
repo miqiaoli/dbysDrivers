@@ -3,8 +3,10 @@ import {Alert} from 'react-native'
 import Loading from './LoadingUtils'
 
 export default class HttpUtils {
-    static async GET(url, params) {
-        Loading.show()
+    static async GET(url, params, loading) {
+        if(!loading) {
+            Loading.show()
+        }
         if (params) {
             var paramsArray = []
             Object.keys(params).forEach(key => paramsArray.push(key + "=" + params[key]))
@@ -21,8 +23,9 @@ export default class HttpUtils {
                 }
             });
             let responseJson = await response.json();
-            Loading.hidden()
-
+            if(!loading) {
+                Loading.hidden()
+            }
             if (responseJson.meta.success == true) {
                 return responseJson.data || true
             } else {
@@ -38,8 +41,10 @@ export default class HttpUtils {
             console.error(error);
         }
     }
-    static async POST(url, params) {
-        Loading.show()
+    static async POST(url, params, loading) {
+        if(!loading) {
+            Loading.show()
+        }
         try {
             let response = await fetch(url, {
                 method: "POST",
@@ -50,7 +55,9 @@ export default class HttpUtils {
                 body: params
             });
             let responseJson = await response.json();
-            Loading.hidden()
+            if(!loading) {
+                Loading.hidden()
+            }
 
             if (responseJson.meta.success == true) {
                 return responseJson.data || true
@@ -68,8 +75,10 @@ export default class HttpUtils {
             console.error(error);
         }
     }
-    static UploadFile(url, images, params) {
-        Loading.show()
+    static UploadFile(url, images, params, loading) {
+        if(!loading) {
+            Loading.show()
+        }
         let formData = new FormData();
         for (var key in params) {
             formData.append(key, params[key]);
@@ -89,7 +98,9 @@ export default class HttpUtils {
                 },
                 body: formData
             }).then((response) => response.json()).then((responseJson) => {
-                Loading.hidden()
+                if(!loading) {
+                    Loading.hidden()
+                }
                 if (responseJson.meta.success == true) {
                     resolve(responseJson.data)
                 } else {
@@ -101,7 +112,9 @@ export default class HttpUtils {
                     ],)
                 }
             }).catch(e => {
-                Loading.hidden()
+                if(!loading) {
+                    Loading.hidden()
+                }
                 reject(error)
             })
         })
