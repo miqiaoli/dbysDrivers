@@ -23,9 +23,7 @@ export default class HttpUtils {
                 }
             });
             let responseJson = await response.json();
-            if(!loading) {
                 Loading.hidden()
-            }
             if (responseJson.meta.success == true) {
                 return responseJson.data || true
             } else {
@@ -55,9 +53,7 @@ export default class HttpUtils {
                 body: params
             });
             let responseJson = await response.json();
-            if(!loading) {
                 Loading.hidden()
-            }
 
             if (responseJson.meta.success == true) {
                 return responseJson.data || true

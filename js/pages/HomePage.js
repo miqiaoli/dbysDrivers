@@ -8,7 +8,6 @@
 
 import React, {Component} from 'react';
 import {
-    Platform,
     StyleSheet,
     Text,
     View,
@@ -118,7 +117,7 @@ export default class HomePage extends Component<Props> {
     }
     async SaveLocations() {
         const params = "token=" + this.state.token + "&locations=" + JSON.stringify(this.state.locations);
-        var loginState = await HttpUtils.POST(_saveLocation, params, false)
+        var loginState = await HttpUtils.POST(_saveLocation, params, true)
         if(loginState) {
             this.setState({
                 locations: []
@@ -129,7 +128,7 @@ export default class HomePage extends Component<Props> {
         if (location) {
             location.timestamp = Date.now();
             if(location.timestamp!==this.state.timestamp) {
-                this.setState({ location, locations: [...this.state.locations,location], points: [...this.state.locations,location]});
+                this.setState({ location, locations: [...this.state.locations,location], points: [...this.state.points,location]});
                 console.log(location);
             }
         }
@@ -282,7 +281,7 @@ export default class HomePage extends Component<Props> {
         const {navigation} = this.props;
 
         return (<View style={styles.container}>
-            <TouchableOpacity onPress={ () => {
+            {/* <TouchableOpacity onPress={ () => {
                 navigation.navigate("LocationPage")
             }}>
                 <Text>定位</Text>
@@ -299,7 +298,7 @@ export default class HomePage extends Component<Props> {
                         <Text>{item.longitude}</Text>
                     </View>
                 </View>}
-            />
+            /> */}
 
             <FlatList data={this.state.list}
                 renderItem={(data) => this._renderItem(data)}

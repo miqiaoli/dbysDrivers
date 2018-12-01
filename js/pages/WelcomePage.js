@@ -18,7 +18,9 @@ import {
     FlatList,
     Alert,
     RefreshControl,
-    ActivityIndicator
+    ActivityIndicator,
+    PermissionsAndroid,
+    ToastAndroid
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
 import {_getLogout, _tokenCheck, _getLogistList} from '../servers/getData'
@@ -32,7 +34,9 @@ export default class HomePage extends Component<Props> {
         }
         componentDidMount() {
             // global.storage.clearMapForKey('user');
-
+            if(Platform.OS === "android") {
+              this.requestLocationPermission()
+            }
             this.checkToken()
             SplashScreen.hide()
         }
@@ -47,6 +51,7 @@ export default class HomePage extends Component<Props> {
                 })
             } catch(e) {
                 NavigatorUtils.resetToLogin({navigation: this.props.navigation});
+                return
             }
             if (user.token) {
                 var loginState = await HttpUtils.POST(_tokenCheck, 'token=' + user.token)
@@ -58,6 +63,32 @@ export default class HomePage extends Component<Props> {
                 }
             } else {
                 NavigatorUtils.resetToLogin({navigation: this.props.navigation});
+            }
+        }
+        async requestLocationPermission() {
+          console.log('android1')
+
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                        //第一次请求拒绝后提示用户你为什么要这个权限
+                        'title': '我要地址查询权限',
+                        'message': '没权限我不能工作，同意就好了'
+                    }
+                )
+
+                if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                    // this.show("你已获取了地址查询权限")
+                    // ToastAndroid.show("你已获取了地址查询权限",ToastAndroid.SHORT)
+                    ToastAndroid.show("获取地址查询失败",ToastAndroid.SHORT)
+                }
+                // else {
+                //     // this.show("获取地址查询失败")
+                //     ToastAndroid.show("获取地址查询失败",ToastAndroid.SHORT)
+                // }
+            } catch (err) {
+                this.show(err.toString())
             }
         }
         render() {
