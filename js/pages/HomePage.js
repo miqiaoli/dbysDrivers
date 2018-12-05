@@ -174,9 +174,12 @@ export default class HomePage extends Component<Props> {
     }
     getAbnormal(state){
         if(state == '2' || state == '3') {
-            return (<View style={[styles.item, {justifyContent: 'flex-end'}]}>
+            return (<TouchableOpacity style={[styles.item, {justifyContent: 'flex-end'}]} onPress={() => this.props.navigation.navigate('ListDetails', {
+                token: this.state.token,
+                list_num: this.state.list.list_num
+            })}>
                 <Text style={styles.itemError}>异常信息</Text>
-            </View>)
+            </TouchableOpacity>)
         }
     }
     _renderItem(){

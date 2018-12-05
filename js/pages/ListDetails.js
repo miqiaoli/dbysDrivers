@@ -14,7 +14,8 @@ import {
     View,
     Image,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    ScrollView
 } from 'react-native';
 
 import {_getLogistDetails} from '../servers/getData'
@@ -141,14 +142,14 @@ export default class ListDetails extends Component<Props> {
         return BoxView
     }
     render() {
-        return (<View style={styles.container}>
+        return (<ScrollView style={styles.container}>
             {/* <TouchableOpacity onPress={ () => {
                 this.getDetails()
                 }}>
                 <Text>获取列表</Text>
             </TouchableOpacity> */}
             {this._renderItem(this.state.items)}
-        </View>);
+        </ScrollView>);
     }
 }
 
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     itemLabel: {
-        width: 60,
+        width: 65,
         marginRight: 12,
         color: '#888888',
         textAlign: 'right',
