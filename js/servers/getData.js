@@ -1,8 +1,8 @@
 
 
 // const baseURL = 'https://www.otimes.com/front';
-// const baseURL = 'https://dbys.otimes.info/front';
-const baseURL = 'http://10.0.0.9:8080/front';
+const baseURL = 'https://dbys.otimes.info/front';
+// const baseURL = 'http://10.0.0.17:8080/front';
 
 // 登录
 export const _getLogin = baseURL+'/member/app/login.dbys';
@@ -28,8 +28,12 @@ export const _getPasswordBack = baseURL+'/password/validInfo.dbys';
 export const _getEditPassword = baseURL+'/password/findPassword.dbys';
 
 // 物流司机端
+// 物流首页当前todo列表
+export const _getTodoList = baseURL+'/logist/getTodoList.dbys';
 // 物流列表
 export const _getLogistList = baseURL+'/logist/seek_logist_list_app.dbys';
+// 物流详情
+export const _getLogistDetails = baseURL+'/logist/getDetails.dbys';
 // 上传图片
 export const _getImgUrl = baseURL+'/logist/trans_logist_abnormalimg.dbys';
 // 待发货

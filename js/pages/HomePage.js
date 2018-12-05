@@ -19,10 +19,10 @@ import {
     RefreshControl,
     ActivityIndicator
 } from 'react-native';
-import {_getLogout, _tokenCheck, _getLogistList, _saveLocation} from '../servers/getData'
+import {_getLogout, _tokenCheck, _getTodoList, _saveLocation} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
-import Icon from 'react-native-vector-icons/AntDesign'
+import Icon from 'react-native-vector-icons/Ionicons'
 import { Geolocation } from "react-native-amap-geolocation"
 import BackgroundTimer from 'react-native-background-timer'
 
@@ -31,31 +31,15 @@ export default class HomePage extends Component<Props> {
     static navigationOptions = ({navigation}) => {
         const {params} = navigation.state;
         return {
-            title: "列表页", headerRight: (<TouchableOpacity style={{
+            title: "未完成订单",
+            headerRight: (<TouchableOpacity style={{
                     paddingRight: 20
             }} onPress={() => {
-                Alert.alert('提示', '确定退出该账户？', [
-                    {
-                            text: '取消',
-                            style: 'cancel'
-                    }, {
-                            text: '确定',
-                        onPress: () => {
-                            fetch(_getLogout, {
-                                    method: "POST",
-                                headers: {
-                                        "Content-Type": "application/x-www-form-urlencoded"
-                                },
-                                    body: "token=" + params.headerToken
-                            }).then(res => {
-                                global.storage.clearMapForKey('user');
-                                NavigatorUtils.resetToLogin({navigation: navigation});
-                            });
-                        }
-                    }
-                    ], {cancelable: false})
+                navigation.navigate('HistoryListPage', {
+                    token: params.headerToken
+                })
             }}>
-                <Icon name="logout" size={22} color="#0078DD"/>
+                <Icon name="md-settings" size={25} color="#0078DD"/>
             </TouchableOpacity>)
         }
     }
@@ -80,6 +64,7 @@ export default class HomePage extends Component<Props> {
         })
         console.log(user);
 
+        this.props.navigation.setParams({ headerToken:user.token })
         this.setState({
             token: user.token
         }, ()=> {
@@ -93,7 +78,7 @@ export default class HomePage extends Component<Props> {
         Geolocation.setOptions({
           interval: 10000,
           distanceFilter: 10,
-          // background: true,
+          background: true,
           reGeocode: true
         });
 
@@ -106,7 +91,6 @@ export default class HomePage extends Component<Props> {
 
         // 开启后台定时器
         BackgroundTimer.runBackgroundTimer(() => {
-            //code that will be called every 3 seconds
             console.log('定时器');
             if(this.state.locations.length > 1) {
                 console.log('sendData');
@@ -118,6 +102,7 @@ export default class HomePage extends Component<Props> {
     async SaveLocations() {
         const params = "token=" + this.state.token + "&locations=" + JSON.stringify(this.state.locations);
         var loginState = await HttpUtils.POST(_saveLocation, params, true)
+        console.log(loginState);
         if(loginState) {
             this.setState({
                 locations: []
@@ -134,195 +119,136 @@ export default class HomePage extends Component<Props> {
         }
     }
     async getLogistList() {
-        let res = await HttpUtils.GET(_getLogistList, {
-            token: this.state.token,
-            page_start: this.state.page_start,
-            page_limit: this.state.page_limit
+        let res = await HttpUtils.GET(_getTodoList, {
+            token: this.state.token
         });
         if (res) {
-            if(this.state.page_start === 1) {
-                this.setState({list: res.data, counts: Math.ceil(res.count/this.state.page_limit)})
-
-            } else {
-                this.setState({list: this.state.list.concat(res.data)})
-            }
+            // this.setState({list: []})
+            this.setState({list: res.data[0] || ''})
         }
     }
-    _onRefresh(){
-        this.setState({
-            page_start: 1
-        }, ()=> {
-            this.getLogistList()
-        });
-    }
-    genIndicator(page_start) {
-        let renderView;
-        if(page_start < this.state.counts) { //下拉刷新
-            renderView = (<View style={styles.indicatorContainer}>
-                <ActivityIndicator style={styles.indicator} size="large" color="#0078DD"/>
-                <Text>正在加载中。。。。</Text>
-            </View>)
-        } else { //下拉触底
-            renderView = (<View style={styles.indicatorContainer}>
-                <Text> - </Text>
-            </View>)
-        }
-        return renderView
-    }
-    loadData(page_start){
-        if(page_start < this.state.counts) {
-            this.setState({
-                page_start: page_start+1
-            }, ()=> {
-                this.getLogistList()
-            });
-        }
-    }
-    renderButton(item) {
+    renderButton(state, list_num) {
         let ButtonView,
-            AbnormalButton,
-            state = item.state, {navigation} = this.props;
+            {navigation} = this.props;
 
         if (state == '0') {
-            ButtonView = (<TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('Delivery', {
-                    token: this.state.token,
-                    list_num: item.list_num,
-                    product_name: item.product_name
-            })}>
-                <Text style={styles.button1Text}>
-                    待发货
-                </Text>
-            </TouchableOpacity>);
-        } else if (state == '4') {
-            ButtonView = (<TouchableOpacity style={styles.button1}>
-                <Text style={styles.button1Text}>
-                    完成配送
-                </Text>
-            </TouchableOpacity>);
-        } else if (state == '-2') {
-            ButtonView = (<TouchableOpacity style={styles.button1}>
-                <Text style={styles.button1Text}>
-                    异常订单，已结束
-                </Text>
-            </TouchableOpacity>);
-        } else if (state == '1' || state == '2' || state == '3') {
             ButtonView = (<View style={styles.buttonBot}>
-                <TouchableOpacity style={styles.button1}>
-                    <Text style={styles.button1Text}>
-                        异常已上报
+                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('Delivery', {
+                    token: this.state.token,
+                    list_num: list_num
+                })}>
+                    <Text style={styles.buttonText}>
+                        待发货
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('Delivering', {
+            </View>);
+        } else if (state == '1' || state == '2' || state == '3') {
+            ButtonView = (<View style={styles.buttonBot}>
+                <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('Delivering', {
                         token: this.state.token,
-                        list_num: item.list_num,
-                        product_name: item.product_name
+                        list_num: list_num
                 })}>
-                    <Text style={styles.button1Text}>
-                        配送中
+                    <Text style={styles.buttonText}>
+                        途中异常
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ConfirmReceipt', {
                         token: this.state.token,
-                        list_num: item.list_num,
-                        product_name: item.product_name
+                        list_num: list_num
                 })}>
-                    <Text style={styles.button1Text}>
+                    <Text style={styles.buttonText}>
                         确认收货
                     </Text>
                 </TouchableOpacity>
             </View>);
-        } else if (state == '-4') {
-            AbnormalButton = (<TouchableOpacity style={styles.button1}>
-                <Text style={styles.button1Text}>
-                    异常已上报
-                </Text>
-            </TouchableOpacity>);
+        } else if (state == '4') {
+            ButtonView = (<View style={styles.buttonBot}>
+                <TouchableOpacity style={styles.button1}>
+                    <Text style={styles.buttonText}>
+                        完成配送
+                    </Text>
+                </TouchableOpacity>
+            </View>);
         }
-        return (<View>
-            {AbnormalButton}
-            {ButtonView}
-        </View>)
+        return (ButtonView)
     }
-    _renderItem(data) {
-        const {item} = data
-        return (<View style={styles.list}>
-            <View style={styles.listContainer}>
-                <View style={styles.listTop}>
-                    <Icon name="filetext1" size={22} color="#979797"/>
-                    <Text style={styles.topTitle}>{item.list_num}</Text>
-                    <Icon name="right" size={20} color="#888888"/>
-                </View>
-                <View style={styles.listBox}>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>商品名称</Text>
-                        <Text style={styles.itemText}>{item.product_name}</Text>
-                    </View>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>数量</Text>
-                        <Text style={styles.itemText}>{item.quantity}公斤</Text>
-                    </View>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>收货地址</Text>
-                        <Text style={styles.itemText}>{item.receiverAddress}</Text>
-                    </View>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>联系方式</Text>
-                        <Text style={styles.itemText}>{item.receiverLinkman}</Text>
-                    </View>
-                </View>
-                <View style={styles.buttonBot}>
-                    {this.renderButton(item)}
-                </View>
-            </View>
-        </View>)
+    getAbnormal(state){
+        if(state == '2' || state == '3') {
+            return (<View style={[styles.item, {justifyContent: 'flex-end'}]}>
+                <Text style={styles.itemError}>异常信息</Text>
+            </View>)
+        }
     }
+    _renderItem(){
+        let renderItem
+        const item = this.state.list
+        if(this.state.list) {
+            renderItem = (<View style={styles.list}>
+                <View style={styles.listContainer}>
+                    <View style={styles.listTop}>
+                        <Icon name="ios-document" size={22} color="#979797"/>
+                        <Text style={styles.topTitle}>{item.list_num}</Text>
+                    </View>
+                    <View style={styles.listBox}>
+                        <View style={styles.item}>
+                            <Text style={styles.itemLabel}>商品名称</Text>
+                            <Text style={styles.itemText}>{item.product_name}</Text>
+                        </View>
+                        <View style={styles.item}>
+                            <Text style={styles.itemLabel}>数量</Text>
+                            <Text style={styles.itemText}>{item.quantity}公斤</Text>
+                        </View>
+                        <View style={styles.item}>
+                            <Text style={styles.itemLabel}>收货地址</Text>
+                            <Text style={styles.itemText}>{item.receiverAddress}</Text>
+                        </View>
+                        <View style={styles.item}>
+                            <Text style={styles.itemLabel}>联系方式</Text>
+                            <Text style={styles.itemText}>{item.receiverLinkman}</Text>
+                        </View>
+                        {this.getAbnormal(item.state)}
 
+                    </View>
+                </View>
+            </View>)
+        } else {
+            renderItem = (<View style={styles.none}>
+                <Text style={styles.noneText}>~~暂无未完成订单~~</Text>
+            </View>)
+        }
+        return renderItem
+    }
     render() {
         const {navigation} = this.props;
+        const item = this.state.list
 
         return (<View style={styles.container}>
             {/* <TouchableOpacity onPress={ () => {
                 navigation.navigate("LocationPage")
-            }}>
+                }}>
                 <Text>定位</Text>
-            </TouchableOpacity>
-            <FlatList
+                </TouchableOpacity>
+                <FlatList
                 data={this.state.points}
                 renderItem={({item}) => <View>
                     <View style={{flexDirection: 'row',flexWrap: 'wrap'}}>
-                        <Text>latitude: </Text>
-                        <Text>{item.latitude}</Text>
-                        <Text>timestamp: </Text>
-                        <Text>{item.timestamp}</Text>
-                        <Text>longitude: </Text>
-                        <Text>{item.longitude}</Text>
+                <Text>latitude: </Text>
+                <Text>{item.latitude}</Text>
+                <Text>timestamp: </Text>
+                <Text>{item.timestamp}</Text>
+                <Text>longitude: </Text>
+                <Text>{item.longitude}</Text>
                     </View>
                 </View>}
             /> */}
+            {/* <TouchableOpacity onPress={ () => {
+                this.getLogistList()
+                }}>
+                <Text>获取列表</Text>
+            </TouchableOpacity> */}
+            {this._renderItem()}
 
-            <FlatList data={this.state.list}
-                renderItem={(data) => this._renderItem(data)}
-                keyExtractor={(item, index) => item.list_num}
-                ListEmptyComponent={this._createEmptyView}
-                refreshControl= {
-                    <RefreshControl
-                        title= {'Loading'}
-                        colors={['red']}
-                        tintColor={'#0078DD'}
-                        refreshing = {this.state.isLoading}
-                        onRefresh = {() => {
-                            this._onRefresh()
-                        }}
-                    />
-                }
-                ListFooterComponent = {()=>
-                    this.genIndicator(this.state.page_start)
-                }
-                onEndReachedThreshold='0.1'
-                onEndReached = {() => {
-                    this.loadData(this.state.page_start)
-                }}
-            />
+            {this.renderButton(item.state, item.list_num)}
         </View>);
     }
 
@@ -340,14 +266,16 @@ const styles = StyleSheet.create({
         marginRight: 12,
         marginBottom: 10,
         backgroundColor: '#fff',
-        fontSize: 28
+        fontSize: 28,
+        borderRadius: 8
     },
     listContainer: {
         padding: 10
     },
     listTop: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 10
     },
     leftIcon: {
         width: 25,
@@ -355,48 +283,74 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     topTitle: {
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: 'bold',
         flex: 1,
         marginLeft: 10
     },
     listBox: {
-        paddingLeft: 26,
-        paddingRight: 26,
-        marginTop: 10
+        // paddingLeft: 26,
+        // paddingRight: 26,
+        marginTop: 20
     },
     item: {
         flexDirection: 'row',
-        marginBottom: 5
+        marginBottom: 10
     },
     itemLabel: {
-        width: 60,
+        width: 92,
         marginRight: 12,
         color: '#888888',
-        textAlign: 'right'
+        textAlign: 'right',
+        fontSize: 22,
+        lineHeight: 30
+    },
+    itemText: {
+        fontSize: 22,
+        flex: 1,
+        lineHeight: 30
+    },
+    itemError:{
+        color: 'red',
+        fontSize: 22,
+        lineHeight: 30
     },
     buttonBot: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
+        flexDirection: 'row'
     },
     button1: {
-        borderColor: '#3B55E7',
-        borderWidth: 1,
-        color: '#3B55E7',
-        borderRadius: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 6,
-        paddingBottom: 6,
-        marginLeft: 10
+        flex: 1,
+        backgroundColor: '#0078DD',
+        borderColor: '#0078DD',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
-    button1Text: {
-        color: '#3B55E7'
+    button2: {
+        flex: 1,
+        backgroundColor: '#EB4E35',
+        borderColor: '#EB4E35',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    buttonText: {
+        color: '#ffffff',
+        fontSize: 30,
+        fontWeight: 'bold'
     },
     indicatorContainer: {
         alignItems: 'center'
     },
     indicator: {
         marginBottom:20
+    },
+    none: {
+        paddingVertical: 50,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    noneText: {
+        fontSize:24
     }
 });

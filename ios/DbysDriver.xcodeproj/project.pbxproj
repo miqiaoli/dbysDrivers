@@ -598,7 +598,6 @@
 				619AF9DF3CB722AA759B9E48 /* Pods-DbysDriver.debug.xcconfig */,
 				C81E3F1E0BB3081D048234B6 /* Pods-DbysDriver.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -848,6 +847,11 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = VVV4849283;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1476,7 +1480,10 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
-					"$(SRCROOT)..\node_modules\neact-native-splash-screenios",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-splash-screenios",
+					"$(SRCROOT)/../../react-native/React",
 				);
 				INFOPLIST_FILE = DbysDriver/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1507,7 +1514,10 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
-					"$(SRCROOT)..\node_modules\neact-native-splash-screenios",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-splash-screenios",
+					"$(SRCROOT)/../../react-native/React",
 				);
 				INFOPLIST_FILE = DbysDriver/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

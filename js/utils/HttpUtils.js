@@ -47,7 +47,7 @@ export default class HttpUtils {
             let response = await fetch(url, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
                     "type": "app"
                 },
                 body: params

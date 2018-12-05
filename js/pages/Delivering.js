@@ -38,9 +38,8 @@ export default class Delivering extends Component {
         this.state = {
             token: '',
             list_num: '',
-            product_name: '',
             state: 2, //货物状态。2:确认提货；-2:无法提货
-            abnormals_type: null, //异常状态选择。1：外包有异议；2：无装卸工；4：其他
+            abnormals_type: '', //异常状态选择。1：外包有异议；2：无装卸工；4：其他
             abnormals_describef: '',
             abnormals_describe: '',
             abnormalImgArr: [], //运输过程中异常上报图片
@@ -48,7 +47,7 @@ export default class Delivering extends Component {
     }
     componentWillMount() {
         const {params} = this.props.navigation.state;
-        this.setState({token: params.token, list_num: params.list_num, product_name: params.product_name})
+        this.setState({token: params.token, list_num: params.list_num})
     }
     handleChangeAbnormalImg(type, val) {
         if (type) {
@@ -79,14 +78,6 @@ export default class Delivering extends Component {
         const {navigation} = this.props;
         return (<View style={styles.fromBox}>
             <View style={styles.inputContent}>
-                <Text style={styles.label}>物流单号：</Text>
-                <Text style={styles.text}>{this.state.list_num}</Text>
-            </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>商品名称：</Text>
-                <Text style={styles.text}>{this.state.product_name}</Text>
-            </View>
-            <View style={styles.inputContent}>
                 <Text style={styles.label}>异常选择：</Text>
                 <View style={styles.labelBox}>
                     {abnormalsTypeArr.map((item, i, arr) => {
@@ -94,8 +85,8 @@ export default class Delivering extends Component {
                             ? [styles.button, styles.activeBtn]
                             : styles.button} onPress={() => this.changeState('abnormals_type', item.id)}>
                             <Text style={this.state.abnormals_type == item.id
-                                ? [styles.buttonText, styles.activeBtn]
-                                : styles.buttonText}>
+                                ? [styles.btnText, styles.activeBtn]
+                                : styles.btnText}>
                                 {item.name}
                             </Text>
                         </TouchableOpacity>)
@@ -112,18 +103,11 @@ export default class Delivering extends Component {
                     this.handleChangeAbnormalImg(type, val)
                 }}/>
             </View>
-            <View style={styles.inputContent}>
-                <TouchableOpacity style={styles.buttonCancel} onPress={() => {
-                    navigation.goBack()
-                }}>
-                    <Text style={styles.buttonCancelText}>
-                        取消
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonOk} onPress={() => {
+            <View style={styles.buttonBot}>
+                <TouchableOpacity style={styles.button2} onPress={() => {
                     this.getOrderWarningDetails()
                 }}>
-                    <Text style={styles.buttonOkText}>
+                    <Text style={styles.buttonText}>
                         确定
                     </Text>
                 </TouchableOpacity>
@@ -173,105 +157,93 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFFFF'
     },
+    warnBox: {
+        flex: 1,
+        backgroundColor: '#F4FAFF',
+        alignItems: 'center',
+        paddingVertical: 10,
+        marginTop: 20,
+        paddingHorizontal: 12
+    },
+    warnTitle: {
+        fontSize: 18,
+        color: '#0078DD'
+    },
     top: {
-        marginTop: 35,
-        marginLeft: 12,
-        marginRight: 12,
-        paddingLeft: 5,
-        borderLeftWidth: 4,
-        borderLeftColor: '#0078DD'
+        marginTop: 20,
+        alignItems: 'center'
     },
     title: {
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: 'bold',
         color: '#353535'
     },
     fromBox: {
-        marginTop: 35,
-        marginLeft: 12,
-        marginRight: 12,
+        marginTop: 20,
         marginBottom: 10
     },
     inputContent: {
+        marginLeft: 12,
+        marginRight: 12,
         marginBottom: 20,
-        flexDirection: 'row',
-        alignItems: 'center'
+    },
+    inputUnion: {
+        flexDirection: 'row'
+    },
+    label: {
+        color: '#888888',
+        fontSize: 20,
+        marginBottom: 14
     },
     labelBox: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        flexWrap: 'wrap'
-    },
-    label: {
-        color: '#888888',
-        fontSize: 14
+        flexWrap: 'wrap',
     },
     text: {
         fontSize: 14
     },
     button: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 10,
-        paddingBottom: 10,
+        width: 150,
+        height: 50,
         borderWidth: 1,
-        borderColor: '#B2B2B2',
-        borderRadius: 5,
+        borderColor: '#979797',
+        borderRadius: 6,
         alignItems: 'center',
+        justifyContent: 'center',
         marginRight: 10,
-        marginBottom: 15
-    },
-    buttonOk: {
-        flex: 1,
-        backgroundColor: '#0078DD',
-        paddingLeft: 14,
-        paddingRight: 14,
-        paddingTop: 15,
-        paddingBottom: 15,
-        borderRadius: 5,
-        marginTop: 20,
-        alignItems: 'center'
-    },
-    buttonCancel: {
-        flex: 1,
-        paddingLeft: 14,
-        paddingRight: 14,
-        paddingTop: 15,
-        paddingBottom: 15,
-        borderWidth: 1,
-        borderColor: '#B2B2B2',
-        borderRadius: 5,
-        marginTop: 20,
-        marginRight: 20,
-        alignItems: 'center'
-
-    },
-    buttonText: {
-        color: '#B2B2B2'
-    },
-    buttonOkText: {
-        fontSize: 18,
-        color: '#fff'
-    },
-    buttonCancelText:{
-        fontSize: 18,
-        color: '#B2B2B2'
+        marginBottom: 15,
     },
     activeBtn: {
-        borderColor: '#0078DD',
-        color: '#0078DD'
+        backgroundColor: '#EB4E35',
+        borderColor: '#EB4E35',
+        color: '#fff'
+    },
+    btnText: {
+        fontSize: 24,
+        color: '#353535'
     },
     textInput: {
         flex: 1,
-        paddingTop: 15,
-        paddingBottom: 15,
-        paddingLeft: 15,
-        paddingRight: 15,
-        backgroundColor: '#F9F9F9',
-        borderRadius: 4,
-        fontSize: 18,
-        borderColor: '#F9F9F9',
-        borderWidth: 1
+        fontSize: 20,
+        borderColor: '#979797',
+        borderBottomWidth: 1,
+    },
+    buttonBot: {
+        flexDirection: 'row'
+    },
+    button2: {
+        flex: 1,
+        backgroundColor: '#EB4E35',
+        borderColor: '#EB4E35',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    buttonText: {
+        color: '#ffffff',
+        fontSize: 30,
+        fontWeight: 'bold'
     }
 });

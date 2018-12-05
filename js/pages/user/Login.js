@@ -68,7 +68,7 @@ export default class Login extends Component<Props> {
     render() {
         const {navigation} = this.props
         return (<View style={styles.container}>
-            <Image style={styles.loginBg} source={require('../../../res/images/login-bg.png')}/>
+            {/* <Image style={styles.loginBg} source={require('../../../res/images/login-bg.png')}/> */}
             <View style={styles.loginBox}>
                 <Text style={styles.text}>用户名：</Text>
                 <TextInput autoCapitalize='none' style={styles.textInput} onChangeText={(username) => this.setState({username})} value={this.state.username}/>

@@ -22,7 +22,7 @@ import HttpUtils from '../utils/HttpUtils'
 const abnormalsTypeArr = [
     {
         id: 1,
-        name: '外包有异议'
+        name: '包装破损'
     }, {
         id: 2,
         name: '无装卸工'
@@ -37,7 +37,6 @@ export default class Delivery extends Component {
         this.state = {
             token: '',
             list_num: '',
-            product_name: '',
             step: 1,
             state: 2, //货物状态。2:确认提货；-2:无法提货
             stateArr: [{id: 2,name: '确认提货'},{id: -2,name: '无法提货'}],
@@ -52,7 +51,7 @@ export default class Delivery extends Component {
     }
     componentWillMount() {
         const {params} = this.props.navigation.state;
-        this.setState({token: params.token, list_num: params.list_num, product_name: params.product_name})
+        this.setState({token: params.token, list_num: params.list_num})
     }
     handleChangeImgPath(type, val) {
         if (type) {
@@ -99,63 +98,47 @@ export default class Delivery extends Component {
     }
 
     renderFristStep() {
-        return (<View style={styles.fromBox}>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>物流单号：</Text>
-                <Text style={styles.text}>{this.state.list_num}</Text>
+        return (<View>
+            <View style={styles.top}>
+                <Text style={styles.title}>额外费用上报</Text>
             </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>商品名称：</Text>
-                <Text style={styles.text}>{this.state.product_name}</Text>
+            <View style={styles.warnBox}>
+                <Text style={styles.warnTitle}>注：无额外费用时，无需填写，发生额外费用时，需上传凭证否则就要书写明细</Text>
             </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>货物状态：</Text>
-                {this.state.stateArr.map((item, i, arr) => {
-                    return (<TouchableOpacity style={this.state.state == item.id
-                        ? [styles.button, styles.activeBtn]
-                        : styles.button} onPress={() => this.changeState('state', item.id)}>
-                        <Text style={this.state.state == item.id
-                            ? [styles.buttonText, styles.activeBtn]
-                            : styles.buttonText}>
-                            {item.name}
-                        </Text>
-                    </TouchableOpacity>)
-                })}
-            </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>异常选择：</Text>
-                <View style={styles.labelBox}>
-                    {abnormalsTypeArr.map((item, i, arr) => {
-                        return (<TouchableOpacity key={i} style={this.state.abnormals_type == item.id
-                            ? [styles.button, styles.activeBtn]
-                            : styles.button} onPress={() => this.changeState('abnormals_type', item.id)}>
-                            <Text style={this.state.abnormals_type == item.id
-                                ? [styles.buttonText, styles.activeBtn]
-                                : styles.buttonText}>
-                                {item.name}
-                            </Text>
-                        </TouchableOpacity>)
-                    })}
+            <View style={styles.fromBox}>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>额外费用汇总：</Text>
+                    <View style={styles.inputUnion}>
+                        <Text style={styles.label}>￥</Text>
+                        <TextInput autoCapitalize='none' style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
+                    </View>
                 </View>
-            </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>异常描述：</Text>
-                <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(abnormals_describe) => this.setState({abnormals_describe})} value={this.state.abnormals_describe}/>
-            </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>图片上传：</Text>
-                <CameraBtnUtils onChangeCamera={(type, val) => {
-                    this.handleChangeImgPath(type, val)
-                }}/>
-            </View>
-            <View style={styles.inputContent}>
-                <TouchableOpacity style={styles.buttonOk} onPress={() => {
-                    this.nextStep()
-                }}>
-                    <Text style={styles.buttonOkText}>
-                        下一步
-                    </Text>
-                </TouchableOpacity>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>无凭证费用明细：</Text>
+                    <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(charges_detail) => this.setState({charges_detail})} value={this.state.charges_detail}/>
+                </View>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>上传费用凭证：</Text>
+                    <CameraBtnUtils onChangeCamera={(type, val) => {
+                        this.handleChangeAbnormalImg(type, val)
+                    }}/>
+                </View>
+                <View style={styles.buttonBot}>
+                    <TouchableOpacity style={styles.button2} onPress={() => {
+                        this.nextStep()
+                    }}>
+                        <Text style={styles.buttonText}>
+                            上报异常
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button1} onPress={() => {
+                        this.getOrderDoingDetails()
+                    }}>
+                        <Text style={styles.buttonText}>
+                            正常装货
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>)
     }
@@ -181,45 +164,54 @@ export default class Delivery extends Component {
         this.setState({step: 2 , state: 2})
     }
     renderSecondStep() {
-        return (<View style={styles.fromBox}>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>物流单号：</Text>
-                <Text style={styles.text}>{this.state.list_num}</Text>
+        return (<View>
+            <View style={styles.top}>
+                <Text style={styles.title}>装货异常信息上报</Text>
             </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>商品名称：</Text>
-                <Text style={styles.text}>{this.state.product_name}</Text>
-            </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>额外费用：</Text>
-                <TextInput autoCapitalize='none' style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
-                <Text style={styles.label}>元</Text>
-            </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>费用明细：</Text>
-                <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(charges_detail) => this.setState({charges_detail})} value={this.state.charges_detail}/>
-            </View>
-            <View style={styles.inputContent}>
-                <Text style={styles.label}>图片上传：</Text>
-                <CameraBtnUtils onChangeCamera={(type, val) => {
-                    this.handleChangeAbnormalImg(type, val)
-                }}/>
-            </View>
-            <View style={styles.inputContent}>
-                <TouchableOpacity style={styles.buttonOk} onPress={() => {
-                    this.getOrderDoingDetails()
+            <View style={styles.fromBox}>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>异常选择：</Text>
+                    <View style={styles.labelBox}>
+                        {abnormalsTypeArr.map((item, i, arr) => {
+                            return (<TouchableOpacity key={i} style={this.state.abnormals_type == item.id
+                                ? [styles.button, styles.activeBtn]
+                                : styles.button} onPress={() => this.changeState('abnormals_type', item.id)}>
+                                <Text style={this.state.abnormals_type == item.id
+                                    ? [styles.btnText, styles.activeBtn]
+                                    : styles.btnText}>
+                                    {item.name}
+                                </Text>
+                            </TouchableOpacity>)
+                        })}
+                    </View>
+                </View>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>异常描述：</Text>
+                    <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(abnormals_describe) => this.setState({abnormals_describe})} value={this.state.abnormals_describe}/>
+                </View>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>图片上传：</Text>
+                    <CameraBtnUtils onChangeCamera={(type, val) => {
+                        this.handleChangeImgPath(type, val)
+                    }}/>
+                </View>
+                <View style={styles.buttonBot}>
+                    <TouchableOpacity style={styles.button2} onPress={() => {
+                        this.getOrderDoingDetails()
                     }}>
-                    <Text style={styles.buttonOkText}>
-                        确定
-                    </Text>
-                </TouchableOpacity>
+                        <Text style={styles.buttonText}>
+                            异常提交
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>)
     }
     async getOrderDoingDetails() {
         console.log(this.state);
         const param = this.state;
-        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=" + param.state + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + param.additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',');
+        const additional_charges = param.additional_charges ? param.additional_charges : 0;
+        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=2" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',');
 
         let res = await HttpUtils.POST(_getOrderDoingDetails, params);
         if (res) {
@@ -237,9 +229,6 @@ export default class Delivery extends Component {
     render() {
         const {navigation} = this.props;
         return (<ScrollView style={styles.container}>
-            <View style={styles.top}>
-                <Text style={styles.title}>装货完毕，上传信息</Text>
-            </View>
             {
                 this.state.step == 1
                     ? this.renderFristStep()
@@ -254,33 +243,43 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFFFF'
     },
+    warnBox: {
+        flex: 1,
+        backgroundColor: '#F4FAFF',
+        alignItems: 'center',
+        paddingVertical: 10,
+        marginTop: 20,
+        paddingHorizontal: 12
+    },
+    warnTitle: {
+        fontSize: 18,
+        color: '#0078DD'
+    },
     top: {
-        marginTop: 35,
-        marginLeft: 12,
-        marginRight: 12,
-        paddingLeft: 5,
-        borderLeftWidth: 4,
-        borderLeftColor: '#0078DD'
+        marginTop: 20,
+        alignItems: 'center'
     },
     title: {
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: 'bold',
         color: '#353535'
     },
     fromBox: {
-        marginTop: 35,
-        marginLeft: 12,
-        marginRight: 12,
+        marginTop: 20,
         marginBottom: 10
     },
     inputContent: {
+        marginLeft: 12,
+        marginRight: 12,
         marginBottom: 20,
-        flexDirection: 'row',
-        alignItems: 'center'
+    },
+    inputUnion: {
+        flexDirection: 'row'
     },
     label: {
         color: '#888888',
-        fontSize: 14
+        fontSize: 20,
+        marginBottom: 14
     },
     labelBox: {
         flex: 1,
@@ -292,67 +291,53 @@ const styles = StyleSheet.create({
         fontSize: 14
     },
     button: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 10,
-        paddingBottom: 10,
+        width: 150,
+        height: 50,
         borderWidth: 1,
-        borderColor: '#B2B2B2',
-        borderRadius: 5,
+        borderColor: '#979797',
+        borderRadius: 6,
         alignItems: 'center',
+        justifyContent: 'center',
         marginRight: 10,
         marginBottom: 15,
     },
-    buttonOk: {
-        flex: 1,
-        backgroundColor: '#0078DD',
-        paddingLeft: 14,
-        paddingRight: 14,
-        paddingTop: 15,
-        paddingBottom: 15,
-        borderRadius: 5,
-        marginTop: 20,
-        alignItems: 'center'
-    },
-    buttonCancel: {
-        flex: 1,
-        paddingLeft: 14,
-        paddingRight: 14,
-        paddingTop: 15,
-        paddingBottom: 15,
-        borderWidth: 1,
-        borderColor: '#B2B2B2',
-        borderRadius: 5,
-        marginTop: 20,
-        marginRight: 20,
-        alignItems: 'center'
-
-    },
-    buttonText: {
-        color: '#B2B2B2'
-    },
-    buttonOkText: {
-        fontSize: 18,
+    activeBtn: {
+        backgroundColor: '#EB4E35',
+        borderColor: '#EB4E35',
         color: '#fff'
     },
-    buttonCancelText:{
-        fontSize: 18,
-        color: '#B2B2B2'
-    },
-    activeBtn: {
-        borderColor: '#0078DD',
-        color: '#0078DD'
+    btnText: {
+        fontSize: 24,
+        color: '#353535'
     },
     textInput: {
         flex: 1,
-        paddingTop: 15,
-        paddingBottom: 15,
-        paddingLeft: 15,
-        paddingRight: 15,
-        backgroundColor: '#F9F9F9',
-        borderRadius: 4,
-        fontSize: 18,
-        borderColor: '#F9F9F9',
-        borderWidth: 1
+        fontSize: 20,
+        borderColor: '#979797',
+        borderBottomWidth: 1,
+    },
+    buttonBot: {
+        flexDirection: 'row'
+    },
+    button1: {
+        flex: 1,
+        backgroundColor: '#0078DD',
+        borderColor: '#0078DD',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    button2: {
+        flex: 1,
+        backgroundColor: '#EB4E35',
+        borderColor: '#EB4E35',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    buttonText: {
+        color: '#ffffff',
+        fontSize: 30,
+        fontWeight: 'bold'
     }
 });
