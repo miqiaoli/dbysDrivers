@@ -24,9 +24,6 @@ const abnormalsTypeArr = [
         id: 1,
         name: '包装破损'
     }, {
-        id: 2,
-        name: '无装卸工'
-    }, {
         id: 4,
         name: '其他'
     }

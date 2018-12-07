@@ -241,7 +241,12 @@ const styles = StyleSheet.create({
         width: 60,
         marginRight: 12,
         color: '#888888',
-        textAlign: 'right'
+        textAlign: 'right',
+        lineHeight: 24
+    },
+    itemText: {
+        flex: 1,
+        lineHeight: 24
     },
     buttonBot: {
         flexDirection: 'row'

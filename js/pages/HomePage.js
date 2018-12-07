@@ -14,7 +14,7 @@ import {
     Image,
     Button,
     TouchableOpacity,
-    FlatList,
+    ScrollView,
     Alert,
     RefreshControl,
     ActivityIndicator
@@ -76,8 +76,8 @@ export default class HomePage extends Component<Props> {
           android: "68b927bf24f7185ac2a06049c69c3148"
         });
         Geolocation.setOptions({
-          interval: 10000,
-          distanceFilter: 10,
+          interval: 6000000,
+          distanceFilter: 1000,
           background: true,
           reGeocode: true
         });
@@ -225,7 +225,7 @@ export default class HomePage extends Component<Props> {
         const {navigation} = this.props;
         const item = this.state.list
 
-        return (<View style={styles.container}>
+        return (<ScrollView style={styles.container}>
             {/* <TouchableOpacity onPress={ () => {
                 navigation.navigate("LocationPage")
                 }}>
@@ -252,7 +252,7 @@ export default class HomePage extends Component<Props> {
             {this._renderItem()}
 
             {this.renderButton(item.state, item.list_num)}
-        </View>);
+        </ScrollView>);
     }
 
 
@@ -261,7 +261,9 @@ export default class HomePage extends Component<Props> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F2F2F2'
+        // position: 'relative',
+        backgroundColor: '#F2F2F2',
+        // paddingBottom: 150
     },
     list: {
         marginTop: 15,
@@ -319,6 +321,10 @@ const styles = StyleSheet.create({
         lineHeight: 30
     },
     buttonBot: {
+        // position:'absolute',
+        // left: 0,
+        // right: 0,
+        // bottom: 0,
         flexDirection: 'row'
     },
     button1: {

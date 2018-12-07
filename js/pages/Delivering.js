@@ -28,6 +28,9 @@ const abnormalsTypeArr = [
         id: 7,
         name: '超载查扣'
     }, {
+        id: 13,
+        name: '天气异常'
+    }, {
         id: 8,
         name: '其他'
     }
