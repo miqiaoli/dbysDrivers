@@ -17,7 +17,8 @@ import {
     ScrollView,
     Alert,
     RefreshControl,
-    ActivityIndicator
+    ActivityIndicator,
+    FlatList
 } from 'react-native';
 import {_getLogout, _tokenCheck, _getTodoList, _saveLocation} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
@@ -54,7 +55,8 @@ export default class HomePage extends Component<Props> {
             isLoading: false,
             location: {},
             locations: [],
-            points: []
+            points: [],
+            listNumArr: []
         }
     }
 
@@ -62,7 +64,6 @@ export default class HomePage extends Component<Props> {
         let user= await global.storage.load({
             key:'user'
         })
-        console.log(user);
 
         this.props.navigation.setParams({ headerToken:user.token })
         this.setState({
@@ -83,26 +84,23 @@ export default class HomePage extends Component<Props> {
         });
 
         Geolocation.addLocationListener(location => {
-          console.log(222);
           this.updateLocationState(location)
         });
-
+    }
+    startGeolocation(){
         Geolocation.start();
 
         // 开启后台定时器
         BackgroundTimer.runBackgroundTimer(() => {
             console.log('定时器');
             if(this.state.locations.length > 1) {
-                console.log('sendData');
                 this.SaveLocations()
             }
-        },
-        3000);
+        }, 3000);
     }
     async SaveLocations() {
-        const params = "token=" + this.state.token + "&locations=" + JSON.stringify(this.state.locations);
+        const params = "token=" + this.state.token + "&list_num=" + JSON.stringify(this.state.listNumArr) + "&locations=" + JSON.stringify(this.state.locations) ;
         var loginState = await HttpUtils.POST(_saveLocation, params, true)
-        console.log(loginState);
         if(loginState) {
             this.setState({
                 locations: []
@@ -114,7 +112,6 @@ export default class HomePage extends Component<Props> {
             location.timestamp = Date.now();
             if(location.timestamp!==this.state.timestamp) {
                 this.setState({ location, locations: [...this.state.locations,location], points: [...this.state.points,location]});
-                console.log(location);
             }
         }
     }
@@ -123,8 +120,20 @@ export default class HomePage extends Component<Props> {
             token: this.state.token
         });
         if (res) {
-            // this.setState({list: []})
-            this.setState({list: res.data[0] || ''})
+            let listNumArr = [],
+            data = res.data
+            for( let i = 0; i<data.length; i++ ) {
+                if(data[i].state == '1' || data[i].state == '2' || data[i].state == '3'){
+                    listNumArr.push(data[i].list_num)
+                }
+            }
+            if(listNumArr.length>0) {
+                this.startGeolocation()
+            } else {
+                Geolocation.stop()
+                BackgroundTimer.stopBackgroundTimer()
+            }
+            this.setState({list: res.data, listNumArr: listNumArr})
         }
     }
     renderButton(state, list_num) {
@@ -182,10 +191,11 @@ export default class HomePage extends Component<Props> {
             </TouchableOpacity>)
         }
     }
-    _renderItem(){
-        let renderItem
-        const item = this.state.list
-        if(this.state.list) {
+    _renderItem(data) {
+        const {item} = data,
+        // let renderItem
+        // const item = this.state.list
+        // if(this.state.list) {
             renderItem = (<View style={styles.list}>
                 <View style={styles.listContainer}>
                     <View style={styles.listTop}>
@@ -210,22 +220,32 @@ export default class HomePage extends Component<Props> {
                             <Text style={styles.itemText}>{item.receiverLinkman}</Text>
                         </View>
                         {this.getAbnormal(item.state)}
-
                     </View>
                 </View>
+                {this.renderButton(item.state, item.list_num)}
             </View>)
-        } else {
-            renderItem = (<View style={styles.none}>
-                <Text style={styles.noneText}>~~暂无未完成订单~~</Text>
-            </View>)
-        }
+        // } else {
+        //     renderItem = (<View style={styles.none}>
+        //         <Text style={styles.noneText}>~~暂无未完成订单~~</Text>
+        //     </View>)
+        // }
         return renderItem
+    }
+    _createEmptyView(){
+        return (<View style={styles.none}>
+            <Text style={styles.noneText}>~~暂无未完成订单~~</Text>
+        </View>)
     }
     render() {
         const {navigation} = this.props;
         const item = this.state.list
 
         return (<ScrollView style={styles.container}>
+            <FlatList data={this.state.list}
+                renderItem={(data) => this._renderItem(data)}
+                keyExtractor={(item) => item.list_num}
+                ListEmptyComponent={this._createEmptyView}
+            />
             {/* <TouchableOpacity onPress={ () => {
                 navigation.navigate("LocationPage")
                 }}>
@@ -249,12 +269,15 @@ export default class HomePage extends Component<Props> {
                 }}>
                 <Text>获取列表</Text>
             </TouchableOpacity> */}
-            {this._renderItem()}
+            {/* {this._renderItem()} */}
 
-            {this.renderButton(item.state, item.list_num)}
         </ScrollView>);
     }
-
+    componentWillUnmount() {
+      this.setState = (state,callback)=>{
+       return
+     }
+    }
 
 }
 
@@ -321,17 +344,13 @@ const styles = StyleSheet.create({
         lineHeight: 30
     },
     buttonBot: {
-        // position:'absolute',
-        // left: 0,
-        // right: 0,
-        // bottom: 0,
         flexDirection: 'row'
     },
     button1: {
         flex: 1,
         backgroundColor: '#0078DD',
         borderColor: '#0078DD',
-        height: 140,
+        height: 80,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -339,7 +358,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#EB4E35',
         borderColor: '#EB4E35',
-        height: 140,
+        height: 80,
         alignItems: 'center',
         justifyContent: 'center'
     },
