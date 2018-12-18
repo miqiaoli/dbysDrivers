@@ -77,7 +77,7 @@ export default class HomePage extends Component<Props> {
           android: "68b927bf24f7185ac2a06049c69c3148"
         });
         Geolocation.setOptions({
-          interval: 6000000,
+          interval: 600000,
           distanceFilter: 1000,
           background: true,
           reGeocode: true
@@ -93,8 +93,9 @@ export default class HomePage extends Component<Props> {
         // 开启后台定时器
         BackgroundTimer.runBackgroundTimer(() => {
             console.log('定时器');
-            if(this.state.locations.length > 1) {
+            if(this.state.locations.length > 0) {
                 this.SaveLocations()
+                console.log('上传定位');
             }
         }, 3000);
     }
@@ -113,6 +114,7 @@ export default class HomePage extends Component<Props> {
             if(location.timestamp!==this.state.timestamp) {
                 this.setState({ location, locations: [...this.state.locations,location], points: [...this.state.points,location]});
             }
+            console.log(location)
         }
     }
     async getLogistList() {
@@ -127,6 +129,7 @@ export default class HomePage extends Component<Props> {
                     listNumArr.push(data[i].list_num)
                 }
             }
+
             if(listNumArr.length>0) {
                 this.startGeolocation()
             } else {
