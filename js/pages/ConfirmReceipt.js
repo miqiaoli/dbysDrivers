@@ -39,6 +39,7 @@ export default class ConfirmReceipt extends Component {
             additional_charges: '', //额外费用
             charges_detail: '', //费用明细
             imgPathArr: [], //货物图片
+            ticketArr: []
         }
     }
     componentWillMount() {
@@ -73,6 +74,20 @@ export default class ConfirmReceipt extends Component {
             this.setState({abnormalImgArr: data})
         }
     }
+    handleChangeTicketImgPath(type, val){
+        if (type) {
+            this.setState({
+                'ticketArr': [
+                    ...this.state.ticketArr,
+                    val.abnormal_img
+                ]
+            })
+        } else {
+            let data = this.state.ticketArr;
+            data.splice(val, 1);
+            this.setState({ticketArr: data})
+        }
+    }
     changeState(type, state) {
         if (type == 'abnormals_type') {
             let obj=abnormalsTypeArr.find(function (item) {
@@ -83,55 +98,9 @@ export default class ConfirmReceipt extends Component {
             this.setState({[type]: state})
         }
     }
-
-    renderFristStep() {
-        return (<View>
-            <View style={styles.top}>
-                <Text style={styles.title}>卸货额外费用上报</Text>
-            </View>
-            <View style={styles.warnBox}>
-                <Text style={styles.warnTitle}>注：无额外费用时，无需填写，发生额外费用时，需上传凭证否则就要书写明细</Text>
-            </View>
-            <View style={styles.fromBox}>
-                <View style={styles.inputContent}>
-                    <Text style={styles.label}>额外费用：</Text>
-                    <View style={styles.inputUnion}>
-                        <Text style={styles.label}>￥</Text>
-                        <TextInput autoCapitalize='none' style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
-                    </View>
-                </View>
-                <View style={styles.inputContent}>
-                    <Text style={styles.label}>无凭证费用明细：</Text>
-                    <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(charges_detail) => this.setState({charges_detail})} value={this.state.charges_detail}/>
-                </View>
-                <View style={styles.inputContent}>
-                    <Text style={styles.label}>上传费用凭证：</Text>
-                    <CameraBtnUtils onChangeCamera={(type, val) => {
-                        this.handleChangeAbnormalImg(type, val)
-                    }}/>
-                </View>
-                <View style={styles.buttonBot}>
-                    <TouchableOpacity style={styles.button2} onPress={() => {
-                        this.nextStep()
-                    }}>
-                        <Text style={styles.buttonText}>
-                            卸货异常
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button1} onPress={() => {
-                        this.getOrderDoneDetails()
-                    }}>
-                        <Text style={styles.buttonText}>
-                            正常卸货
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </View>)
-    }
-    nextStep() {
-        if (this.state.abnormals_type && !this.state.imgPathArr.join(',')) {
-            Alert.alert('提示', '需上传图片', [
+    checkTicket(num) {
+        if (!this.state.ticketArr.join(',')) {
+            Alert.alert('提示', '需上传物流回单', [
                 {
                     text: '确定',
                     onPress: () => {}
@@ -139,9 +108,50 @@ export default class ConfirmReceipt extends Component {
             ])
             return
         }
-        this.setState({step: 2})
+        if(num === 2) {
+            this.setState({step: num})
+        } else {
+            this.getOrderDoneDetails()
+        }
     }
-    renderSecondStep() {
+    renderReceiptItem() {
+        return (<View>
+            <View style={styles.top}>
+                <Text style={styles.title}>卸货回单上传</Text>
+            </View>
+            <View style={styles.fromBox}>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}><Text style={styles.red}>*</Text>卸货回单上传：</Text>
+                    <CameraBtnUtils onChangeCamera={(type, val) => {
+                        this.handleChangeTicketImgPath(type, val)
+                    }}/>
+                </View>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>备注描述：</Text>
+                    <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(abnormals_describe) => this.setState({abnormals_describe})} value={this.state.abnormals_describe}/>
+                </View>
+                <View style={styles.buttonBot}>
+                    <TouchableOpacity style={styles.button2} onPress={() => {
+                        this.checkTicket(2)
+                        // this.setState({step: 2})
+                    }}>
+                        <Text style={styles.buttonText}>
+                            卸货异常
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button1} onPress={() => {
+                        this.checkTicket(3)
+                        // this.getOrderDoneDetails()
+                    }}>
+                        <Text style={styles.buttonText}>
+                            卸货正常
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>)
+    }
+    renderAbnormalItem() {
         return (<View>
             <View style={styles.top}>
                 <Text style={styles.title}>卸货异常信息上报</Text>
@@ -174,22 +184,62 @@ export default class ConfirmReceipt extends Component {
                     }}/>
                 </View>
                 <View style={styles.buttonBot}>
-                    <TouchableOpacity style={styles.button2} onPress={() => {
+                    <TouchableOpacity style={styles.button1} onPress={() => {
                         this.getOrderDoneDetails()
+                        // this.setState({step: 3})
                     }}>
                         <Text style={styles.buttonText}>
-                            卸货异常提交
+                            确定卸货
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </View>)
     }
+    renderPremiumItem() {
+        return (<View>
+            <View style={styles.top}>
+                <Text style={styles.title}>卸货额外费用上报</Text>
+            </View>
+            <View style={styles.warnBox}>
+                <Text style={styles.warnTitle}>注：无额外费用时，无需填写，发生额外费用时，需上传凭证否则就要书写明细</Text>
+            </View>
+            <View style={styles.fromBox}>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>额外费用：</Text>
+                    <View style={styles.inputUnion}>
+                        <Text style={styles.label}>￥</Text>
+                        <TextInput autoCapitalize='none' style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
+                    </View>
+                </View>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>无凭证费用明细：</Text>
+                    <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(charges_detail) => this.setState({charges_detail})} value={this.state.charges_detail}/>
+                </View>
+                <View style={styles.inputContent}>
+                    <Text style={styles.label}>上传费用凭证：</Text>
+                    <CameraBtnUtils onChangeCamera={(type, val) => {
+                        this.handleChangeAbnormalImg(type, val)
+                    }}/>
+                </View>
+                <View style={styles.buttonBot}>
+                    <TouchableOpacity style={styles.button1} onPress={() => {
+                        this.getOrderDoneDetails()
+                    }}>
+                        <Text style={styles.buttonText}>
+                            确定卸货
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>)
+    }
+
     async getOrderDoneDetails() {
         console.log(this.state);
         const param = this.state;
         const additional_charges = param.additional_charges ? param.additional_charges : 0;
-        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=4" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',');
+        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=4" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',') + "&ticket=" + param.ticketArr.join(',');
 
         let res = await HttpUtils.POST(_getOrderDoneDetails, params);
         if (res) {
@@ -203,14 +253,31 @@ export default class ConfirmReceipt extends Component {
             ],)
         }
     }
-
     render() {
         const {navigation} = this.props;
         return (<ScrollView style={styles.container}>
-            {
-                this.state.step == 1
-                    ? this.renderFristStep()
-                    : this.renderSecondStep()
+            {( () => {
+                switch (this.state.step) {
+                    case 1:
+                        console.log('renderReceiptItem');
+                        return this.renderReceiptItem()
+                        break;
+                    case 2:
+                        console.log('renderAbnormalItem');
+                        return this.renderAbnormalItem()
+                        break;
+                    case 3:
+                        console.log('renderPremiumItem');
+                        return this.renderPremiumItem()
+                        break;
+                    default:
+                        break;
+                }
+            })()
+
+                // this.state.step == 1
+                //     ? this.renderFristStep()
+                //     : this.renderSecondStep()
             }
         </ScrollView>);
     }
@@ -220,6 +287,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF'
+    },
+    red: {
+        color: '#EB4E35'
     },
     warnBox: {
         flex: 1,

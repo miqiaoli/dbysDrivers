@@ -16,9 +16,10 @@ import {
     TouchableOpacity,
     ScrollView,
     Alert,
-    RefreshControl,
     ActivityIndicator,
-    FlatList
+    FlatList,
+    RefreshControl,
+    Linking
 } from 'react-native';
 import {_getLogout, _tokenCheck, _getTodoList, _saveLocation} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
@@ -52,7 +53,7 @@ export default class HomePage extends Component<Props> {
             page_limit: 5,
             list: [],
             counts: null,//总条数
-            isLoading: false,
+            refreshing: false,
             location: {},
             locations: [],
             points: [],
@@ -169,7 +170,7 @@ export default class HomePage extends Component<Props> {
                         list_num: list_num
                 })}>
                     <Text style={styles.buttonText}>
-                        确认收货
+                        货物送达
                     </Text>
                 </TouchableOpacity>
             </View>);
@@ -195,43 +196,64 @@ export default class HomePage extends Component<Props> {
         }
     }
     _renderItem(data) {
-        const {item} = data,
-        // let renderItem
-        // const item = this.state.list
-        // if(this.state.list) {
-            renderItem = (<View style={styles.list}>
-                <View style={styles.listContainer}>
-                    <View style={styles.listTop}>
-                        <Icon name="ios-document" size={22} color="#979797"/>
-                        <Text style={styles.topTitle}>{item.list_num}</Text>
+        const {item} = data
+        renderItem = (<View style={styles.list}>
+            <View style={styles.listContainer}>
+                {/* <View style={styles.listTop}>
+                    <Icon name="ios-document" size={22} color="#979797"/>
+                    <Text style={styles.topTitle}>{item.list_num}</Text>
+                </View> */}
+                <View style={styles.listBox}>
+                    <View style={styles.item}>
+                        <Text style={styles.itemLabel}>商品名称</Text>
+                        <Text style={styles.itemText}>{item.product_name}</Text>
                     </View>
-                    <View style={styles.listBox}>
-                        <View style={styles.item}>
-                            <Text style={styles.itemLabel}>商品名称</Text>
-                            <Text style={styles.itemText}>{item.product_name}</Text>
-                        </View>
-                        <View style={styles.item}>
-                            <Text style={styles.itemLabel}>数量</Text>
-                            <Text style={styles.itemText}>{item.quantity}公斤</Text>
-                        </View>
-                        <View style={styles.item}>
-                            <Text style={styles.itemLabel}>收货地址</Text>
-                            <Text style={styles.itemText}>{item.receiverAddress}</Text>
-                        </View>
-                        <View style={styles.item}>
-                            <Text style={styles.itemLabel}>联系方式</Text>
-                            <Text style={styles.itemText}>{item.receiverLinkman}</Text>
-                        </View>
-                        {this.getAbnormal(item.state)}
+                    <View style={styles.item}>
+                        <Text style={styles.itemLabel}>数量</Text>
+                        <Text style={styles.itemText}>{item.quantity}公斤</Text>
                     </View>
+                    <View style={styles.item}>
+                        <Text style={styles.itemLabel}>提货地址</Text>
+                        <Text style={styles.itemText}>{item.pickAddress}</Text>
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={styles.itemLabel}>联系人</Text>
+                        <Text style={styles.itemText}>{item.picker}</Text>
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={styles.itemLabel}>联系电话</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                // Linking.openURL(`tel:${item.pickerPhone}`).catch(e=>console.war(e))
+                                Linking.openURL('tel:'+item.pickerPhone).catch(e=>console.log(e))
+                            }}>
+                            <Text style={styles.itemText}>{item.pickerPhone}</Text>
+                        </TouchableOpacity>
+                        {/* <Text style={styles.itemText}>{item.pickerPhone}</Text> */}
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={styles.itemLabel}>送货地址</Text>
+                        <Text style={styles.itemText}>{item.receiverAddress}</Text>
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={styles.itemLabel}>联系人</Text>
+                        <Text style={styles.itemText}>{item.receiverLinkman}</Text>
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={styles.itemLabel}>联系电话</Text>
+                        {/* <Text style={styles.itemText}>{item.receiverPhone}</Text> */}
+                        <TouchableOpacity
+                            onPress={() => {
+                                Linking.openURL('tel:'+item.receiverPhone).catch(e=>console.log(e))
+                            }}>
+                            <Text style={styles.itemText}>{item.receiverPhone}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {this.getAbnormal(item.state)}
                 </View>
-                {this.renderButton(item.state, item.list_num)}
-            </View>)
-        // } else {
-        //     renderItem = (<View style={styles.none}>
-        //         <Text style={styles.noneText}>~~暂无未完成订单~~</Text>
-        //     </View>)
-        // }
+            </View>
+            {this.renderButton(item.state, item.list_num)}
+        </View>)
         return renderItem
     }
     _createEmptyView(){
@@ -239,15 +261,31 @@ export default class HomePage extends Component<Props> {
             <Text style={styles.noneText}>~~暂无未完成订单~~</Text>
         </View>)
     }
+    _onRefresh(){
+        // this.setState({refreshing: true});
+        this.getLogistList()
+        // this.setState({refreshing: false});
+    }
     render() {
         const {navigation} = this.props;
         const item = this.state.list
 
-        return (<ScrollView style={styles.container}>
+        return (<View style={styles.container}>
             <FlatList data={this.state.list}
                 renderItem={(data) => this._renderItem(data)}
                 keyExtractor={(item) => item.list_num}
                 ListEmptyComponent={this._createEmptyView}
+                refreshControl= {
+                    <RefreshControl
+                        title= {'Loading'}
+                        colors={['red']}
+                        tintColor={'#0078DD'}
+                        refreshing = {this.state.refreshing}
+                        onRefresh = {() => {
+                            this._onRefresh()
+                        }}
+                    />
+                }
             />
             {/* <TouchableOpacity onPress={ () => {
                 navigation.navigate("LocationPage")
@@ -274,7 +312,7 @@ export default class HomePage extends Component<Props> {
             </TouchableOpacity> */}
             {/* {this._renderItem()} */}
 
-        </ScrollView>);
+        </View>);
     }
     componentWillUnmount() {
       this.setState = (state,callback)=>{

@@ -17,7 +17,8 @@ import {
     Button,
     TextInput,
     TouchableOpacity,
-    Alert
+    Alert,
+    Linking
 } from 'react-native';
 import HttpUtils from '../../utils/HttpUtils'
 import NavigatorUtils from '../../utils/NavigatorUtils'
@@ -39,12 +40,12 @@ export default class Login extends Component<Props> {
             Toast.show('请先填写用户名')
             return
         }
-        if (password == '') {
-            Toast.show('请先填写密码')
-            return
-        }
+        // if (password == '') {
+        //     Toast.show('请先填写密码')
+        //     return
+        // }
 
-        const params = "username=" + username + "&password=" + password;
+        const params = "username=wlsj" + username + "&password=666666";
 
         let res = await HttpUtils.POST(_getLogin, params);
         if (res) {
@@ -68,37 +69,42 @@ export default class Login extends Component<Props> {
     render() {
         const {navigation} = this.props
         return (<View style={styles.container}>
-            {/* <Image style={styles.loginBg} source={require('../../../res/images/login-bg.png')}/> */}
+            <Image style={styles.loginBg} source={require('../../../res/images/login-bg.png')}/>
             <View style={styles.loginBox}>
-                <Text style={styles.text}>用户名：</Text>
-                <TextInput autoCapitalize='none' style={styles.textInput} onChangeText={(username) => this.setState({username})} value={this.state.username}/>
-                <Text style={styles.text}>密码：</Text>
-                <TextInput secureTextEntry={true} style={styles.textInput} onChangeText={(password) => this.setState({password})} value={this.state.password}/>
+                <Text style={styles.text}>手机号：</Text>
+                <TextInput autoCapitalize='none' keyboardType='number-pad' style={styles.textInput} onChangeText={(username) => this.setState({username})} value={this.state.username}/>
+                {/* <Text style={styles.text}>密码：</Text>
+                <TextInput secureTextEntry={true} style={styles.textInput} onChangeText={(password) => this.setState({password})} value={this.state.password}/> */}
                 <TouchableOpacity style={styles.button} onPress={() => this.getLogin(this.state.username, this.state.password)}>
                     <Text style={styles.buttonText}>
                         登录
                     </Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.loginText}>
+            {/* <View style={styles.loginText}>
                 <TouchableOpacity onPress={() => {
-                        navigation.navigate('Registered')
-                    }}>
+                    navigation.navigate('Registered')
+                }}>
                     <Text>
-                        注册新用户
+                注册新用户
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
-                        navigation.navigate('ForgetPassword')
-                    }}>
+                    navigation.navigate('ForgetPassword')
+                }}>
                     <Text>
-                        忘记密码
+                忘记密码
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
             <View style={styles.loginFoot}>
                 <Icon name="old-phone" size={20} style={{marginRight: 20}} color="#0078DD"/>
-                <Text>客服热线：400-888-9383</Text>
+                <TouchableOpacity
+                    onPress={() => {
+                        Linking.openURL(`tel:${`400-888-9383`}`)
+                    }}>
+                    <Text>客服热线：400-888-9383</Text>
+                </TouchableOpacity>
             </View>
         </View>);
     }
