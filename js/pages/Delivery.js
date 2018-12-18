@@ -97,14 +97,14 @@ export default class Delivery extends Component {
     renderFristStep() {
         return (<View>
             <View style={styles.top}>
-                <Text style={styles.title}>额外费用上报</Text>
+                <Text style={styles.title}>异地装车费用上报</Text>
             </View>
             <View style={styles.warnBox}>
-                <Text style={styles.warnTitle}>注：无额外费用时，无需填写，发生额外费用时，需上传凭证否则就要书写明细</Text>
+                <Text style={styles.warnTitle}>注：无费用时，无需填写，发生费用时，需上传凭证否则就要书写明细</Text>
             </View>
             <View style={styles.fromBox}>
                 <View style={styles.inputContent}>
-                    <Text style={styles.label}>额外费用汇总：</Text>
+                    <Text style={styles.label}>费用汇总：</Text>
                     <View style={styles.inputUnion}>
                         <Text style={styles.label}>￥</Text>
                         <TextInput autoCapitalize='none' style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>

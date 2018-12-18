@@ -36,7 +36,7 @@ export default class HomePage extends Component<Props> {
         this.setState({
             token: params.token
         }, ()=> {
-            this.getLogistList()
+            // this.getLogistList()
         })
     }
     getLogout(){
