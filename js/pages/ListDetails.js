@@ -88,8 +88,8 @@ export default class ListDetails extends Component<Props> {
             BoxView = <View style={styles.box}><Text>暂无数据</Text></View>
         } else {
             BoxView = (<View style={styles.box}>
-                <View style={styles.listBox}>
-                    <View style={styles.item}>
+                {/*<View style={styles.listBox}>
+                     <View style={styles.item}>
                         <Text style={styles.itemLabel}>订单号</Text>
                         <Text style={styles.itemText}>{item.list_num}</Text>
                     </View>
@@ -113,7 +113,7 @@ export default class ListDetails extends Component<Props> {
                         <Text style={styles.itemLabel}>公司名称</Text>
                         <Text style={styles.itemText}>{item.entru.receiver.name}</Text>
                     </View>
-                </View>
+                </View>*/}
                 <View style={styles.listBox}>
                     { item.additional_charges ? (<View style={styles.item}>
                         <Text style={styles.itemLabel}>额外费用</Text>

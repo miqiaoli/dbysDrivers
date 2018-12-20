@@ -100,7 +100,7 @@ export default class Delivery extends Component {
                 <Text style={styles.title}>异地装车费用上报</Text>
             </View>
             <View style={styles.warnBox}>
-                <Text style={styles.warnTitle}>注：无费用时，无需填写，发生费用时，需上传凭证否则就要书写明细</Text>
+                <Text style={styles.warnTitle}>注：无费用时，无需填写，发生费用时，需上传凭证</Text>
             </View>
             <View style={styles.fromBox}>
                 <View style={styles.inputContent}>
@@ -110,10 +110,10 @@ export default class Delivery extends Component {
                         <TextInput autoCapitalize='none' style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
                     </View>
                 </View>
-                <View style={styles.inputContent}>
+                  {/* <View style={styles.inputContent}>
                     <Text style={styles.label}>无凭证费用明细：</Text>
                     <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(charges_detail) => this.setState({charges_detail})} value={this.state.charges_detail}/>
-                </View>
+                </View> */}
                 <View style={styles.inputContent}>
                     <Text style={styles.label}>上传费用凭证：</Text>
                     <CameraBtnUtils onChangeCamera={(type, val) => {

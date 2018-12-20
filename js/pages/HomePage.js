@@ -185,11 +185,11 @@ export default class HomePage extends Component<Props> {
         }
         return (ButtonView)
     }
-    getAbnormal(state){
+    getAbnormal(state, list_num){
         if(state == '2' || state == '3') {
             return (<TouchableOpacity style={[styles.item, {justifyContent: 'flex-end'}]} onPress={() => this.props.navigation.navigate('ListDetails', {
                 token: this.state.token,
-                list_num: this.state.list.list_num
+                list_num: list_num
             })}>
                 <Text style={styles.itemError}>异常信息</Text>
             </TouchableOpacity>)
@@ -212,49 +212,67 @@ export default class HomePage extends Component<Props> {
                         <Text style={styles.itemLabel}>数量</Text>
                         <Text style={styles.itemText}>{item.quantity}公斤</Text>
                     </View>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>提货地址</Text>
-                        <Text style={styles.itemText}>{item.pickAddress}</Text>
-                    </View>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>联系人</Text>
-                        <Text style={styles.itemText}>{item.picker}</Text>
-                    </View>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>联系电话</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                // Linking.openURL(`tel:${item.pickerPhone}`).catch(e=>console.war(e))
-                                Linking.openURL('tel:'+item.pickerPhone).catch(e=>console.log(e))
-                            }}>
-                            <Text style={styles.itemText}>{item.pickerPhone}</Text>
-                        </TouchableOpacity>
-                        {/* <Text style={styles.itemText}>{item.pickerPhone}</Text> */}
-                    </View>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>送货地址</Text>
-                        <Text style={styles.itemText}>{item.receiverAddress}</Text>
-                    </View>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>联系人</Text>
-                        <Text style={styles.itemText}>{item.receiverLinkman}</Text>
-                    </View>
-                    <View style={styles.item}>
-                        <Text style={styles.itemLabel}>联系电话</Text>
-                        {/* <Text style={styles.itemText}>{item.receiverPhone}</Text> */}
-                        <TouchableOpacity
-                            onPress={() => {
-                                Linking.openURL('tel:'+item.receiverPhone).catch(e=>console.log(e))
-                            }}>
-                            <Text style={styles.itemText}>{item.receiverPhone}</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {this.getAbnormal(item.state)}
+                    {this._renderAddressItem(item)}
+                    {this.getAbnormal(item.state, item.list_num)}
                 </View>
             </View>
             {this.renderButton(item.state, item.list_num)}
         </View>)
         return renderItem
+    }
+    _renderAddressItem(item) {
+      let addressItem;
+      if(item.state == 0) {
+        addressItem = (<View>
+          <View style={styles.item}>
+            <Text style={styles.itemLabel}>提货地址</Text>
+            <Text style={styles.itemText}>{item.pickAddress}</Text>
+        </View>
+        {
+          item.picker ? (<View style={styles.item}>
+              <Text style={styles.itemLabel}>联系人</Text>
+              <Text style={styles.itemText}>{item.picker}</Text>
+          </View>) : null
+        }
+        {
+          item.pickerPhone ? (<View style={styles.item}>
+              <Text style={styles.itemLabel}>联系电话</Text>
+              <TouchableOpacity
+                  onPress={() => {
+                      Linking.openURL('tel:'+item.pickerPhone).catch(e=>console.log(e))
+                  }}>
+                  <Text style={styles.itemText}>{item.pickerPhone}</Text>
+              </TouchableOpacity>
+          </View>) : null
+        }
+      </View>)
+      } else {
+        addressItem = (<View>
+          <View style={styles.item}>
+              <Text style={styles.itemLabel}>送货地址</Text>
+              <Text style={styles.itemText}>{item.receiverAddress.split('-')[0]}</Text>
+          </View>
+          {
+            item.companyCharger ? (<View style={styles.item}>
+                <Text style={styles.itemLabel}>联系人</Text>
+                <Text style={styles.itemText}>{item.companyCharger}</Text>
+            </View>) : null
+          }
+          {
+            item.companyPhone ? (<View style={styles.item}>
+                <Text style={styles.itemLabel}>联系电话</Text>
+                {/* <Text style={styles.itemText}>{item.receiverPhone}</Text> */}
+                <TouchableOpacity
+                    onPress={() => {
+                        Linking.openURL('tel:'+item.companyPhone).catch(e=>console.log(e))
+                    }}>
+                    <Text style={styles.itemText}>{item.companyPhone}</Text>
+                </TouchableOpacity>
+            </View>) : null
+          }
+        </View>)
+      }
+      return addressItem
     }
     _createEmptyView(){
         return (<View style={styles.none}>
@@ -271,6 +289,9 @@ export default class HomePage extends Component<Props> {
         const item = this.state.list
 
         return (<View style={styles.container}>
+            <View style={styles.warnBox}>
+                <Text style={styles.warnTitle}>注：详细地址请拨打联系人电话</Text>
+            </View>
             <FlatList data={this.state.list}
                 renderItem={(data) => this._renderItem(data)}
                 keyExtractor={(item) => item.list_num}
@@ -306,7 +327,7 @@ export default class HomePage extends Component<Props> {
                 </View>}
             /> */}
             {/* <TouchableOpacity onPress={ () => {
-                this.getLogistList()
+                this.getAbnormal()
                 }}>
                 <Text>获取列表</Text>
             </TouchableOpacity> */}
@@ -328,6 +349,17 @@ const styles = StyleSheet.create({
         // position: 'relative',
         backgroundColor: '#F2F2F2',
         // paddingBottom: 150
+    },
+    warnBox: {
+        backgroundColor: '#F4FAFF',
+        alignItems: 'center',
+        paddingVertical: 10,
+        marginTop: 20,
+        paddingHorizontal: 12
+    },
+    warnTitle: {
+        fontSize: 18,
+        color: '#0078DD'
     },
     list: {
         marginTop: 15,
