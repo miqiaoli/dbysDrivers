@@ -1,7 +1,7 @@
 
 
-// const baseURL = 'https://www.otimes.com/front';
-const baseURL = 'https://dbys.otimes.info/front';
+const baseURL = 'https://www.otimes.com/front';
+// const baseURL = 'https://dbys.otimes.info/front';
 // const baseURL = 'http://10.0.0.17:8080/front';
 
 // 登录
