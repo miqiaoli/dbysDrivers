@@ -36,7 +36,15 @@ export default class Delivery extends Component {
             list_num: '',
             step: 1,
             state: 2, //货物状态。2:确认提货；-2:无法提货
-            stateArr: [{id: 2,name: '确认提货'},{id: -2,name: '无法提货'}],
+            stateArr: [
+                {
+                    id: 2,
+                    name: '确认提货'
+                }, {
+                    id: -2,
+                    name: '无法提货'
+                }
+            ],
             abnormals_type: '', //异常状态选择。1：外包有异议；2：无装卸工；4：其他
             abnormals_describef: '',
             abnormals_describe: '',
@@ -44,11 +52,13 @@ export default class Delivery extends Component {
             additional_charges: '', //额外费用
             charges_detail: '', //费用明细
             imgPathArr: [], //货物图片
+            location: {}
         }
     }
     componentWillMount() {
         const {params} = this.props.navigation.state;
-        this.setState({token: params.token, list_num: params.list_num})
+        this.setState({token: params.token, list_num: params.list_num, geolocation: params.geolocation})
+        console.log('geolocation: ' + params.geolocation);
     }
     handleChangeImgPath(type, val) {
         if (type) {
@@ -80,10 +90,10 @@ export default class Delivery extends Component {
     }
     changeState(type, state) {
         if (type == 'abnormals_type') {
-            if(this.state.abnormals_type == state) {
+            if (this.state.abnormals_type == state) {
                 this.setState({[type]: '', abnormals_describef: ''})
             } else {
-                let obj=abnormalsTypeArr.find(function (item) {
+                let obj = abnormalsTypeArr.find(function(item) {
                     return item.id === state
                 })
                 this.setState({[type]: state, abnormals_describef: obj.name})
@@ -110,27 +120,28 @@ export default class Delivery extends Component {
                         <TextInput autoCapitalize='none' style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
                     </View>
                 </View>
-                  {/* <View style={styles.inputContent}>
+                {/* <View style={styles.inputContent}>
                     <Text style={styles.label}>无凭证费用明细：</Text>
                     <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(charges_detail) => this.setState({charges_detail})} value={this.state.charges_detail}/>
-                </View> */}
+                </View> */
+                }
                 <View style={styles.inputContent}>
                     <Text style={styles.label}>上传费用凭证：</Text>
                     <CameraBtnUtils onChangeCamera={(type, val) => {
-                        this.handleChangeAbnormalImg(type, val)
-                    }}/>
+                            this.handleChangeAbnormalImg(type, val)
+                        }}/>
                 </View>
                 <View style={styles.buttonBot}>
                     <TouchableOpacity style={styles.button2} onPress={() => {
-                        this.nextStep()
-                    }}>
+                            this.nextStep()
+                        }}>
                         <Text style={styles.buttonText}>
                             上报异常
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button1} onPress={() => {
-                        this.getOrderDoingDetails()
-                    }}>
+                            this.getOrderDoingDetails()
+                        }}>
                         <Text style={styles.buttonText}>
                             正常装货
                         </Text>
@@ -158,7 +169,7 @@ export default class Delivery extends Component {
             ])
             return
         }
-        this.setState({step: 2 , state: 2})
+        this.setState({step: 2, state: 2})
     }
     renderSecondStep() {
         return (<View>
@@ -169,17 +180,19 @@ export default class Delivery extends Component {
                 <View style={styles.inputContent}>
                     <Text style={styles.label}>异常选择：</Text>
                     <View style={styles.labelBox}>
-                        {abnormalsTypeArr.map((item, i, arr) => {
-                            return (<TouchableOpacity key={i} style={this.state.abnormals_type == item.id
-                                ? [styles.button, styles.activeBtn]
-                                : styles.button} onPress={() => this.changeState('abnormals_type', item.id)}>
-                                <Text style={this.state.abnormals_type == item.id
-                                    ? [styles.btnText, styles.activeBtn]
-                                    : styles.btnText}>
-                                    {item.name}
-                                </Text>
-                            </TouchableOpacity>)
-                        })}
+                        {
+                            abnormalsTypeArr.map((item, i, arr) => {
+                                return (<TouchableOpacity key={i} style={this.state.abnormals_type == item.id
+                                        ? [styles.button, styles.activeBtn]
+                                        : styles.button} onPress={() => this.changeState('abnormals_type', item.id)}>
+                                    <Text style={this.state.abnormals_type == item.id
+                                            ? [styles.btnText, styles.activeBtn]
+                                            : styles.btnText}>
+                                        {item.name}
+                                    </Text>
+                                </TouchableOpacity>)
+                            })
+                        }
                     </View>
                 </View>
                 <View style={styles.inputContent}>
@@ -189,13 +202,13 @@ export default class Delivery extends Component {
                 <View style={styles.inputContent}>
                     <Text style={styles.label}>图片上传：</Text>
                     <CameraBtnUtils onChangeCamera={(type, val) => {
-                        this.handleChangeImgPath(type, val)
-                    }}/>
+                            this.handleChangeImgPath(type, val)
+                        }}/>
                 </View>
                 <View style={styles.buttonBot}>
                     <TouchableOpacity style={styles.button2} onPress={() => {
-                        this.getOrderDoingDetails()
-                    }}>
+                            this.getOrderDoingDetails()
+                        }}>
                         <Text style={styles.buttonText}>
                             异常提交
                         </Text>
@@ -204,12 +217,27 @@ export default class Delivery extends Component {
             </View>
         </View>)
     }
-    async getOrderDoingDetails() {
-        console.log(this.state);
-        const param = this.state;
-        const additional_charges = param.additional_charges ? param.additional_charges : 0;
-        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=2" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',');
 
+    updateLocationState(location) {
+        if (location) {
+            location.timestamp = new Date(location.timestamp).toLocaleString();
+            this.setState({location});
+            // console.log(location);
+        }
+    }
+    async getLastLocation(){
+        this.updateLocationState(await this.state.geolocation.getLastLocation())
+    }
+    async getOrderDoingDetails() {
+        // console.log(this.state);
+        const param = this.state;
+        const additional_charges = param.additional_charges
+            ? param.additional_charges
+            : 0;
+
+        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=2" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',') + "&point=" + JSON.stringify(this.state.location);
+        console.log(params);
+        // return
         let res = await HttpUtils.POST(_getOrderDoingDetails, params);
         if (res) {
             Alert.alert('提示', '发货信息提交成功', [
@@ -226,6 +254,11 @@ export default class Delivery extends Component {
     render() {
         const {navigation} = this.props;
         return (<ScrollView style={styles.container}>
+            <TouchableOpacity onPress={() => {
+                    this.getLastLocation()
+                }}>
+                <Text>getLastLocation</Text>
+            </TouchableOpacity>
             {
                 this.state.step == 1
                     ? this.renderFristStep()
@@ -268,7 +301,7 @@ const styles = StyleSheet.create({
     inputContent: {
         marginLeft: 12,
         marginRight: 12,
-        marginBottom: 20,
+        marginBottom: 20
     },
     inputUnion: {
         flexDirection: 'row'
@@ -282,7 +315,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        flexWrap: 'wrap',
+        flexWrap: 'wrap'
     },
     text: {
         fontSize: 14
@@ -296,7 +329,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 10,
-        marginBottom: 15,
+        marginBottom: 15
     },
     activeBtn: {
         backgroundColor: '#EB4E35',
@@ -311,7 +344,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 20,
         borderColor: '#979797',
-        borderBottomWidth: 1,
+        borderBottomWidth: 1
     },
     buttonBot: {
         flexDirection: 'row'

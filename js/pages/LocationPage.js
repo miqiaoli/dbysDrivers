@@ -32,31 +32,31 @@ export default class LocationPage extends Component {
       android: "68b927bf24f7185ac2a06049c69c3148"
     });
     Geolocation.setOptions({
-      interval: 10000,
-      distanceFilter: 10,
+      interval: 0,
+      distanceFilter: 2000,
       // background: true,
       reGeocode: true
     });
 
-    BackgroundTimer.runBackgroundTimer(() => {
-    //code that will be called every 3 seconds
-        console.log('定时器');
-        this.setState({id: this.state.id ++})
-        if(this.state.locations.length > 1) {
-            console.log('sendData');
-            this.SaveLocations()
-        }
-    },
-    3000);
+    // BackgroundTimer.runBackgroundTimer(() => {
+    //     console.log('定时器');
+    //     this.setState({id: this.state.id ++})
+    //     if(this.state.locations.length > 1) {
+    //         console.log('sendData');
+    //         this.SaveLocations()
+    //     }
+    // },
+    // 3000);
 
     Geolocation.addLocationListener(location => {
-      console.log(222);
+      // console.log(222);
       this.updateLocationState(location)
 
     });
 
-      // console.log(1111);
       Geolocation.start();
+      console.log('getLastLocation: ' + await Geolocation.getLastLocation());
+
   }
 
   async SaveLocations() {

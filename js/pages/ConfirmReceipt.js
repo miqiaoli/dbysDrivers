@@ -39,12 +39,14 @@ export default class ConfirmReceipt extends Component {
             additional_charges: '', //额外费用
             charges_detail: '', //费用明细
             imgPathArr: [], //货物图片
-            ticketArr: []
+            ticketArr: [],
+            geolocation: '',
+            location: {}
         }
     }
     componentWillMount() {
         const {params} = this.props.navigation.state;
-        this.setState({token: params.token, list_num: params.list_num})
+        this.setState({token: params.token, list_num: params.list_num, geolocation: params.geolocation})
     }
     handleChangeImgPath(type, val) {
         if (type) {
@@ -234,13 +236,27 @@ export default class ConfirmReceipt extends Component {
             </View>
         </View>)
     }
+    updateLocationState(location) {
+        if (location) {
+            // location.timestamp = Date.now();
+            this.setState({ point: location });
+            console.log(location)
+        }
+    }
+    async getLastLocation(){
+        this.updateLocationState(await this.state.geolocation.getLastLocation())
+    }
 
     async getOrderDoneDetails() {
         console.log(this.state);
         const param = this.state;
         const additional_charges = param.additional_charges ? param.additional_charges : 0;
-        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=4" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',') + "&ticket=" + param.ticketArr.join(',');
+        // await this.getLastLocation()
 
+        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=4" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',') + "&ticket=" + param.ticketArr.join(',') + "&point=" + JSON.stringify(this.state.location);
+        console.log(params);
+
+// return
         let res = await HttpUtils.POST(_getOrderDoneDetails, params);
         if (res) {
             Alert.alert('提示', '卸货信息提交成功', [

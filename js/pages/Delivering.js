@@ -46,11 +46,14 @@ export default class Delivering extends Component {
             abnormals_describef: '',
             abnormals_describe: '',
             abnormalImgArr: [], //运输过程中异常上报图片
+            geolocation: '',
+            location: {}
         }
     }
     componentWillMount() {
         const {params} = this.props.navigation.state;
-        this.setState({token: params.token, list_num: params.list_num})
+        this.setState({token: params.token, list_num: params.list_num, geolocation: params.geolocation})
+        console.log('geolocation: ' + params.geolocation);
     }
     handleChangeAbnormalImg(type, val) {
         if (type) {
@@ -130,8 +133,10 @@ export default class Delivering extends Component {
             ])
             return
         }
-        const params = "token=" + param.token + "&list_num=" + param.list_num  + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',');
-
+        // await this.getLastLocation()
+        const params = "token=" + param.token + "&list_num=" + param.list_num  + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&point=" +JSON.stringify(this.state.location);
+        console.log(params);
+// return
         let res = await HttpUtils.POST(_getOrderWarningDetails, params);
         if (res) {
             Alert.alert('提示', '异常信息上报提交成功', [
@@ -144,7 +149,16 @@ export default class Delivering extends Component {
             ],)
         }
     }
-
+    updateLocationState(location) {
+        if (location) {
+            // location.timestamp = Date.now();
+            this.setState({ point: location });
+            console.log(location)
+        }
+    }
+    async getLastLocation(){
+        this.updateLocationState(await this.state.geolocation.getLastLocation())
+    }
     render() {
         return (<ScrollView style={styles.container}>
             <View style={styles.top}>

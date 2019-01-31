@@ -56,7 +56,7 @@ export default class HomePage extends Component<Props> {
             refreshing: false,
             location: {},
             locations: [],
-            points: [],
+            point: {},
             listNumArr: []
         }
     }
@@ -78,8 +78,8 @@ export default class HomePage extends Component<Props> {
           android: "68b927bf24f7185ac2a06049c69c3148"
         });
         Geolocation.setOptions({
-          interval: 600000,
-          distanceFilter: 1000,
+          interval: 10000,  //600000
+          distanceFilter: 10,  //1000
           background: true,
           reGeocode: true
         });
@@ -113,7 +113,7 @@ export default class HomePage extends Component<Props> {
         if (location) {
             location.timestamp = Date.now();
             if(location.timestamp!==this.state.timestamp) {
-                this.setState({ location, locations: [...this.state.locations,location], points: [...this.state.points,location]});
+                this.setState({ location, locations: [...this.state.locations,location] });
             }
             console.log(location)
         }
@@ -140,16 +140,26 @@ export default class HomePage extends Component<Props> {
             this.setState({list: res.data, listNumArr: listNumArr})
         }
     }
+
+    async btnNext(str, list_num){
+        let {navigation} = this.props;
+
+        navigation.navigate(str, {
+                token: this.state.token,
+                list_num: list_num,
+                // point: this.state.point,
+                geolocation: Geolocation
+        })
+    }
     renderButton(state, list_num) {
         let ButtonView,
             {navigation} = this.props;
 
         if (state == '0') {
             ButtonView = (<View style={styles.buttonBot}>
-                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('Delivery', {
-                    token: this.state.token,
-                    list_num: list_num
-                })}>
+                <TouchableOpacity style={styles.button1} onPress={() => {
+                    this.btnNext('Delivery', list_num)
+                }}>
                     <Text style={styles.buttonText}>
                         待发货
                     </Text>
@@ -157,18 +167,16 @@ export default class HomePage extends Component<Props> {
             </View>);
         } else if (state == '1' || state == '2' || state == '3') {
             ButtonView = (<View style={styles.buttonBot}>
-                <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('Delivering', {
-                        token: this.state.token,
-                        list_num: list_num
-                })}>
+                <TouchableOpacity style={styles.button2} onPress={() => {
+                    this.btnNext('Delivering', list_num)
+                }}>
                     <Text style={styles.buttonText}>
                         途中异常
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ConfirmReceipt', {
-                        token: this.state.token,
-                        list_num: list_num
-                })}>
+                <TouchableOpacity style={styles.button1} onPress={() => {
+                    this.btnNext('ConfirmReceipt', list_num)
+                }}>
                     <Text style={styles.buttonText}>
                         货物送达
                     </Text>
@@ -309,29 +317,10 @@ export default class HomePage extends Component<Props> {
                 }
             />
             {/* <TouchableOpacity onPress={ () => {
-                navigation.navigate("LocationPage")
-                }}>
-                <Text>定位</Text>
-                </TouchableOpacity>
-                <FlatList
-                data={this.state.points}
-                renderItem={({item}) => <View>
-                    <View style={{flexDirection: 'row',flexWrap: 'wrap'}}>
-                <Text>latitude: </Text>
-                <Text>{item.latitude}</Text>
-                <Text>timestamp: </Text>
-                <Text>{item.timestamp}</Text>
-                <Text>longitude: </Text>
-                <Text>{item.longitude}</Text>
-                    </View>
-                </View>}
-            /> */}
-            {/* <TouchableOpacity onPress={ () => {
                 this.getAbnormal()
                 }}>
                 <Text>获取列表</Text>
             </TouchableOpacity> */}
-            {/* {this._renderItem()} */}
 
         </View>);
     }
