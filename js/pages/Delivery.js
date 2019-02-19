@@ -254,11 +254,6 @@ export default class Delivery extends Component {
     render() {
         const {navigation} = this.props;
         return (<ScrollView style={styles.container}>
-            <TouchableOpacity onPress={() => {
-                    this.getLastLocation()
-                }}>
-                <Text>getLastLocation</Text>
-            </TouchableOpacity>
             {
                 this.state.step == 1
                     ? this.renderFristStep()

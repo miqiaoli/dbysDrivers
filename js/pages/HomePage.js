@@ -78,8 +78,8 @@ export default class HomePage extends Component<Props> {
           android: "68b927bf24f7185ac2a06049c69c3148"
         });
         Geolocation.setOptions({
-          interval: 10000,  //600000
-          distanceFilter: 10,  //1000
+          interval: 600000,  //600000
+          distanceFilter: 1000,  //1000
           background: true,
           reGeocode: true
         });
