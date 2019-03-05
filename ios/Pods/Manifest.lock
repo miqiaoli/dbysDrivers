@@ -95,10 +95,10 @@ SPEC CHECKSUMS:
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
   glog: e8acf0ebbf99759d3ff18c86c292a5898282dcde
   React: 1f4ca35c4aeac2b47e42e8be98bb9188f48fba84
-  react-native-amap-geolocation: daacfe52bb072bf5061baafaed08b0cbc19874b6
-  react-native-background-timer: 1b6e6b4e10f1b74c367a1fdc3c72b67c619b222b
+  react-native-amap-geolocation: af509ba5aaea6bc3abdfe0232a2d1486855e590f
+  react-native-background-timer: 0d34748e53a972507c66963490c775321a88f6f2
   yoga: ac0f4c6ff31ac05bad1bd166fec5204c19de0277
 
-PODFILE CHECKSUM: fce4b49385fc5cc4a2667da5f484c38e5889b464
+PODFILE CHECKSUM: e2a1d3de974d8e06dfeadaaef1314aa8578fb4b3
 
 COCOAPODS: 1.6.0.beta.2

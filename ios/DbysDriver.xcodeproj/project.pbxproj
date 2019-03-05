@@ -25,7 +25,6 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		1D097D270681A573BC4F6498 /* libPods-DbysDriver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BE1962BA08EDE52D2B4ECCC /* libPods-DbysDriver.a */; };
 		24ADBBDA5A15413787D869D2 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9C34E9F2CAEC492F9F6193B4 /* FontAwesome5_Solid.ttf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -44,16 +43,17 @@
 		4943AF592C3F445482A062F7 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1B6CE74357E4556AD17C948 /* MaterialIcons.ttf */; };
 		5B262A0EF7EE4D74A3C0A74C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ABC05EE54AD5485D93CD0C3F /* Octicons.ttf */; };
 		6C36742033A442DC9E9CCA1D /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B714B3EB4CF2450882A96645 /* Entypo.ttf */; };
-		77050A40C9A548AF84FF05B4 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 876A9915DF764302B71C7EFA /* libSplashScreen.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8D04E217B5154C2F8AEDB5CB /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7601E3393A9946A6BFFC666E /* Ionicons.ttf */; };
 		8D142B906C4C4A848E1B19AE /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 019FC9DC15D043569B1964BD /* MaterialCommunityIcons.ttf */; };
-		98602A08211D4391B6800AE2 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B53F0D6593F4E1A9AB82365 /* libRNVectorIcons.a */; };
 		A8F64B576A374761BF520A1A /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC05C910D8AA446EB65830B3 /* SimpleLineIcons.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		B6325BDDE8BD4C219E9EC800 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC56ABECFDE24EB19604B2F4 /* libRNImagePicker.a */; };
 		B6E96BCED91B4E5587C84E8D /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADF0D6DA9BA142D4B9EEBA7A /* FontAwesome5_Brands.ttf */; };
 		B730A178A4DA44E584136207 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37487AD9C6E64713BEF6BE55 /* EvilIcons.ttf */; };
+		CC09C716222938DA001C3C4F /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC61602921997A6B0072EA0E /* libRNVectorIcons.a */; };
+		CC09C717222938F9001C3C4F /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC616064219985D80072EA0E /* libRNImagePicker.a */; };
+		CC09C71822293909001C3C4F /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC08BBD321A25211001DEDDC /* libSplashScreen.a */; };
+		CC13BDFC222CF87800C9B6E7 /* libPods-DbysDriver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC13BDFB222CF87800C9B6E7 /* libPods-DbysDriver.a */; };
 		CCF67503219DAB880028D83B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCF67502219DAB880028D83B /* Images.xcassets */; };
 		CFAF5E6D80B344709A960BCF /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3CEDE19B024D4026AD9EB307 /* Feather.ttf */; };
 		F471FBCCA78F4BA1840ACD5A /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 314F578D65A14A40B2642A26 /* Foundation.ttf */; };
@@ -410,6 +410,10 @@
 		ADF0D6DA9BA142D4B9EEBA7A /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		B714B3EB4CF2450882A96645 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		C81E3F1E0BB3081D048234B6 /* Pods-DbysDriver.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DbysDriver.release.xcconfig"; path = "Target Support Files/Pods-DbysDriver/Pods-DbysDriver.release.xcconfig"; sourceTree = "<group>"; };
+		CC09C71922293919001C3C4F /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC09C71B22293945001C3C4F /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC09C71D22293B84001C3C4F /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC13BDFB222CF87800C9B6E7 /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCF67502219DAB880028D83B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DbysDriver/Images.xcassets; sourceTree = "<group>"; };
 		D161C22B58724CEEB4E0625C /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		EC56ABECFDE24EB19604B2F4 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
@@ -430,6 +434,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC13BDFC222CF87800C9B6E7 /* libPods-DbysDriver.a in Frameworks */,
+				CC09C71822293909001C3C4F /* libSplashScreen.a in Frameworks */,
+				CC09C717222938F9001C3C4F /* libRNImagePicker.a in Frameworks */,
+				CC09C716222938DA001C3C4F /* libRNVectorIcons.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -442,10 +450,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				98602A08211D4391B6800AE2 /* libRNVectorIcons.a in Frameworks */,
-				B6325BDDE8BD4C219E9EC800 /* libRNImagePicker.a in Frameworks */,
-				77050A40C9A548AF84FF05B4 /* libSplashScreen.a in Frameworks */,
-				1D097D270681A573BC4F6498 /* libPods-DbysDriver.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,6 +608,10 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CC13BDFB222CF87800C9B6E7 /* libPods-DbysDriver.a */,
+				CC09C71D22293B84001C3C4F /* libPods-DbysDriver.a */,
+				CC09C71B22293945001C3C4F /* libPods-DbysDriver.a */,
+				CC09C71922293919001C3C4F /* libPods-DbysDriver.a */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
 				7BE1962BA08EDE52D2B4ECCC /* libPods-DbysDriver.a */,
 			);
@@ -845,7 +853,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = VVV4849283;
+						DevelopmentTeam = V6Z672D9UC;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -1474,7 +1482,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = VVV4849283;
+				DEVELOPMENT_TEAM = V6Z672D9UC;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
@@ -1486,15 +1494,17 @@
 					"$(SRCROOT)/../../react-native/React",
 				);
 				INFOPLIST_FILE = DbysDriver/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dbys.drivers;
 				PRODUCT_NAME = DbysDriver;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1508,7 +1518,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VVV4849283;
+				DEVELOPMENT_TEAM = V6Z672D9UC;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
@@ -1520,15 +1530,17 @@
 					"$(SRCROOT)/../../react-native/React",
 				);
 				INFOPLIST_FILE = DbysDriver/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dbys.drivers;
 				PRODUCT_NAME = DbysDriver;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

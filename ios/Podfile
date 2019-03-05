@@ -1,4 +1,5 @@
 platform :ios, '9.0'
+install! 'cocoapods', :deterministic_uuids => false
 
 # The target name is most likely the name of your project.
 target 'DbysDriver' do
@@ -26,4 +27,12 @@ target 'DbysDriver' do
   pod 'react-native-amap-geolocation', path: '../node_modules/react-native-amap-geolocation/lib/ios'
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
 
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == "React"
+      target.remove_from_project
+    end
+  end
 end
