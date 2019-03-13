@@ -160,7 +160,7 @@ export default class HomePage extends Component<Props> {
                 <TouchableOpacity style={styles.button1} onPress={() => {
                     this.btnNext('Delivery', list_num)
                 }}>
-                    <Text style={styles.buttonText}>
+                    <Text style={styles.button1Text}>
                         待发货
                     </Text>
                 </TouchableOpacity>
@@ -170,14 +170,14 @@ export default class HomePage extends Component<Props> {
                 <TouchableOpacity style={styles.button2} onPress={() => {
                     this.btnNext('Delivering', list_num)
                 }}>
-                    <Text style={styles.buttonText}>
+                    <Text style={styles.button2Text}>
                         途中异常
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button1} onPress={() => {
                     this.btnNext('ConfirmReceipt', list_num)
                 }}>
-                    <Text style={styles.buttonText}>
+                    <Text style={styles.button1Text}>
                         货物送达
                     </Text>
                 </TouchableOpacity>
@@ -185,7 +185,7 @@ export default class HomePage extends Component<Props> {
         } else if (state == '4') {
             ButtonView = (<View style={styles.buttonBot}>
                 <TouchableOpacity style={styles.button1}>
-                    <Text style={styles.buttonText}>
+                    <Text style={styles.button1Text}>
                         完成配送
                     </Text>
                 </TouchableOpacity>
@@ -207,10 +207,14 @@ export default class HomePage extends Component<Props> {
         const {item} = data
         renderItem = (<View style={styles.list}>
             <View style={styles.listContainer}>
-                {/* <View style={styles.listTop}>
-                    <Icon name="ios-document" size={22} color="#979797"/>
+                <View style={styles.listTop}>
+                    {/* <Icon name="ios-document" size={22} color="#979797"/> */}
+                    <Image
+                        style={styles.fileImage}
+                        source={require('../../res/images/icon-file.png')}
+                    />
                     <Text style={styles.topTitle}>{item.list_num}</Text>
-                </View> */}
+                </View>
                 <View style={styles.listBox}>
                     <View style={styles.item}>
                         <Text style={styles.itemLabel}>商品名称</Text>
@@ -232,21 +236,21 @@ export default class HomePage extends Component<Props> {
       let addressItem;
       if(item.state == 0) {
         addressItem = (<View>
-          <View style={styles.item}>
-            <Text style={styles.itemLabel}>提货地址</Text>
-            <Text style={styles.itemText}>{item.pickAddress}</Text>
-        </View>
-        {
-          item.picker ? (<View style={styles.item}>
-              <Text style={styles.itemLabel}>联系人</Text>
-              <Text style={styles.itemText}>{item.picker}</Text>
-          </View>) : null
-        }
-        {
-          item.pickerPhone ? (<View style={styles.item}>
-              <Text style={styles.itemLabel}>联系电话</Text>
-              <TouchableOpacity
-                  onPress={() => {
+            <View style={styles.item}>
+                <Text style={styles.itemLabel}>提货地址</Text>
+                <Text style={styles.itemText}>{item.pickAddress}</Text>
+            </View>
+            {
+                item.picker ? (<View style={styles.item}>
+                    <Text style={styles.itemLabel}>联系人</Text>
+                    <Text style={styles.itemText}>{item.picker}</Text>
+                </View>) : null
+            }
+            {
+                item.pickerPhone ? (<View style={styles.item}>
+                    <Text style={styles.itemLabel}>联系电话</Text>
+                    <TouchableOpacity
+                        onPress={() => {
                       Linking.openURL('tel:'+item.pickerPhone).catch(e=>console.log(e))
                   }}>
                   <Text style={styles.itemText}>{item.pickerPhone}</Text>
@@ -298,6 +302,10 @@ export default class HomePage extends Component<Props> {
 
         return (<View style={styles.container}>
             <View style={styles.warnBox}>
+                <Image
+                    style={styles.warnImage}
+                    source={require('../../res/images/icon-warn.png')}
+                />
                 <Text style={styles.warnTitle}>注：详细地址请拨打联系人电话</Text>
             </View>
             <FlatList data={this.state.list}
@@ -317,7 +325,7 @@ export default class HomePage extends Component<Props> {
                 }
             />
             {/* <TouchableOpacity onPress={ () => {
-                this.getAbnormal()
+                this.getLogistList()
                 }}>
                 <Text>获取列表</Text>
             </TouchableOpacity> */}
@@ -335,37 +343,46 @@ export default class HomePage extends Component<Props> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // position: 'relative',
         backgroundColor: '#F2F2F2',
-        // paddingBottom: 150
     },
     warnBox: {
+        flexDirection: 'row',
         backgroundColor: '#F4FAFF',
-        alignItems: 'center',
         paddingVertical: 10,
-        marginTop: 20,
         paddingHorizontal: 12
+    },
+    warnImage: {
+        width: 20,
+        height: 20,
+        marginRight: 6
     },
     warnTitle: {
         fontSize: 18,
         color: '#0078DD'
     },
     list: {
-        marginTop: 15,
+        marginTop: 10,
         marginLeft: 12,
         marginRight: 12,
         marginBottom: 10,
+        paddingBottom:15,
         backgroundColor: '#fff',
-        fontSize: 28,
         borderRadius: 8
     },
     listContainer: {
-        padding: 10
+        paddingHorizontal: 10,
+        paddingTop: 10
     },
     listTop: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 10
+        paddingTop: 10
+    },
+    fileImage: {
+        width: 22,
+        height: 22,
+        marginRight: 5,
+        marginLeft: 15
     },
     leftIcon: {
         width: 25,
@@ -373,60 +390,71 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     topTitle: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
         flex: 1,
         marginLeft: 10
     },
     listBox: {
-        // paddingLeft: 26,
-        // paddingRight: 26,
-        marginTop: 20
+        marginTop: 10
     },
     item: {
         flexDirection: 'row',
-        marginBottom: 10
+        marginBottom: 5
     },
     itemLabel: {
         width: 92,
         marginRight: 12,
-        color: '#888888',
+        color: '#979797',
         textAlign: 'right',
-        fontSize: 22,
+        fontSize: 18,
         lineHeight: 30
     },
     itemText: {
-        fontSize: 22,
+        fontSize: 18,
         flex: 1,
         lineHeight: 30
     },
     itemError:{
         color: 'red',
-        fontSize: 22,
+        fontSize: 18,
         lineHeight: 30
     },
     buttonBot: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
     },
     button1: {
-        flex: 1,
+        // flex: 1,
+        width:120,
         backgroundColor: '#0078DD',
         borderColor: '#0078DD',
-        height: 80,
+        height: 50,
+        borderRadius: 4,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight: 10
+    },
+    button1Text: {
+        color: '#ffffff',
+        fontSize: 18,
+        fontWeight: 'bold'
     },
     button2: {
-        flex: 1,
-        backgroundColor: '#EB4E35',
+        // flex: 1,
+        width:120,
+        // backgroundColor: '#EB4E35',
+        height: 48,
+        borderWidth: 1,
         borderColor: '#EB4E35',
-        height: 80,
+        borderRadius: 4,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight: 10
     },
-    buttonText: {
-        color: '#ffffff',
-        fontSize: 30,
+    button2Text: {
+        color: '#EB4E35',
+        fontSize: 18,
         fontWeight: 'bold'
     },
     indicatorContainer: {

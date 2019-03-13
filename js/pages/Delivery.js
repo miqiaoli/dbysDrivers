@@ -36,15 +36,6 @@ export default class Delivery extends Component {
             list_num: '',
             step: 1,
             state: 2, //货物状态。2:确认提货；-2:无法提货
-            stateArr: [
-                {
-                    id: 2,
-                    name: '确认提货'
-                }, {
-                    id: -2,
-                    name: '无法提货'
-                }
-            ],
             abnormals_type: '', //异常状态选择。1：外包有异议；2：无装卸工；4：其他
             abnormals_describef: '',
             abnormals_describe: '',
@@ -106,43 +97,47 @@ export default class Delivery extends Component {
 
     renderFristStep() {
         return (<View>
+            <View style={styles.warnBox}>
+                <Icon style={styles.warnImage} name="exclamationcircleo" size={20} />
+                <Text style={styles.warnTitle}>注：无费用时，无需填写，有费用时，需上传凭证</Text>
+            </View>
             <View style={styles.top}>
                 <Text style={styles.title}>异地装车费用上报</Text>
             </View>
-            <View style={styles.warnBox}>
-                <Text style={styles.warnTitle}>注：无费用时，无需填写，发生费用时，需上传凭证</Text>
-            </View>
             <View style={styles.fromBox}>
                 <View style={styles.inputContent}>
-                    <Text style={styles.label}>费用汇总：</Text>
+                    <Text style={styles.title}>费用汇总：</Text>
                     <View style={styles.inputUnion}>
-                        <Text style={styles.label}>￥</Text>
-                        <TextInput autoCapitalize='none' style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
+                        <TextInput autoCapitalize='none' placeholder="请输入费用汇总金额" style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
+                        <Text style={styles.label}>元</Text>
                     </View>
                 </View>
                 {/* <View style={styles.inputContent}>
-                    <Text style={styles.label}>无凭证费用明细：</Text>
+                    <Text style={styles.title}>无凭证费用明细：</Text>
+                    <View style={styles.inputUnion}>
                     <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(charges_detail) => this.setState({charges_detail})} value={this.state.charges_detail}/>
-                </View> */
-                }
+                    </View>
+                </View> */}
                 <View style={styles.inputContent}>
-                    <Text style={styles.label}>上传费用凭证：</Text>
-                    <CameraBtnUtils onChangeCamera={(type, val) => {
+                    <Text style={styles.title}>上传费用凭证：</Text>
+                    <View style={styles.inputUnion}>
+                        <CameraBtnUtils onChangeCamera={(type, val) => {
                             this.handleChangeAbnormalImg(type, val)
                         }}/>
+                    </View>
                 </View>
                 <View style={styles.buttonBot}>
-                    <TouchableOpacity style={styles.button2} onPress={() => {
-                            this.nextStep()
-                        }}>
-                        <Text style={styles.buttonText}>
+                    <TouchableOpacity style={[styles.button,styles.buttonOrange]} onPress={() => {
+                        this.nextStep()
+                    }}>
+                        <Text style={[styles.buttonText, styles.buttonTextOrange]}>
                             上报异常
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button1} onPress={() => {
-                            this.getOrderDoingDetails()
-                        }}>
-                        <Text style={styles.buttonText}>
+                    <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
+                        this.getOrderDoingDetails()
+                    }}>
+                        <Text style={[styles.buttonText, styles.buttonBlue]}>
                             正常装货
                         </Text>
                     </TouchableOpacity>
@@ -178,16 +173,16 @@ export default class Delivery extends Component {
             </View>
             <View style={styles.fromBox}>
                 <View style={styles.inputContent}>
-                    <Text style={styles.label}>异常选择：</Text>
+                    <Text style={styles.title}>异常选择：</Text>
                     <View style={styles.labelBox}>
                         {
                             abnormalsTypeArr.map((item, i, arr) => {
                                 return (<TouchableOpacity key={i} style={this.state.abnormals_type == item.id
-                                        ? [styles.button, styles.activeBtn]
-                                        : styles.button} onPress={() => this.changeState('abnormals_type', item.id)}>
+                                    ? [styles.labelButton, styles.activeBtn]
+                                    : styles.labelButton} onPress={() => this.changeState('abnormals_type', item.id)}>
                                     <Text style={this.state.abnormals_type == item.id
-                                            ? [styles.btnText, styles.activeBtn]
-                                            : styles.btnText}>
+                                        ? [styles.btnText, styles.activeBtn]
+                                        : styles.btnText}>
                                         {item.name}
                                     </Text>
                                 </TouchableOpacity>)
@@ -196,20 +191,24 @@ export default class Delivery extends Component {
                     </View>
                 </View>
                 <View style={styles.inputContent}>
-                    <Text style={styles.label}>异常描述：</Text>
-                    <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(abnormals_describe) => this.setState({abnormals_describe})} value={this.state.abnormals_describe}/>
+                    <Text style={styles.title}>异常描述：</Text>
+                    <View style={styles.inputUnion}>
+                        <TextInput autoCapitalize='none' placeholder="请输入异常信息" style={styles.textInput} multiline={true} onChangeText={(abnormals_describe) => this.setState({abnormals_describe})} value={this.state.abnormals_describe}/>
+                    </View>
                 </View>
                 <View style={styles.inputContent}>
-                    <Text style={styles.label}>图片上传：</Text>
-                    <CameraBtnUtils onChangeCamera={(type, val) => {
+                    <Text style={styles.title}>图片上传：</Text>
+                    <View style={styles.inputUnion}>
+                        <CameraBtnUtils onChangeCamera={(type, val) => {
                             this.handleChangeImgPath(type, val)
                         }}/>
+                    </View>
                 </View>
                 <View style={styles.buttonBot}>
-                    <TouchableOpacity style={styles.button2} onPress={() => {
-                            this.getOrderDoingDetails()
-                        }}>
-                        <Text style={styles.buttonText}>
+                    <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
+                        this.getOrderDoingDetails()
+                    }}>
+                        <Text style={[styles.buttonText, styles.buttonBlue]}>
                             异常提交
                         </Text>
                     </TouchableOpacity>
@@ -222,7 +221,6 @@ export default class Delivery extends Component {
         if (location) {
             location.timestamp = new Date(location.timestamp).toLocaleString();
             this.setState({location});
-            // console.log(location);
         }
     }
     async getLastLocation(){
@@ -266,19 +264,21 @@ export default class Delivery extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#F2F2F2'
     },
     warnBox: {
-        flex: 1,
+        flexDirection: 'row',
         backgroundColor: '#F4FAFF',
-        alignItems: 'center',
-        paddingVertical: 10,
-        marginTop: 20,
-        paddingHorizontal: 12
+        padding: 10
+    },
+    warnImage: {
+        marginRight: 6,
+        color: '#0078DD',
     },
     warnTitle: {
+        flex: 1,
         fontSize: 18,
-        color: '#0078DD'
+        color: '#0078DD',
     },
     top: {
         marginTop: 20,
@@ -289,80 +289,86 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#353535'
     },
-    fromBox: {
-        marginTop: 20,
-        marginBottom: 10
-    },
     inputContent: {
-        marginLeft: 12,
-        marginRight: 12,
-        marginBottom: 20
+        marginTop: 10
+    },
+    title: {
+        color: '#808080',
+        fontSize: 16,
+        marginVertical: 10,
+        paddingHorizontal: 15
     },
     inputUnion: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: "#ffffff",
+        paddingVertical: 10,
+        paddingHorizontal: 15
     },
-    label: {
-        color: '#888888',
-        fontSize: 20,
-        marginBottom: 14
+    textInput: {
+        flex: 1,
+        fontSize: 18,
+        backgroundColor: '#ffffff',
     },
     labelBox: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        backgroundColor: '#ffffff'
     },
-    text: {
-        fontSize: 14
-    },
-    button: {
-        width: 150,
-        height: 50,
+    labelButton: {
+        height: 40,
         borderWidth: 1,
         borderColor: '#979797',
-        borderRadius: 6,
+        borderRadius: 20,
+        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        paddingHorizontal: 30,
         marginRight: 10,
-        marginBottom: 15
+        marginVertical: 5
+    },
+    btnText: {
+        fontSize: 18,
+        color: '#353535'
     },
     activeBtn: {
         backgroundColor: '#EB4E35',
         borderColor: '#EB4E35',
         color: '#fff'
     },
-    btnText: {
-        fontSize: 24,
-        color: '#353535'
-    },
-    textInput: {
-        flex: 1,
-        fontSize: 20,
-        borderColor: '#979797',
-        borderBottomWidth: 1
-    },
     buttonBot: {
-        flexDirection: 'row'
+        marginTop: 30,
+        paddingVertical: 10,
+        paddingHorizontal: 15
     },
-    button1: {
+    button: {
         flex: 1,
-        backgroundColor: '#0078DD',
-        borderColor: '#0078DD',
-        height: 140,
+        height: 50,
+        borderRadius: 4,
         alignItems: 'center',
-        justifyContent: 'center'
-    },
-    button2: {
-        flex: 1,
-        backgroundColor: '#EB4E35',
-        borderColor: '#EB4E35',
-        height: 140,
-        alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight: 10,
+        marginBottom: 20
     },
     buttonText: {
-        color: '#ffffff',
-        fontSize: 30,
+        fontSize: 18,
         fontWeight: 'bold'
+    },
+    buttonOrange: {
+        backgroundColor: '#ffffff',
+        borderColor: '#EB4E35',
+        borderWidth: 1
+    },
+    buttonTextOrange: {
+        color: '#EB4E35',
+    },
+    buttonBlue: {
+        backgroundColor: '#0078DD',
+        borderColor: '#0078DD',
+        color: '#ffffff'
     }
 });
