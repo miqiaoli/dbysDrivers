@@ -21,7 +21,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.2</string>
+	<string>1.0.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -42,11 +42,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>需要访问相机</string>
+	<string>需要访问相机用于您拍摄物流回单，若不允许，将无法记录您的状态</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>我们需要您的位置，方便为您提供服务</string>
+	<string>我们需要获取您的位置信息用于记录物流路线，若不允许，将无法记录您的路线</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>我们需要访问相册，方便为您上传图片信息</string>
+	<string>我们需要访问相册用于您上传物流回单，若不允许，将无法记录您的状态</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

@@ -18,7 +18,8 @@ import {
     TextInput,
     TouchableOpacity,
     Alert,
-    Linking
+    Linking,
+    Dimensions
 } from 'react-native';
 import HttpUtils from '../../utils/HttpUtils'
 import NavigatorUtils from '../../utils/NavigatorUtils'
@@ -109,6 +110,8 @@ export default class Login extends Component<Props> {
         </View>);
     }
 }
+const width = Dimensions.get('window').width
+const bgHeight = width * 360 / 750
 
 const styles = StyleSheet.create({
     container: {
@@ -117,8 +120,9 @@ const styles = StyleSheet.create({
     },
     loginBg: {
         width: '100%',
-        height: 200,
-        resizeMode: 'cover'
+        maxHeight: bgHeight,
+        resizeMode: 'contain',
+        // resizeMethod: 'resize'
     },
     loginBox: {
         paddingRight: 12,
