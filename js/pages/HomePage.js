@@ -26,7 +26,7 @@ import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Geolocation } from "react-native-amap-geolocation"
-import BackgroundTimer from 'react-native-background-timer'
+// import BackgroundTimer from 'react-native-background-timer'
 
 type Props = {};
 export default class HomePage extends Component<Props> {
@@ -92,13 +92,13 @@ export default class HomePage extends Component<Props> {
         Geolocation.start();
 
         // 开启后台定时器
-        BackgroundTimer.runBackgroundTimer(() => {
+        // BackgroundTimer.runBackgroundTimer(() => {
             console.log('定时器');
             if(this.state.locations.length > 0) {
                 this.SaveLocations()
                 console.log('上传定位');
             }
-        }, 3000);
+        // }, 3000);
     }
     async SaveLocations() {
         const params = "token=" + this.state.token + "&list_num=" + JSON.stringify(this.state.listNumArr) + "&locations=" + JSON.stringify(this.state.locations) ;
@@ -135,7 +135,7 @@ export default class HomePage extends Component<Props> {
                 this.startGeolocation()
             } else {
                 Geolocation.stop()
-                BackgroundTimer.stopBackgroundTimer()
+                // BackgroundTimer.stopBackgroundTimer()
             }
             this.setState({list: res.data, listNumArr: listNumArr})
         }
