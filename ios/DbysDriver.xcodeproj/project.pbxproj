@@ -54,6 +54,7 @@
 		CC09C717222938F9001C3C4F /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC616064219985D80072EA0E /* libRNImagePicker.a */; };
 		CC09C71822293909001C3C4F /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC08BBD321A25211001DEDDC /* libSplashScreen.a */; };
 		CC13BDFC222CF87800C9B6E7 /* libPods-DbysDriver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC13BDFB222CF87800C9B6E7 /* libPods-DbysDriver.a */; };
+		CC5E508A224DEC4E009A5ECB /* upgrade.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5E505F224DEC4E009A5ECB /* upgrade.m */; };
 		CCF67503219DAB880028D83B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCF67502219DAB880028D83B /* Images.xcassets */; };
 		CFAF5E6D80B344709A960BCF /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3CEDE19B024D4026AD9EB307 /* Feather.ttf */; };
 		F471FBCCA78F4BA1840ACD5A /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 314F578D65A14A40B2642A26 /* Foundation.ttf */; };
@@ -414,6 +415,8 @@
 		CC09C71B22293945001C3C4F /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC09C71D22293B84001C3C4F /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC13BDFB222CF87800C9B6E7 /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC5E505F224DEC4E009A5ECB /* upgrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = upgrade.m; path = "../../react-native-app-upgrade/ios_upgrade/upgrade.m"; sourceTree = "<group>"; };
+		CC5E5089224DEC4E009A5ECB /* upgrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upgrade.h; path = "../../react-native-app-upgrade/ios_upgrade/upgrade.h"; sourceTree = "<group>"; };
 		CCF67502219DAB880028D83B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DbysDriver/Images.xcassets; sourceTree = "<group>"; };
 		D161C22B58724CEEB4E0625C /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		EC56ABECFDE24EB19604B2F4 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
@@ -562,6 +565,8 @@
 		13B07FAE1A68108700A75B9A /* DbysDriver */ = {
 			isa = PBXGroup;
 			children = (
+				CC5E5089224DEC4E009A5ECB /* upgrade.h */,
+				CC5E505F224DEC4E009A5ECB /* upgrade.m */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -1359,6 +1364,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC5E508A224DEC4E009A5ECB /* upgrade.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
