@@ -99,12 +99,15 @@ export default class Login extends Component<Props> {
                 </TouchableOpacity>
             </View> */}
             <View style={styles.loginFoot}>
-                <Icon name="old-phone" size={20} style={{marginRight: 20}} color="#0078DD"/>
                 <TouchableOpacity
                     onPress={() => {
                         Linking.openURL(`tel:${`400-888-9383`}`)
                     }}>
-                    <Text>客服热线：400-888-9383</Text>
+                    <View style={styles.footPhone}>
+                        <Icon name="old-phone" size={20} style={{marginRight: 20}} color="#0078DD"/>
+                        <Text>内部使用系统，如有疑问，请拨打客服热线</Text>
+                    </View>
+                    <Text style={styles.footText}>400-888-9383</Text>
                 </TouchableOpacity>
             </View>
         </View>);
@@ -169,9 +172,15 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 40,
+    },
+    footText: {
+        textAlign: 'center',
+    },
+    footPhone: {
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 20
     },
     phone: {
         width: 18,

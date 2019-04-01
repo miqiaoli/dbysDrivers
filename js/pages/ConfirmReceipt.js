@@ -118,9 +118,13 @@ export default class ConfirmReceipt extends Component {
     }
     renderReceiptItem() {
         return (<View>
-            <View style={styles.top}>
-                <Text style={styles.title}>卸货回单上传</Text>
+            <View style={styles.warnBox}>
+                <Icon style={styles.warnImage} name="exclamationcircleo" size={20} />
+                <Text style={styles.warnTitle}>注：回单必须上传，无费用时，无需填写，有费用时，需上传凭证</Text>
             </View>
+            {/* <View style={styles.top}>
+                <Text style={styles.title}>卸货回单上传</Text>
+            </View> */}
             <View style={styles.fromBox}>
                 <View style={styles.inputContent}>
                     <Text style={styles.title}>
@@ -132,9 +136,24 @@ export default class ConfirmReceipt extends Component {
                     </View>
                 </View>
                 <View style={styles.inputContent}>
+                    <Text style={styles.title}>费用汇总：</Text>
+                    <View style={styles.inputUnion}>
+                        <TextInput autoCapitalize='none' placeholder="请输入费用汇总金额" style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
+                        <Text style={styles.label}>元</Text>
+                    </View>
+                </View>
+                <View style={styles.inputContent}>
+                    <Text style={styles.title}>上传费用凭证：</Text>
+                    <View style={styles.inputUnion}>
+                        <CameraBtnUtils onChangeCamera={(type, val) => {
+                            this.handleChangeAbnormalImg(type, val)
+                        }}/>
+                    </View>
+                </View>
+                <View style={styles.inputContent}>
                     <Text style={styles.title}>备注描述：</Text>
                     <View style={styles.inputUnion}>
-                        <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(abnormals_describe) => this.setState({abnormals_describe})} value={this.state.abnormals_describe}/>
+                        <TextInput autoCapitalize='none' placeholder="请输入备注" style={styles.textInput} multiline={true} onChangeText={(abnormals_describe) => this.setState({abnormals_describe})} value={this.state.abnormals_describe}/>
                     </View>
                 </View>
                 <View style={styles.buttonBot}>
@@ -146,6 +165,13 @@ export default class ConfirmReceipt extends Component {
                             卸货异常
                         </Text>
                     </TouchableOpacity>
+                    {/* <TouchableOpacity style={[styles.button, styles.buttonBlueLine]} onPress={() => {
+                        this.checkTicket(3)
+                        }}>
+                        <Text style={[styles.buttonText, styles.buttonTextBlueLine]}>
+                            异地装车费用上报
+                        </Text>
+                    </TouchableOpacity> */}
                     <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
                         this.checkTicket(3)
                             // this.getOrderDoneDetails()
@@ -318,6 +344,23 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F2F2F2'
     },
+    warnBox: {
+        flexDirection: 'row',
+        backgroundColor: '#F4FAFF',
+        padding: 10
+    },
+    warnImage: {
+        marginRight: 6,
+        color: '#0078DD',
+    },
+    warnTitle: {
+        flex: 1,
+        fontSize: 18,
+        color: '#0078DD',
+    },
+    red: {
+        color: '#E51C23'
+    },
     top: {
         marginTop: 20,
         alignItems: 'center'
@@ -403,6 +446,14 @@ const styles = StyleSheet.create({
     },
     buttonTextOrange: {
         color: '#EB4E35',
+    },
+    buttonBlueLine: {
+        backgroundColor: '#ffffff',
+        borderColor: '#0078DD',
+        borderWidth: 1
+    },
+    buttonTextBlueLine: {
+        color: '#0078DD',
     },
     buttonBlue: {
         backgroundColor: '#0078DD',

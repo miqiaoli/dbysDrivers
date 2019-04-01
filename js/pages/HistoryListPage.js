@@ -9,7 +9,8 @@ import {
     FlatList,
     Alert,
     RefreshControl,
-    ActivityIndicator
+    ActivityIndicator,
+    NativeModules
 } from 'react-native';
 import {_getLogout, _getLogistList} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
@@ -25,7 +26,7 @@ export default class HomePage extends Component<Props> {
             page_start: 1,
             page_limit: 5,
             list: [],
-            counts: null,//总条数
+            counts: null, //总条数
             isLoading: false
         }
     }
@@ -35,31 +36,31 @@ export default class HomePage extends Component<Props> {
 
         this.setState({
             token: params.token
-        }, ()=> {
+        }, () => {
             // this.getLogistList()
         })
     }
-    getLogout(){
+    getLogout() {
         const {navigation} = this.props
         Alert.alert('提示', '确定退出该账户？', [
-        {
+            {
                 text: '取消',
                 style: 'cancel'
-        }, {
+            }, {
                 text: '确定',
-            onPress: () => {
-                fetch(_getLogout, {
+                onPress: () => {
+                    fetch(_getLogout, {
                         method: "POST",
-                    headers: {
+                        headers: {
                             "Content-Type": "application/x-www-form-urlencoded"
-                    },
+                        },
                         body: "token=" + this.state.token
-                }).then(res => {
-                    global.storage.clearMapForKey('user');
-                    NavigatorUtils.resetToLogin({navigation: navigation});
-                });
+                    }).then(res => {
+                        global.storage.clearMapForKey('user');
+                        NavigatorUtils.resetToLogin({navigation: navigation});
+                    });
+                }
             }
-        }
         ], {cancelable: false})
     }
     async getLogistList() {
@@ -69,40 +70,47 @@ export default class HomePage extends Component<Props> {
             page_limit: this.state.page_limit
         });
         if (res) {
-            if(this.state.page_start === 1) {
-                this.setState({list: res.data, counts: Math.ceil(res.count/this.state.page_limit)})
+            if (this.state.page_start === 1) {
+                this.setState({
+                    list: res.data,
+                    counts: Math.ceil(res.count / this.state.page_limit)
+                })
 
             } else {
-                this.setState({list: this.state.list.concat(res.data)})
+                this.setState({
+                    list: this.state.list.concat(res.data)
+                })
             }
         }
     }
-    _onRefresh(){
+    _onRefresh() {
         this.setState({
             page_start: 1
-        }, ()=> {
+        }, () => {
             this.getLogistList()
         });
     }
     genIndicator(page_start) {
         let renderView;
-        if(page_start < this.state.counts) { //下拉刷新
+        if (page_start < this.state.counts) { //下拉刷新
             renderView = (<View style={styles.indicatorContainer}>
                 <ActivityIndicator style={styles.indicator} size="large" color="#0078DD"/>
                 <Text>正在加载中。。。。</Text>
             </View>)
         } else { //下拉触底
             renderView = (<View style={styles.indicatorContainer}>
-                <Text> - </Text>
+                <Text>
+                    -
+                </Text>
             </View>)
         }
         return renderView
     }
-    loadData(page_start){
-        if(page_start < this.state.counts) {
+    loadData(page_start) {
+        if (page_start < this.state.counts) {
             this.setState({
-                page_start: page_start+1
-            }, ()=> {
+                page_start: page_start + 1
+            }, () => {
                 this.getLogistList()
             });
         }
@@ -119,8 +127,7 @@ export default class HomePage extends Component<Props> {
         return ButtonView
     }
     _renderItem(data) {
-        const {item} = data,
-              {navigation} = this.props;
+        const {item} = data, {navigation} = this.props;
 
         return (<View style={styles.list}>
             <View style={styles.listContainer}>
@@ -128,9 +135,9 @@ export default class HomePage extends Component<Props> {
                     <Icon name="filetext1" size={22} color="#979797"/>
                     <Text style={styles.topTitle}>{item.list_num}</Text>
                     <TouchableOpacity style={styles.listTop} onPress={() => navigation.navigate('ListDetails', {
-                        token: this.state.token,
-                        list_num: item.list_num
-                    })}>
+                            token: this.state.token,
+                            list_num: item.list_num
+                        })}>
                         {this.renderButton(item.state)}
                         <Icon name="right" size={20} color="#888888"/>
                     </TouchableOpacity>
@@ -156,35 +163,51 @@ export default class HomePage extends Component<Props> {
             </View>
         </View>)
     }
-
+    appUpdateCheck() {
+        Alert.alert('Alert Title', 'appUpdateCheck', [
+            {
+                text: 'Ask me later',
+                onPress: () => {
+                     NativeModules.upgrade.openAPPStore('1454336256');
+                }
+            }, {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel'
+            }
+        ], {cancelable: false})
+    }
     render() {
         return (<View style={styles.container}>
 
-            <FlatList data={this.state.list}
-                renderItem={(data) => this._renderItem(data)}
-                keyExtractor={(item, index) => item.list_num}
-                ListEmptyComponent={this._createEmptyView}
-                refreshControl= {
-                    <RefreshControl
-                        title= {'Loading'}
-                        colors={['red']}
-                        tintColor={'#0078DD'}
-                        refreshing = {this.state.isLoading}
-                        onRefresh = {() => {
-                            this._onRefresh()
-                        }}
-                    />
-                }
-                ListFooterComponent = {()=>
-                    this.genIndicator(this.state.page_start)
-                }
-                onEndReachedThreshold='0.1'
-                onEndReached = {() => {
-                    this.loadData(this.state.page_start)
-                }}
-            />
+            {/* <FlatList data={this.state.list} renderItem={(data) => this._renderItem(data)} keyExtractor={(item, index) => item.list_num} ListEmptyComponent={this._createEmptyView} refreshControl="refreshControl" {
+                <RefreshControl
+                    title= {'Loading'}
+                    colors={['red']}
+                    tintColor={'#0078DD'}
+                    refreshing = {this.state.isLoading}
+                    onRefresh = {() => {
+                this._onRefresh()
+                    }}
+                />
+                } ListFooterComponent="ListFooterComponent" {()=>
+                this.genIndicator(this.state.page_start)
+                } onEndReachedThreshold='0.1' onEndReached="onEndReached" {() => {
+                this.loadData(this.state.page_start)
+            }}/> */}
             <View style={styles.buttonBot}>
-                <TouchableOpacity style={styles.button1} onPress={() => {this.getLogout()}}>
+                <TouchableOpacity style={styles.button1} onPress={() => {
+                    this.appUpdateCheck()
+                }}>
+                    <Text style={styles.buttonText}>
+                        更新
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.buttonBot}>
+                <TouchableOpacity style={styles.button1} onPress={() => {
+                    this.getLogout()
+                }}>
                     <Text style={styles.buttonText}>
                         退出登录
                     </Text>
@@ -192,7 +215,6 @@ export default class HomePage extends Component<Props> {
             </View>
         </View>);
     }
-
 
 }
 
@@ -265,6 +287,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     indicator: {
-        marginBottom:20
+        marginBottom: 20
     }
 });
