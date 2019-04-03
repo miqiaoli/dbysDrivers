@@ -9,8 +9,7 @@ import {
     FlatList,
     Alert,
     RefreshControl,
-    ActivityIndicator,
-    NativeModules
+    ActivityIndicator
 } from 'react-native';
 import {_getLogout, _getLogistList} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
@@ -30,7 +29,6 @@ export default class HomePage extends Component<Props> {
             isLoading: false
         }
     }
-
     componentDidMount() {
         const {params} = this.props.navigation.state;
 
@@ -41,27 +39,27 @@ export default class HomePage extends Component<Props> {
         })
     }
     getLogout() {
-        const {navigation} = this.props
-        Alert.alert('提示', '确定退出该账户？', [
-            {
-                text: '取消',
-                style: 'cancel'
-            }, {
-                text: '确定',
-                onPress: () => {
-                    fetch(_getLogout, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
-                        },
-                        body: "token=" + this.state.token
-                    }).then(res => {
-                        global.storage.clearMapForKey('user');
-                        NavigatorUtils.resetToLogin({navigation: navigation});
-                    });
-                }
-            }
-        ], {cancelable: false})
+      const {navigation} = this.props;
+      Alert.alert('提示', '确定退出该账户？', [
+          {
+              text: '取消',
+              style: 'cancel'
+          }, {
+              text: '确定',
+              onPress: () => {
+                  fetch(_getLogout, {
+                      method: "POST",
+                      headers: {
+                          "Content-Type": "application/x-www-form-urlencoded"
+                      },
+                      body: "token=" + this.state.token
+                  }).then(res => {
+                      global.storage.clearMapForKey('user');
+                      NavigatorUtils.resetToLogin({navigation: navigation});
+                  });
+              }
+          }
+      ], {cancelable: false})
     }
     async getLogistList() {
         let res = await HttpUtils.GET(_getLogistList, {
@@ -163,20 +161,7 @@ export default class HomePage extends Component<Props> {
             </View>
         </View>)
     }
-    appUpdateCheck() {
-        Alert.alert('Alert Title', 'appUpdateCheck', [
-            {
-                text: 'Ask me later',
-                onPress: () => {
-                     NativeModules.upgrade.openAPPStore('1454336256');
-                }
-            }, {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel'
-            }
-        ], {cancelable: false})
-    }
+
     render() {
         return (<View style={styles.container}>
 
@@ -195,15 +180,6 @@ export default class HomePage extends Component<Props> {
                 } onEndReachedThreshold='0.1' onEndReached="onEndReached" {() => {
                 this.loadData(this.state.page_start)
             }}/> */}
-            <View style={styles.buttonBot}>
-                <TouchableOpacity style={styles.button1} onPress={() => {
-                    this.appUpdateCheck()
-                }}>
-                    <Text style={styles.buttonText}>
-                        更新
-                    </Text>
-                </TouchableOpacity>
-            </View>
             <View style={styles.buttonBot}>
                 <TouchableOpacity style={styles.button1} onPress={() => {
                     this.getLogout()

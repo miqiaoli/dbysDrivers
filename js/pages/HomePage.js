@@ -19,9 +19,13 @@ import {
     ActivityIndicator,
     FlatList,
     RefreshControl,
-    Linking
+    Linking,
+    Platform,
+    // DeviceEventEmitter,
+    // ToastAndroid,
+    NativeModules
 } from 'react-native';
-import {_getLogout, _tokenCheck, _getTodoList, _saveLocation} from '../servers/getData'
+import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _getAppVersion} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -57,7 +61,8 @@ export default class HomePage extends Component<Props> {
             location: {},
             locations: [],
             point: {},
-            listNumArr: []
+            listNumArr: [],
+            appVersion:'0'
         }
     }
 
@@ -67,6 +72,7 @@ export default class HomePage extends Component<Props> {
         })
 
         this.props.navigation.setParams({ headerToken:user.token })
+
         this.setState({
             token: user.token
         }, ()=> {
@@ -87,6 +93,49 @@ export default class HomePage extends Component<Props> {
         Geolocation.addLocationListener(location => {
           this.updateLocationState(location)
         });
+
+        this.getAppVersion()
+    }
+    async getAppVersion(){
+      let res = await HttpUtils.GET(_getAppVersion, {}, true);
+
+      if( res.appVersion > this.state.appVersion ) {
+        this.appUpdateCheck(res.apkLink)
+      }
+    }
+    // app热跟新
+    appUpdateCheck(apkUrl) {
+      if(Platform.OS === "android") {
+            this.setState({
+                apkUrl:apkUrl
+            })
+            Alert.alert('发现新版本','是否下载',
+            [
+                {text:"确定", onPress:() => {
+                    //apkUrl为app下载连接地址
+                    NativeModules.upgrade.upgrade(this.state.apkUrl);
+                }},
+                // {text:"取消", onPress:this.opntion2Selected}
+                {text:"取消"}
+            ]
+            );
+        } else if(Platform.OS === "ios") {
+            NativeModules.upgrade.upgrade('1454336256',(msg) =>{
+                if('YES' == msg) {
+                   Alert.alert('发现新版本','是否下载',
+                   [
+                       {text:"确定", onPress:() => {
+                           //跳转到APP Stroe
+                            NativeModules.upgrade.openAPPStore('1454336256');
+                       }},
+                       {text:"取消"}
+                   ]
+                   );
+                } else {
+                //    this.toast('当前为最新版本');
+                }
+            })
+        }
     }
     startGeolocation(){
         Geolocation.start();
@@ -324,20 +373,20 @@ export default class HomePage extends Component<Props> {
                     />
                 }
             />
-            {/* <TouchableOpacity onPress={ () => {
-                this.getLogistList()
-                }}>
-                <Text>获取列表</Text>
+            {/* <TouchableOpacity style={styles.button1} onPress={() => {
+                this.getAppVersion()
+            }}>
+                <Text style={styles.buttonText}>
+                    退出登录
+                </Text>
             </TouchableOpacity> */}
-
-        </View>);
+        </View>)
     }
     componentWillUnmount() {
       this.setState = (state,callback)=>{
        return
      }
     }
-
 }
 
 const styles = StyleSheet.create({

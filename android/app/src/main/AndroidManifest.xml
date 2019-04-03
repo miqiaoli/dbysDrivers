@@ -4,8 +4,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!--写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据-->
-    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!--读取缓存数据-->
+     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <!-- Normal Permissions 不需要运行时注册 -->
     <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
@@ -27,8 +30,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <!--用于提高GPS定位速度-->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-    <!--读取缓存数据-->
-    <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> -->
 
     <!--用于读取手机当前的状态-->
     <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE"/> -->
@@ -42,6 +43,22 @@
       android:icon="@mipmap/ic_launcher"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+
+        <!--添加fileProvider配置代码-->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.updateFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/update_file_provider" />
+        </provider>
+        <!--添加Service代码-->
+        <service
+            android:name=".android_upgrade.DownloadService"
+            android:exported="true" />
+
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -56,6 +73,7 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="68b927bf24f7185ac2a06049c69c3148" />
+
         <service android:name="com.amap.api.location.APSService"></service>
     </application>
 
