@@ -8,9 +8,7 @@ import {
     TouchableOpacity,
     TextInput,
     Alert,
-    ScrollView,
-    dismissKeyboard,
-    TouchableWithoutFeedback
+    ScrollView
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign'
 import ImagePicker from 'react-native-image-picker'
@@ -27,7 +25,8 @@ const abnormalsTypeArr = [
         id: 4,
         name: '其他'
     }
-]
+];
+let Geolocation;
 export default class Delivery extends Component {
     constructor(props) {
         super(props)
@@ -40,7 +39,7 @@ export default class Delivery extends Component {
             abnormals_describef: '',
             abnormals_describe: '',
             abnormalImgArr: [], //额外费用图片
-            additional_charges: '', //额外费用
+            additional_charges: 0, //额外费用
             charges_detail: '', //费用明细
             imgPathArr: [], //货物图片
             location: {}
@@ -48,23 +47,17 @@ export default class Delivery extends Component {
     }
     componentWillMount() {
         const {params} = this.props.navigation.state;
-        this.setState({token: params.token, list_num: params.list_num, geolocation: params.geolocation})
-        console.log('geolocation: ' + params.geolocation);
+        this.setState({token: params.token, list_num: params.list_num})
+
+        // 定位发货地
+        Geolocation = params.geolocation
+        Geolocation.addLocationListener(location => {
+            this.updateLocationState(location)
+        });
+
+        Geolocation.start();
     }
-    handleChangeImgPath(type, val) {
-        if (type) {
-            this.setState({
-                'imgPathArr': [
-                    ...this.state.imgPathArr,
-                    val.abnormal_img
-                ]
-            })
-        } else {
-            let data = this.state.imgPathArr;
-            data.splice(val, 1);
-            this.setState({imgPathArr: data})
-        }
-    }
+    //图片上传
     handleChangeAbnormalImg(type, val) {
         if (type) {
             this.setState({
@@ -79,6 +72,7 @@ export default class Delivery extends Component {
             this.setState({abnormalImgArr: data})
         }
     }
+    // 装货时异常选择
     changeState(type, state) {
         if (type == 'abnormals_type') {
             if (this.state.abnormals_type == state) {
@@ -95,77 +89,6 @@ export default class Delivery extends Component {
         }
     }
 
-    renderFristStep() {
-        return (<View>
-            <View style={styles.warnBox}>
-                <Icon style={styles.warnImage} name="exclamationcircleo" size={20} />
-                <Text style={styles.warnTitle}>注：无费用时，无需填写，有费用时，需上传凭证</Text>
-            </View>
-            <View style={styles.top}>
-                <Text style={styles.title}>异地装车费用上报</Text>
-            </View>
-            <View style={styles.fromBox}>
-                <View style={styles.inputContent}>
-                    <Text style={styles.title}>费用汇总：</Text>
-                    <View style={styles.inputUnion}>
-                        <TextInput autoCapitalize='none' placeholder="请输入费用汇总金额" style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
-                        <Text style={styles.label}>元</Text>
-                    </View>
-                </View>
-                {/* <View style={styles.inputContent}>
-                    <Text style={styles.title}>无凭证费用明细：</Text>
-                    <View style={styles.inputUnion}>
-                    <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(charges_detail) => this.setState({charges_detail})} value={this.state.charges_detail}/>
-                    </View>
-                </View> */}
-                <View style={styles.inputContent}>
-                    <Text style={styles.title}>上传费用凭证：</Text>
-                    <View style={styles.inputUnion}>
-                        <CameraBtnUtils onChangeCamera={(type, val) => {
-                            this.handleChangeAbnormalImg(type, val)
-                        }}/>
-                    </View>
-                </View>
-                <View style={styles.buttonBot}>
-                    <TouchableOpacity style={[styles.button,styles.buttonOrange]} onPress={() => {
-                        this.nextStep()
-                    }}>
-                        <Text style={[styles.buttonText, styles.buttonTextOrange]}>
-                            上报异常
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
-                        this.getOrderDoingDetails()
-                    }}>
-                        <Text style={[styles.buttonText, styles.buttonBlue]}>
-                            正常装货
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </View>)
-    }
-    nextStep() {
-        if (this.state.state == '-2' && !this.state.abnormals_type) {
-            Alert.alert('提示', '需选择异常类型', [
-                {
-                    text: '确定',
-                    onPress: () => {}
-                }
-            ])
-            return
-        }
-        if (this.state.abnormals_type && !this.state.imgPathArr.join(',')) {
-            Alert.alert('提示', '需上传图片', [
-                {
-                    text: '确定',
-                    onPress: () => {}
-                }
-            ])
-            return
-        }
-        this.setState({step: 2, state: 2})
-    }
     renderSecondStep() {
         return (<View>
             <View style={styles.top}>
@@ -200,7 +123,7 @@ export default class Delivery extends Component {
                     <Text style={styles.title}>图片上传：</Text>
                     <View style={styles.inputUnion}>
                         <CameraBtnUtils onChangeCamera={(type, val) => {
-                            this.handleChangeImgPath(type, val)
+                            this.handleChangeAbnormalImg(type, val)
                         }}/>
                     </View>
                 </View>
@@ -209,7 +132,7 @@ export default class Delivery extends Component {
                         this.getOrderDoingDetails()
                     }}>
                         <Text style={[styles.buttonText, styles.buttonBlue]}>
-                            异常提交
+                            发货信息提交
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -219,21 +142,24 @@ export default class Delivery extends Component {
 
     updateLocationState(location) {
         if (location) {
-            location.timestamp = new Date(location.timestamp).toLocaleString();
+            location.timestamp = Date.now();
+            // location.timestamp = new Date(location.timestamp).toLocaleString();
             this.setState({location});
         }
     }
-    async getLastLocation(){
-        this.updateLocationState(await this.state.geolocation.getLastLocation())
-    }
     async getOrderDoingDetails() {
-        // console.log(this.state);
         const param = this.state;
-        const additional_charges = param.additional_charges
-            ? param.additional_charges
-            : 0;
+        if (this.state.abnormals_type && !this.state.abnormalImgArr.join(',')) {
+            Alert.alert('提示', '需上传图片', [
+                {
+                    text: '确定',
+                    onPress: () => {}
+                }
+            ])
+            return
+        }
 
-        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=2" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',') + "&point=" + JSON.stringify(this.state.location);
+        const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=2" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + param.additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',') + "&point=" + JSON.stringify(this.state.location);
         console.log(params);
         // return
         let res = await HttpUtils.POST(_getOrderDoingDetails, params);
@@ -245,19 +171,18 @@ export default class Delivery extends Component {
                         NavigatorUtils.resetToHomepage({navigation: this.props.navigation});
                     }
                 }
-            ],)
+            ])
         }
     }
 
     render() {
-        const {navigation} = this.props;
+        // const {navigation} = this.props;
         return (<ScrollView style={styles.container}>
-            {
-                this.state.step == 1
-                    ? this.renderFristStep()
-                    : this.renderSecondStep()
-            }
+            {this.renderSecondStep()}
         </ScrollView>);
+    }
+    componentWillUnmount() {
+        Geolocation.stop()
     }
 }
 

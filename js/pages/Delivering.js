@@ -46,14 +46,18 @@ export default class Delivering extends Component {
             abnormals_describef: '',
             abnormals_describe: '',
             abnormalImgArr: [], //运输过程中异常上报图片
-            geolocation: '',
             location: {}
         }
     }
     componentWillMount() {
         const {params} = this.props.navigation.state;
-        this.setState({token: params.token, list_num: params.list_num, geolocation: params.geolocation})
-        console.log('geolocation: ' + params.geolocation);
+        this.setState({token: params.token, list_num: params.list_num})
+        // 获取定位点
+        Geolocation = params.geolocation
+        Geolocation.addLocationListener(location => {
+            this.updateLocationState(location)
+        });
+        Geolocation.start();
     }
     handleChangeAbnormalImg(type, val) {
         if (type) {
@@ -71,7 +75,7 @@ export default class Delivering extends Component {
     }
     changeState(type, state) {
         if (type == 'abnormals_type') {
-            let obj=abnormalsTypeArr.find(function (item) {
+            let obj = abnormalsTypeArr.find(function(item) {
                 return item.id === state
             })
             this.setState({[type]: state, abnormals_describef: obj.name})
@@ -86,17 +90,19 @@ export default class Delivering extends Component {
             <View style={styles.inputContent}>
                 <Text style={styles.title}>异常选择：</Text>
                 <View style={styles.labelBox}>
-                    {abnormalsTypeArr.map((item, i, arr) => {
-                        return (<TouchableOpacity key={i} style={this.state.abnormals_type == item.id
-                            ? [styles.labelButton, styles.activeBtn]
-                            : styles.labelButton} onPress={() => this.changeState('abnormals_type', item.id)}>
-                            <Text style={this.state.abnormals_type == item.id
-                                ? [styles.btnText, styles.activeBtn]
-                                : styles.btnText}>
-                                {item.name}
-                            </Text>
-                        </TouchableOpacity>)
-                    })}
+                    {
+                        abnormalsTypeArr.map((item, i, arr) => {
+                            return (<TouchableOpacity key={i} style={this.state.abnormals_type == item.id
+                                    ? [styles.labelButton, styles.activeBtn]
+                                    : styles.labelButton} onPress={() => this.changeState('abnormals_type', item.id)}>
+                                <Text style={this.state.abnormals_type == item.id
+                                        ? [styles.btnText, styles.activeBtn]
+                                        : styles.btnText}>
+                                    {item.name}
+                                </Text>
+                            </TouchableOpacity>)
+                        })
+                    }
                 </View>
             </View>
             <View style={styles.inputContent}>
@@ -109,14 +115,14 @@ export default class Delivering extends Component {
                 <Text style={styles.title}>图片上传：</Text>
                 <View style={styles.inputUnion}>
                     <CameraBtnUtils onChangeCamera={(type, val) => {
-                        this.handleChangeAbnormalImg(type, val)
-                    }}/>
+                            this.handleChangeAbnormalImg(type, val)
+                        }}/>
                 </View>
             </View>
             <View style={styles.buttonBot}>
                 <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
-                    this.getOrderWarningDetails()
-                }}>
+                        this.getOrderWarningDetails()
+                    }}>
                     <Text style={[styles.buttonText, styles.buttonBlue]}>
                         确定
                     </Text>
@@ -137,9 +143,10 @@ export default class Delivering extends Component {
             ])
             return
         }
-        // await this.getLastLocation()
-        const params = "token=" + param.token + "&list_num=" + param.list_num  + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&point=" +JSON.stringify(this.state.location);
+        const params = "token=" + param.token + "&list_num=" + param.list_num + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&point=" + JSON.stringify(this.state.location);
         console.log(params);
+        // return
+
         let res = await HttpUtils.POST(_getOrderWarningDetails, params);
         if (res) {
             Alert.alert('提示', '异常信息上报提交成功', [
@@ -149,19 +156,17 @@ export default class Delivering extends Component {
                         NavigatorUtils.resetToHomepage({navigation: this.props.navigation});
                     }
                 }
-            ],)
+            ])
         }
     }
     updateLocationState(location) {
         if (location) {
-            // location.timestamp = Date.now();
-            this.setState({ point: location });
-            console.log(location)
+            location.timestamp = Date.now();
+            this.setState({ location });
+            // console.log(location)
         }
     }
-    async getLastLocation(){
-        this.updateLocationState(await this.state.geolocation.getLastLocation())
-    }
+
     render() {
         return (<ScrollView style={styles.container}>
             <View style={styles.top}>
@@ -169,6 +174,9 @@ export default class Delivering extends Component {
             </View>
             {this.renderFristStep()}
         </ScrollView>);
+    }
+    componentWillUnmount() {
+        Geolocation.stop()
     }
 }
 
@@ -205,7 +213,7 @@ const styles = StyleSheet.create({
     textInput: {
         flex: 1,
         fontSize: 18,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#ffffff'
     },
     labelBox: {
         flex: 1,

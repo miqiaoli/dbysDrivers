@@ -161,7 +161,6 @@ export default class HomePage extends Component<Props> {
             </View>
         </View>)
     }
-
     render() {
         return (<View style={styles.container}>
 
@@ -191,7 +190,6 @@ export default class HomePage extends Component<Props> {
             </View>
         </View>);
     }
-
 }
 
 const styles = StyleSheet.create({

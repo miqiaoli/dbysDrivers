@@ -26,6 +26,7 @@ const abnormalsTypeArr = [
         name: '其他'
     }
 ]
+let Geolocation
 export default class ConfirmReceipt extends Component {
     constructor(props) {
         super(props)
@@ -35,18 +36,24 @@ export default class ConfirmReceipt extends Component {
             abnormals_type: '', //异常状态选择。9：未接到到货通知；10：外包有异议；11：无装卸工；12：其他
             abnormals_describef: '',
             abnormals_describe: '',
-            abnormalImgArr: [], //额外费用图片
+            abnormalImgArr: [], //货物图片
             additional_charges: '', //额外费用
             charges_detail: '', //费用明细
-            imgPathArr: [], //货物图片
-            ticketArr: [],
+            imgPathArr: [], //回单图片
+            ticketArr: [],//额外费用图片
             geolocation: '',
             location: {}
         }
     }
     componentWillMount() {
         const {params} = this.props.navigation.state;
-        this.setState({token: params.token, list_num: params.list_num, geolocation: params.geolocation})
+        this.setState({token: params.token, list_num: params.list_num})
+        // 获取定位点
+        Geolocation = params.geolocation
+        Geolocation.addLocationListener(location => {
+            this.updateLocationState(location)
+        });
+        Geolocation.start();
     }
     handleChangeImgPath(type, val) {
         if (type) {
@@ -101,7 +108,7 @@ export default class ConfirmReceipt extends Component {
         }
     }
     checkTicket(num) {
-        if (!this.state.ticketArr.join(',')) {
+        if (!this.state.imgPathArr.join(',')) {
             Alert.alert('提示', '需上传物流回单', [
                 {
                     text: '确定',
@@ -131,7 +138,7 @@ export default class ConfirmReceipt extends Component {
                         <Text style={styles.red}>*</Text>卸货回单上传：</Text>
                     <View style={styles.inputUnion}>
                         <CameraBtnUtils onChangeCamera={(type, val) => {
-                            this.handleChangeTicketImgPath(type, val)
+                            this.handleChangeImgPath(type, val)
                         }}/>
                     </View>
                 </View>
@@ -146,7 +153,7 @@ export default class ConfirmReceipt extends Component {
                     <Text style={styles.title}>上传费用凭证：</Text>
                     <View style={styles.inputUnion}>
                         <CameraBtnUtils onChangeCamera={(type, val) => {
-                            this.handleChangeAbnormalImg(type, val)
+                            this.handleChangeTicketImgPath(type, val)
                         }}/>
                     </View>
                 </View>
@@ -159,22 +166,13 @@ export default class ConfirmReceipt extends Component {
                 <View style={styles.buttonBot}>
                     <TouchableOpacity style={[styles.button,styles.buttonOrange]} onPress={() => {
                         this.checkTicket(2)
-                            // this.setState({step: 2})
                     }}>
                         <Text style={[styles.buttonText, styles.buttonTextOrange]}>
                             卸货异常
                         </Text>
                     </TouchableOpacity>
-                    {/* <TouchableOpacity style={[styles.button, styles.buttonBlueLine]} onPress={() => {
-                        this.checkTicket(3)
-                        }}>
-                        <Text style={[styles.buttonText, styles.buttonTextBlueLine]}>
-                            异地装车费用上报
-                        </Text>
-                    </TouchableOpacity> */}
                     <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
                         this.checkTicket(3)
-                            // this.getOrderDoneDetails()
                     }}>
                         <Text style={[styles.buttonText, styles.buttonBlue]}>
                             卸货正常
@@ -215,51 +213,12 @@ export default class ConfirmReceipt extends Component {
                     </View>
                 </View>
                 <View style={styles.inputContent}>
-                    <Text style={styles.title}>图片上传：</Text>
+                    <Text style={styles.title}>上传费用凭证：</Text>
                     <View style={styles.inputUnion}>
                         <CameraBtnUtils onChangeCamera={(type, val) => {
-                            this.handleChangeImgPath(type, val)
+                            this.handleChangeAbnormalImg(type, val)
                         }}/>
                     </View>
-                </View>
-                <View style={styles.buttonBot}>
-                    <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
-                        this.getOrderDoneDetails()
-                            // this.setState({step: 3})
-                    }}>
-                        <Text style={[styles.buttonText, styles.buttonBlue]}>
-                            确定卸货
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </View>)
-    }
-    renderPremiumItem() {
-        return (<View>
-            <View style={styles.top}>
-                <Text style={styles.title}>卸货额外费用上报</Text>
-            </View>
-            <View style={styles.warnBox}>
-                <Text style={styles.warnTitle}>注：无额外费用时，无需填写，发生额外费用时，需上传凭证否则就要书写明细</Text>
-            </View>
-            <View style={styles.fromBox}>
-                <View style={styles.inputContent}>
-                    <Text style={styles.label}>额外费用：</Text>
-                    <View style={styles.inputUnion}>
-                        <Text style={styles.label}>￥</Text>
-                        <TextInput autoCapitalize='none' style={styles.textInput} keyboardType="decimal-pad" onChangeText={(additional_charges) => this.setState({additional_charges})} value={this.state.additional_charges}/>
-                    </View>
-                </View>
-                <View style={styles.inputContent}>
-                    <Text style={styles.label}>无凭证费用明细：</Text>
-                    <TextInput autoCapitalize='none' style={styles.textInput} multiline={true} onChangeText={(charges_detail) => this.setState({charges_detail})} value={this.state.charges_detail}/>
-                </View>
-                <View style={styles.inputContent}>
-                    <Text style={styles.label}>上传费用凭证：</Text>
-                    <CameraBtnUtils onChangeCamera={(type, val) => {
-                        this.handleChangeAbnormalImg(type, val)
-                    }}/>
                 </View>
                 <View style={styles.buttonBot}>
                     <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
@@ -275,26 +234,31 @@ export default class ConfirmReceipt extends Component {
     }
     updateLocationState(location) {
         if (location) {
-            // location.timestamp = Date.now();
-            this.setState({point: location});
+            location.timestamp = Date.now();
+            this.setState({ location });
             console.log(location)
         }
     }
-    async getLastLocation() {
-        this.updateLocationState(await this.state.geolocation.getLastLocation())
-    }
 
     async getOrderDoneDetails() {
-        console.log(this.state);
         const param = this.state;
+
+        if (this.state.additional_charges && !this.state.ticketArr.join(',')) {
+            Alert.alert('提示', '额外费用需上传图片', [
+                {
+                    text: '确定',
+                    onPress: () => {}
+                }
+            ])
+            return
+        }
+
         const additional_charges = param.additional_charges
             ? param.additional_charges
             : 0;
-        // await this.getLastLocation()
 
         const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=4" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',') + "&ticket=" + param.ticketArr.join(',') + "&point=" + JSON.stringify(this.state.location);
         console.log(params);
-
         // return
         let res = await HttpUtils.POST(_getOrderDoneDetails, params);
         if (res) {
@@ -312,30 +276,14 @@ export default class ConfirmReceipt extends Component {
         const {navigation} = this.props;
         return (<ScrollView style={styles.container}>
             {
-                (() => {
-                    switch (this.state.step) {
-                        case 1:
-                            console.log('renderReceiptItem');
-                            return this.renderReceiptItem()
-                            break;
-                        case 2:
-                            console.log('renderAbnormalItem');
-                            return this.renderAbnormalItem()
-                            break;
-                        case 3:
-                            console.log('renderPremiumItem');
-                            return this.renderPremiumItem()
-                            break;
-                        default:
-                            break;
-                    }
-                })()
-
-                // this.state.step == 1
-                //     ? this.renderFristStep()
-                //     : this.renderSecondStep()
+                this.state.step == 1
+                    ? this.renderReceiptItem()
+                    : this.renderAbnormalItem()
             }
         </ScrollView>);
+    }
+    componentWillUnmount() {
+        Geolocation.stop()
     }
 }
 

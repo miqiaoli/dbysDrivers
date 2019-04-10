@@ -29,10 +29,13 @@ import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _getAppVersion} fr
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/Ionicons'
+// import LocationUtil from '../utils/LocationUtil'
+
 import { Geolocation } from "react-native-amap-geolocation"
-// import BackgroundTimer from 'react-native-background-timer'
+import BackgroundTimer from 'react-native-background-timer'
 
 type Props = {};
+// let Geolocation;
 export default class HomePage extends Component<Props> {
     static navigationOptions = ({navigation}) => {
         const {params} = navigation.state;
@@ -70,6 +73,22 @@ export default class HomePage extends Component<Props> {
         let user= await global.storage.load({
             key:'user'
         })
+        // Geolocation = await global.storage.load({
+        //     key:'geolocation'
+        // })
+        // Geolocation = this.props.navigation.state.params.geolocation
+
+        // 初始化定位功能
+        await Geolocation.init({
+          ios: "a421265fe274bd3e2863ac0fcefde36b",
+          android: "68b927bf24f7185ac2a06049c69c3148"
+        });
+        await Geolocation.setOptions({
+          interval: 600000,  //600000
+          distanceFilter: 1000,  //1000
+          background: true,
+          reGeocode: true
+        });
 
         this.props.navigation.setParams({ headerToken:user.token })
 
@@ -78,28 +97,22 @@ export default class HomePage extends Component<Props> {
         }, ()=> {
             this.getLogistList()
         })
-        // 初始化定位功能
-        await Geolocation.init({
-          ios: "a421265fe274bd3e2863ac0fcefde36b",
-          android: "68b927bf24f7185ac2a06049c69c3148"
-        });
-        Geolocation.setOptions({
-          interval: 600000,  //600000
-          distanceFilter: 1000,  //1000
-          background: true,
-          reGeocode: true
-        });
 
         Geolocation.addLocationListener(location => {
           this.updateLocationState(location)
         });
+        // let location = LocationUtil.locationListener()
+        // LocationUtil.geolocation.addLocationListener(location => {
+        //   this.updateLocationState(location)
+        // })
 
-        this.getAppVersion()
+        // console.log(location);
+        // this.getAppVersion()
     }
     async getAppVersion(){
       let res = await HttpUtils.GET(_getAppVersion, {}, true);
 
-      if( res.appVersion > this.state.appVersion ) {
+      if( res.appVersion > this.state.appVersion &&  res.apkLink) {
         this.appUpdateCheck(res.apkLink)
       }
     }
@@ -138,16 +151,15 @@ export default class HomePage extends Component<Props> {
         }
     }
     startGeolocation(){
-        Geolocation.start();
-
+        Geolocation.start()
         // 开启后台定时器
-        // BackgroundTimer.runBackgroundTimer(() => {
+        BackgroundTimer.runBackgroundTimer(() => {
             console.log('定时器');
             if(this.state.locations.length > 0) {
                 this.SaveLocations()
                 console.log('上传定位');
             }
-        // }, 3000);
+        }, 3000);
     }
     async SaveLocations() {
         const params = "token=" + this.state.token + "&list_num=" + JSON.stringify(this.state.listNumArr) + "&locations=" + JSON.stringify(this.state.locations) ;
@@ -192,7 +204,7 @@ export default class HomePage extends Component<Props> {
 
     async btnNext(str, list_num){
         let {navigation} = this.props;
-
+        Geolocation.stop();
         navigation.navigate(str, {
                 token: this.state.token,
                 list_num: list_num,
@@ -374,10 +386,10 @@ export default class HomePage extends Component<Props> {
                 }
             />
             {/* <TouchableOpacity style={styles.button1} onPress={() => {
-                this.getAppVersion()
-            }}>
+                this.getLocation()
+                }}>
                 <Text style={styles.buttonText}>
-                    退出登录
+                    位置
                 </Text>
             </TouchableOpacity> */}
         </View>)
