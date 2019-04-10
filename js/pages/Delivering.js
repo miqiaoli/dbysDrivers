@@ -177,6 +177,9 @@ export default class Delivering extends Component {
     }
     componentWillUnmount() {
         Geolocation.stop()
+        this.setState = (state,callback)=>{
+         return
+       }
     }
 }
 
