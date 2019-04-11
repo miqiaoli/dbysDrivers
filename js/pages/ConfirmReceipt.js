@@ -117,6 +117,15 @@ export default class ConfirmReceipt extends Component {
             ])
             return
         }
+        if (this.state.additional_charges && !this.state.ticketArr.join(',')) {
+            Alert.alert('提示', '额外费用需上传图片', [
+                {
+                    text: '确定',
+                    onPress: () => {}
+                }
+            ])
+            return
+        }
         if (num === 2) {
             this.setState({step: num})
         } else {
@@ -135,8 +144,8 @@ export default class ConfirmReceipt extends Component {
                         <Text style={styles.red}>*</Text>卸货回单上传：</Text>
                     <View style={styles.inputUnion}>
                         <CameraBtnUtils onChangeCamera={(type, val) => {
-                                this.handleChangeTicketImgPath(type, val)
-                            }}/>
+                            this.handleChangeImgPath(type, val)
+                        }}/>
                     </View>
                 </View>
                 <View style={styles.inputContent}>
@@ -150,20 +159,20 @@ export default class ConfirmReceipt extends Component {
                     <Text style={styles.title}>上传费用凭证：</Text>
                     <View style={styles.inputUnion}>
                         <CameraBtnUtils onChangeCamera={(type, val) => {
-                                this.handleChangeImgPath(type, val)
-                            }}/>
+                            this.handleChangeTicketImgPath(type, val)
+                        }}/>
                     </View>
                 </View>
                 <View style={styles.buttonBot}>
                     <TouchableOpacity style={[styles.button, styles.buttonOrange]} onPress={() => {
-                            this.checkTicket(2)
-                        }}>
+                        this.checkTicket(2)
+                    }}>
                         <Text style={[styles.buttonText, styles.buttonTextOrange]}>
                             卸货异常
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
-                            this.checkTicket(3)
+                        this.checkTicket(3)
                         }}>
                         <Text style={[styles.buttonText, styles.buttonBlue]}>
                             卸货正常
@@ -233,16 +242,6 @@ export default class ConfirmReceipt extends Component {
 
     async getOrderDoneDetails() {
         const param = this.state;
-
-        if (this.state.additional_charges && !this.state.ticketArr.join(',')) {
-            Alert.alert('提示', '额外费用需上传图片', [
-                {
-                    text: '确定',
-                    onPress: () => {}
-                }
-            ])
-            return
-        }
 
         const additional_charges = param.additional_charges
             ? param.additional_charges
