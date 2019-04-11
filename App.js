@@ -3,7 +3,7 @@ import {AsyncStorage} from 'react-native';
 import Storage from 'react-native-storage';
 import {AppStackNavigator} from './js/Navigators/AppNavigator'
 
-GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest
+// GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest
 
 var storage = new Storage({
     size: 1000,
