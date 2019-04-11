@@ -91,9 +91,13 @@ export default class Delivery extends Component {
 
     renderSecondStep() {
         return (<View>
-            <View style={styles.top}>
-                <Text style={styles.title}>装货异常信息上报</Text>
+            <View style={styles.warnBox}>
+                <Icon style={styles.warnImage} name="exclamationcircleo" size={20}/>
+                <Text style={styles.warnTitle}>注：无异常信息时，以下信息均不用填写，直接正常发货即可</Text>
             </View>
+            {/* <View style={styles.top}>
+                <Text style={styles.title}>装货异常信息上报</Text>
+            </View> */}
             <View style={styles.fromBox}>
                 <View style={styles.inputContent}>
                     <Text style={styles.title}>异常选择：</Text>
@@ -128,11 +132,18 @@ export default class Delivery extends Component {
                     </View>
                 </View>
                 <View style={styles.buttonBot}>
-                    <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
+                    <TouchableOpacity style={[styles.button, styles.buttonOrange]} onPress={() => {
                         this.getOrderDoingDetails()
                     }}>
+                        <Text style={[styles.buttonText, styles.buttonTextOrange]}>
+                            异常发货
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
+                        this.checkTgetOrderDoingDetailsicket()
+                    }}>
                         <Text style={[styles.buttonText, styles.buttonBlue]}>
-                            发货信息提交
+                            正常发货
                         </Text>
                     </TouchableOpacity>
                 </View>

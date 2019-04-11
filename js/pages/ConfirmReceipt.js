@@ -168,14 +168,14 @@ export default class ConfirmReceipt extends Component {
                         this.checkTicket(2)
                     }}>
                         <Text style={[styles.buttonText, styles.buttonTextOrange]}>
-                            卸货异常
+                            异常卸货
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
                         this.checkTicket(3)
-                        }}>
+                    }}>
                         <Text style={[styles.buttonText, styles.buttonBlue]}>
-                            卸货正常
+                            正常卸货
                         </Text>
                     </TouchableOpacity>
                 </View>
