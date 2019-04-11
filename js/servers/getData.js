@@ -47,3 +47,7 @@ export const _saveLocation = baseURL+'/logist/saveLocation.dbys';
 // 上传定位点
 // export const _getAppVersion = 'http://192.168.0.129/front/logist/getAppVersion.dbys';
 export const _getAppVersion = baseURL+'/logist/getAppVersion.dbys';
+
+export const _mapIDIos = 'a421265fe274bd3e2863ac0fcefde36b';
+export const _mapIDAndroid = '68b927bf24f7185ac2a06049c69c3148';
+export const _AppId = '1454336256';

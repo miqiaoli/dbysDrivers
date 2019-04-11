@@ -25,7 +25,7 @@ import {
     // ToastAndroid,
     NativeModules
 } from 'react-native';
-import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _getAppVersion} from '../servers/getData'
+import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _getAppVersion, _mapIDIos, _mapIDAndroid, _AppId} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -81,8 +81,8 @@ export default class HomePage extends Component<Props> {
 
         // 初始化定位功能
         await Geolocation.init({
-          ios: "a421265fe274bd3e2863ac0fcefde36b",
-          android: "68b927bf24f7185ac2a06049c69c3148"
+          ios: _mapIDIos,
+          android: _mapIDAndroid
         });
         await Geolocation.setOptions({
           interval: 600000,  //600000
@@ -134,13 +134,13 @@ export default class HomePage extends Component<Props> {
             ]
             );
         } else if(Platform.OS === "ios") {
-            NativeModules.upgrade.upgrade('1454336256',(msg) =>{
+            NativeModules.upgrade.upgrade(_AppId,(msg) =>{
                 if('YES' == msg) {
                    Alert.alert('发现新版本','是否下载',
                    [
                        {text:"确定", onPress:() => {
                            //跳转到APP Stroe
-                            NativeModules.upgrade.openAPPStore('1454336256');
+                            NativeModules.upgrade.openAPPStore(_AppId);
                        }},
                        {text:"取消"}
                    ]
