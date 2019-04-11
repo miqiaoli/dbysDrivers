@@ -29,6 +29,7 @@ import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _getAppVersion} fr
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/Ionicons'
+import BasicUtils from '../utils/BasicUtils'
 // import LocationUtil from '../utils/LocationUtil'
 
 import { Geolocation } from "react-native-amap-geolocation"
@@ -65,7 +66,7 @@ export default class HomePage extends Component<Props> {
             locations: [],
             point: {},
             listNumArr: [],
-            appVersion:'0'
+            appVersion:'1.1.0'
         }
     }
 
@@ -107,7 +108,7 @@ export default class HomePage extends Component<Props> {
         // })
 
         // console.log(location);
-        // this.getAppVersion()
+        this.getAppVersion()
     }
     async getAppVersion(){
       let res = await HttpUtils.GET(_getAppVersion, {}, true);
@@ -185,7 +186,9 @@ export default class HomePage extends Component<Props> {
         });
         if (res) {
             let listNumArr = [],
-            data = res.data
+            data = BasicUtils.jsonSort(res.data, 'list_num', true)
+
+
             for( let i = 0; i<data.length; i++ ) {
                 if(data[i].state == '1' || data[i].state == '2' || data[i].state == '3'){
                     listNumArr.push(data[i].list_num)
@@ -196,9 +199,9 @@ export default class HomePage extends Component<Props> {
                 this.startGeolocation()
             } else {
                 Geolocation.stop()
-                // BackgroundTimer.stopBackgroundTimer()
+                BackgroundTimer.stopBackgroundTimer()
             }
-            this.setState({list: res.data, listNumArr: listNumArr})
+            this.setState({list: data, listNumArr: listNumArr})
         }
     }
 
@@ -286,6 +289,24 @@ export default class HomePage extends Component<Props> {
                         <Text style={styles.itemText}>{item.quantity}公斤</Text>
                     </View>
                     {this._renderAddressItem(item)}
+
+                    {
+                        item.picker ? (<View style={styles.item}>
+                            <Text style={styles.itemLabel}>联系人</Text>
+                            <Text style={styles.itemText}>{item.picker}</Text>
+                        </View>) : null
+                    }
+                    {
+                        item.pickerPhone ? (<View style={styles.item}>
+                            <Text style={styles.itemLabel}>联系电话</Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    Linking.openURL('tel:'+item.pickerPhone).catch(e=>console.log(e))
+                                }}>
+                                <Text style={styles.itemText}>{item.pickerPhone}</Text>
+                            </TouchableOpacity>
+                        </View>) : null
+                    }
                     {this.getAbnormal(item.state, item.list_num)}
                 </View>
             </View>
@@ -301,48 +322,13 @@ export default class HomePage extends Component<Props> {
                 <Text style={styles.itemLabel}>提货地址</Text>
                 <Text style={styles.itemText}>{item.pickAddress}</Text>
             </View>
-            {
-                item.picker ? (<View style={styles.item}>
-                    <Text style={styles.itemLabel}>联系人</Text>
-                    <Text style={styles.itemText}>{item.picker}</Text>
-                </View>) : null
-            }
-            {
-                item.pickerPhone ? (<View style={styles.item}>
-                    <Text style={styles.itemLabel}>联系电话</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                      Linking.openURL('tel:'+item.pickerPhone).catch(e=>console.log(e))
-                  }}>
-                  <Text style={styles.itemText}>{item.pickerPhone}</Text>
-              </TouchableOpacity>
-          </View>) : null
-        }
       </View>)
       } else {
         addressItem = (<View>
-          <View style={styles.item}>
-              <Text style={styles.itemLabel}>送货地址</Text>
-              <Text style={styles.itemText}>{item.receiverAddress.split('-')[0]}</Text>
-          </View>
-          {
-            item.companyCharger ? (<View style={styles.item}>
-                <Text style={styles.itemLabel}>联系人</Text>
-                <Text style={styles.itemText}>{item.companyCharger}</Text>
-            </View>) : null
-          }
-          {
-            item.companyPhone ? (<View style={styles.item}>
-                <Text style={styles.itemLabel}>联系电话</Text>
-                {/* <Text style={styles.itemText}>{item.receiverPhone}</Text> */}
-                <TouchableOpacity
-                    onPress={() => {
-                        Linking.openURL('tel:'+item.companyPhone).catch(e=>console.log(e))
-                    }}>
-                    <Text style={styles.itemText}>{item.companyPhone}</Text>
-                </TouchableOpacity>
-            </View>) : null
-          }
+            <View style={styles.item}>
+                <Text style={styles.itemLabel}>送货地址</Text>
+                <Text style={styles.itemText}>{item.receiverAddress.split('-')[0]}</Text>
+            </View>
         </View>)
       }
       return addressItem
@@ -386,7 +372,7 @@ export default class HomePage extends Component<Props> {
                 }
             />
             {/* <TouchableOpacity style={styles.button1} onPress={() => {
-                this.getLocation()
+                this.getBasicUtils()
                 }}>
                 <Text style={styles.buttonText}>
                     位置
