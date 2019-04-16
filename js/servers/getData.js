@@ -1,5 +1,5 @@
-// const baseURL = 'https://www.otimes.com/front';
-const baseURL = 'https://dbys.otimes.info/front';
+const baseURL = 'https://www.otimes.com/front';
+// const baseURL = 'https://dbys.otimes.info/front';
 // const baseURL = 'http://hdhhp4.vicp.io/front';
 
 // 登录

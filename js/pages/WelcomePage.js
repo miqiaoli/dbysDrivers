@@ -20,7 +20,8 @@ import {
     RefreshControl,
     ActivityIndicator,
     PermissionsAndroid,
-    ToastAndroid
+    ToastAndroid,
+    NativeModules
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
 import {_getLogout, _tokenCheck, _getLogistList, _getAppVersion} from '../servers/getData'
@@ -56,17 +57,14 @@ export default class HomePage extends Component<Props> {
         // app热跟新
         appUpdateCheck(apkUrl) {
           if(Platform.OS === "android") {
-                this.setState({
-                    apkUrl:apkUrl
-                })
                 Alert.alert('发现新版本','是否下载',
                 [
                     {text:"确定", onPress:() => {
                         //apkUrl为app下载连接地址
-                        NativeModules.upgrade.upgrade(this.state.apkUrl);
+                        NativeModules.upgrade.upgrade(apkUrl);
                     }},
                     // {text:"取消", onPress:this.opntion2Selected}
-                    {text:"取消"}
+                    // {text:"取消"}
                 ]
                 );
             } else if(Platform.OS === "ios") {
@@ -116,7 +114,6 @@ export default class HomePage extends Component<Props> {
             }
         }
         async requestLocationPermission() {
-          console.log('android1')
             try {
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,

@@ -20,10 +20,9 @@ import {
     FlatList,
     RefreshControl,
     Linking,
-    Platform,
+    Platform
     // DeviceEventEmitter,
     // ToastAndroid,
-    NativeModules
 } from 'react-native';
 import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _mapIDIos, _mapIDAndroid, _AppId} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
