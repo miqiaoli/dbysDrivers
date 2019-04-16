@@ -140,7 +140,7 @@ export default class Delivery extends Component {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.button, styles.buttonBlue]} onPress={() => {
-                        this.checkTgetOrderDoingDetailsicket()
+                        this.getOrderDoingDetails()
                     }}>
                         <Text style={[styles.buttonText, styles.buttonBlue]}>
                             正常发货

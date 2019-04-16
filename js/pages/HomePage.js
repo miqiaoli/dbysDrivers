@@ -25,7 +25,7 @@ import {
     // ToastAndroid,
     NativeModules
 } from 'react-native';
-import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _getAppVersion, _mapIDIos, _mapIDAndroid, _AppId} from '../servers/getData'
+import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _mapIDIos, _mapIDAndroid, _AppId} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -65,8 +65,7 @@ export default class HomePage extends Component<Props> {
             location: {},
             locations: [],
             point: {},
-            listNumArr: [],
-            appVersion:'1.1.0'
+            listNumArr: []
         }
     }
 
@@ -108,48 +107,6 @@ export default class HomePage extends Component<Props> {
         // })
 
         // console.log(location);
-        this.getAppVersion()
-    }
-    async getAppVersion(){
-      let res = await HttpUtils.GET(_getAppVersion, {}, true);
-
-      if( res.appVersion > this.state.appVersion &&  res.apkLink) {
-        this.appUpdateCheck(res.apkLink)
-      }
-    }
-    // app热跟新
-    appUpdateCheck(apkUrl) {
-      if(Platform.OS === "android") {
-            this.setState({
-                apkUrl:apkUrl
-            })
-            Alert.alert('发现新版本','是否下载',
-            [
-                {text:"确定", onPress:() => {
-                    //apkUrl为app下载连接地址
-                    NativeModules.upgrade.upgrade(this.state.apkUrl);
-                }},
-                // {text:"取消", onPress:this.opntion2Selected}
-                {text:"取消"}
-            ]
-            );
-        } else if(Platform.OS === "ios") {
-            NativeModules.upgrade.upgrade(_AppId,(msg) =>{
-                if('YES' == msg) {
-                   Alert.alert('发现新版本','是否下载',
-                   [
-                       {text:"确定", onPress:() => {
-                           //跳转到APP Stroe
-                            NativeModules.upgrade.openAPPStore(_AppId);
-                       }},
-                       {text:"取消"}
-                   ]
-                   );
-                } else {
-                //    this.toast('当前为最新版本');
-                }
-            })
-        }
     }
     startGeolocation(){
         Geolocation.start()
