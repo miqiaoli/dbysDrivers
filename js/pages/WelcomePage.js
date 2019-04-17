@@ -24,7 +24,7 @@ import {
     NativeModules
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
-import {_getLogout, _tokenCheck, _getLogistList, _getAppVersion} from '../servers/getData'
+import {_getLogout, _tokenCheck, _getLogistList, _getAppVersion, _AppId} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 
@@ -33,7 +33,7 @@ export default class HomePage extends Component<Props> {
         constructor(props) {
             super(props)
             this.state = {
-                appVersion:'1.1.0'
+                appVersion:'1.1.2'
             }
         }
         async componentDidMount() {
