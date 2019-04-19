@@ -20,49 +20,74 @@ import {
     RefreshControl,
     ActivityIndicator,
     PermissionsAndroid,
-    ToastAndroid
+    ToastAndroid,
+    NativeModules
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen'
-import {_getLogout, _tokenCheck, _getLogistList} from '../servers/getData'
+import {_getLogout, _tokenCheck, _getLogistList, _getAppVersion, _AppId} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
-// import LocationUtil from '../utils/LocationUtil'
-// import { Geolocation } from "react-native-amap-geolocation"
 
 type Props = {};
 export default class HomePage extends Component<Props> {
         constructor(props) {
             super(props)
+            this.state = {
+                appVersion:'1.1.2'
+            }
         }
         async componentDidMount() {
             // global.storage.clearMapForKey('user');
             if(Platform.OS === "android") {
               this.requestLocationPermission()
             }
+            this.getAppVersion()
+
             this.checkToken()
             SplashScreen.hide()
 
-            // LocationUtil.init()
-            // 初始化定位功能
-            // await Geolocation.init({
-            //   ios: "a421265fe274bd3e2863ac0fcefde36b",
-            //   android: "68b927bf24f7185ac2a06049c69c3148"
-            // });
-            // await Geolocation.setOptions({
-            //   interval: 600000,  //600000
-            //   distanceFilter: 1000,  //1000
-            //   background: true,
-            //   reGeocode: true
-            // });
-            // console.log(Geolocation);
-             // global.storage.save({
-             //        key:'geolocation',
-             //        data: Geolocation
-             //    });
+        }
+        async getAppVersion(){
+          let res = await HttpUtils.GET(_getAppVersion, {}, true);
+
+          if( res.appVersion > this.state.appVersion &&  res.apkLink) {
+            this.appUpdateCheck(res.apkLink)
+          }
+        }
+        // app热跟新
+        appUpdateCheck(apkUrl) {
+          if(Platform.OS === "android") {
+                Alert.alert('发现新版本','是否下载',
+                [
+                    {text:"确定", onPress:() => {
+                        //apkUrl为app下载连接地址
+                        NativeModules.upgrade.upgrade(apkUrl);
+                    }},
+                    // {text:"取消", onPress:this.opntion2Selected}
+                    // {text:"取消"}
+                ]
+                );
+            } else if(Platform.OS === "ios") {
+                NativeModules.upgrade.upgrade(_AppId,(msg) =>{
+                    if('YES' == msg) {
+                       Alert.alert('发现新版本','是否下载',
+                       [
+                           {text:"确定", onPress:() => {
+                               //跳转到APP Stroe
+                                NativeModules.upgrade.openAPPStore(_AppId);
+                           }},
+                           {text:"取消"}
+                       ]
+                       );
+                    } else {
+                    //    this.toast('当前为最新版本');
+                    }
+                })
+            }
         }
         /**
-     * 判断token是否有效，否则跳转登录页面
-     */
+         * 判断token是否有效，否则跳转登录页面
+         */
         async checkToken() {
             let user;
             try {
@@ -89,7 +114,6 @@ export default class HomePage extends Component<Props> {
             }
         }
         async requestLocationPermission() {
-          console.log('android1')
             try {
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
