@@ -3,6 +3,7 @@ package com.dbysdriver;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.jpush.reactnativejpush.JPushPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
 import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
               new UpgradePackage(),
           new MainReactPackage(),
+            new JPushPackage(!BuildConfig.DEBUG, !BuildConfig.DEBUG),
             new BackgroundTimerPackage(),
             new AMapGeolocationPackage(),
             new SplashScreenReactPackage(),

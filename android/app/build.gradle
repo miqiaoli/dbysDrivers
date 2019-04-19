@@ -103,6 +103,11 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
         versionName "1.0.41"
+        manifestPlaceholders = [
+                JPUSH_APPKEY: "ebd4f2236b5698a95bd55257",
+                APP_CHANNEL : "default"
+        ]
+
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -148,6 +153,8 @@ android {
 }
 
 dependencies {
+    implementation project(':jcore-react-native')
+    implementation project(':jpush-react-native')
     implementation project(':react-native-background-timer')
     implementation project(':react-native-amap-geolocation')
     implementation project(':react-native-splash-screen')
