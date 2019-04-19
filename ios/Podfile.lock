@@ -9,6 +9,10 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - JCoreRN (1.3.2):
+    - React
+  - JPushRN (2.5.3):
+    - React
   - React (0.57.4):
     - React/Core (= 0.57.4)
   - react-native-amap-geolocation (0.3.2):
@@ -54,6 +58,8 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - JCoreRN (from `../node_modules/jcore-react-native`)
+  - JPushRN (from `../node_modules/jpush-react-native`)
   - react-native-amap-geolocation (from `../node_modules/react-native-amap-geolocation/lib/ios`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - React/Core (from `../node_modules/react-native`)
@@ -78,6 +84,10 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  JCoreRN:
+    :path: "../node_modules/jcore-react-native"
+  JPushRN:
+    :path: "../node_modules/jpush-react-native"
   React:
     :path: "../node_modules/react-native"
   react-native-amap-geolocation:
@@ -94,11 +104,13 @@ SPEC CHECKSUMS:
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
   glog: e8acf0ebbf99759d3ff18c86c292a5898282dcde
+  JCoreRN: 4b0ad270209c0e1ab2ec92b33f19774ee15f3c25
+  JPushRN: 24d74b712a1cc214be8e62dc356b7c331180472d
   React: 1f4ca35c4aeac2b47e42e8be98bb9188f48fba84
   react-native-amap-geolocation: af509ba5aaea6bc3abdfe0232a2d1486855e590f
   react-native-background-timer: 0d34748e53a972507c66963490c775321a88f6f2
   yoga: ac0f4c6ff31ac05bad1bd166fec5204c19de0277
 
-PODFILE CHECKSUM: e2a1d3de974d8e06dfeadaaef1314aa8578fb4b3
+PODFILE CHECKSUM: 1eb1f48c9bc35904de85c4c6cb069f18bcc141b0
 
 COCOAPODS: 1.6.0.beta.2
