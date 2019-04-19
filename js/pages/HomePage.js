@@ -24,7 +24,7 @@ import {
     // DeviceEventEmitter,
     // ToastAndroid,
 } from 'react-native';
-import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _mapIDIos, _mapIDAndroid, _AppId} from '../servers/getData'
+import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _mapIDIos, _mapIDAndroid} from '../servers/getData'
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/Ionicons'

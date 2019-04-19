@@ -3,6 +3,12 @@ package com.dbysdriver;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
+import cn.jpush.reactnativejpush.JPushPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
 import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -31,6 +37,12 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
               new UpgradePackage(),
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new SplashScreenReactPackage(),
+            new ImagePickerPackage(),
+            new BackgroundTimerPackage(),
+            new AMapGeolocationPackage(),
+            new JPushPackage(!BuildConfig.DEBUG, !BuildConfig.DEBUG),
             new BackgroundTimerPackage(),
             new AMapGeolocationPackage(),
             new SplashScreenReactPackage(),
