@@ -8,6 +8,8 @@
     "react-devtools": "react-devtools"
   },
   "dependencies": {
+    "jcore-react-native": "^1.3.2",
+    "jpush-react-native": "^2.5.3",
     "react": "16.6.0-alpha.8af6728",
     "react-native": "0.57.4",
     "react-native-amap-geolocation": "^0.3.2",
