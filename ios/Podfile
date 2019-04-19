@@ -27,6 +27,10 @@ target 'DbysDriver' do
   pod 'react-native-amap-geolocation', path: '../node_modules/react-native-amap-geolocation/lib/ios'
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
 
+  pod 'JPushRN', :path => '../node_modules/jpush-react-native'
+
+  pod 'JCoreRN', :path => '../node_modules/jcore-react-native'
+
 end
 
 post_install do |installer|
