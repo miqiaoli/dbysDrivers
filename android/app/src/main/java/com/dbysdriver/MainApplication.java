@@ -42,12 +42,7 @@ public class MainApplication extends Application implements ReactApplication {
             new ImagePickerPackage(),
             new BackgroundTimerPackage(),
             new AMapGeolocationPackage(),
-            new JPushPackage(!BuildConfig.DEBUG, !BuildConfig.DEBUG),
-            new BackgroundTimerPackage(),
-            new AMapGeolocationPackage(),
-            new SplashScreenReactPackage(),
-            new ImagePickerPackage(),
-            new VectorIconsPackage()
+            new JPushPackage(!BuildConfig.DEBUG, !BuildConfig.DEBUG)
       );
     }
 
