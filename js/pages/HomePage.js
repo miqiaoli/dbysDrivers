@@ -246,23 +246,7 @@ export default class HomePage extends Component<Props> {
                     </View>
                     {this._renderAddressItem(item)}
 
-                    {
-                        item.picker ? (<View style={styles.item}>
-                            <Text style={styles.itemLabel}>联系人</Text>
-                            <Text style={styles.itemText}>{item.picker}</Text>
-                        </View>) : null
-                    }
-                    {
-                        item.pickerPhone ? (<View style={styles.item}>
-                            <Text style={styles.itemLabel}>联系电话</Text>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    Linking.openURL('tel:'+item.pickerPhone).catch(e=>console.log(e))
-                                }}>
-                                <Text style={styles.itemText}>{item.pickerPhone}</Text>
-                            </TouchableOpacity>
-                        </View>) : null
-                    }
+
                     {this.getAbnormal(item.state, item.list_num)}
                 </View>
             </View>
@@ -278,13 +262,47 @@ export default class HomePage extends Component<Props> {
                 <Text style={styles.itemLabel}>提货地址</Text>
                 <Text style={styles.itemText}>{item.pickAddress}</Text>
             </View>
-      </View>)
+            {
+                item.picker ? (<View style={styles.item}>
+                    <Text style={styles.itemLabel}>联系人</Text>
+                    <Text style={styles.itemText}>{item.picker}</Text>
+                </View>) : null
+            }
+            {
+                item.pickerPhone ? (<View style={styles.item}>
+                    <Text style={styles.itemLabel}>联系电话</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            Linking.openURL('tel:'+item.pickerPhone).catch(e=>console.log(e))
+                        }}>
+                        <Text style={styles.itemText}>{item.pickerPhone}</Text>
+                    </TouchableOpacity>
+                </View>) : null
+            }
+        </View>)
       } else {
         addressItem = (<View>
             <View style={styles.item}>
                 <Text style={styles.itemLabel}>送货地址</Text>
                 <Text style={styles.itemText}>{item.receiverAddress.split('-')[0]}</Text>
             </View>
+            {
+                item.staffName ? (<View style={styles.item}>
+                    <Text style={styles.itemLabel}>联系人</Text>
+                    <Text style={styles.itemText}>{item.staffName}</Text>
+                </View>) : null
+            }
+            {
+                item.staffPhone ? (<View style={styles.item}>
+                    <Text style={styles.itemLabel}>联系电话</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            Linking.openURL('tel:'+item.staffPhone).catch(e=>console.log(e))
+                        }}>
+                        <Text style={styles.itemText}>{item.staffPhone}</Text>
+                    </TouchableOpacity>
+                </View>) : null
+            }
         </View>)
       }
       return addressItem
