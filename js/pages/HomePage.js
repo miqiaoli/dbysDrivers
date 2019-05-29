@@ -84,7 +84,7 @@ export default class HomePage extends Component<Props> {
         });
         await Geolocation.setOptions({
           interval: 600000,  //600000
-          distanceFilter: 1000,  //1000
+          distanceFilter: 1000,  //200
           background: true,
           reGeocode: true
         });
@@ -111,7 +111,7 @@ export default class HomePage extends Component<Props> {
         Geolocation.start()
         // 开启后台定时器
         BackgroundTimer.runBackgroundTimer(() => {
-            console.log('定时器');
+            console.log('定时器： ' + this.state.locations);
             if(this.state.locations.length > 0) {
                 this.SaveLocations()
                 console.log('上传定位');
@@ -238,6 +238,10 @@ export default class HomePage extends Component<Props> {
                 <View style={styles.listBox}>
                     <View style={styles.item}>
                         <Text style={styles.itemLabel}>商品名称</Text>
+                        <Text style={styles.itemText}>{item.buyer_department}</Text>
+                    </View>
+                    <View style={styles.item}>
+                        <Text style={styles.itemLabel}>商品名称</Text>
                         <Text style={styles.itemText}>{item.product_name}</Text>
                     </View>
                     <View style={styles.item}>
@@ -346,7 +350,7 @@ export default class HomePage extends Component<Props> {
                 }
             />
             {/* <TouchableOpacity style={styles.button1} onPress={() => {
-                this.getBasicUtils()
+                this.getLogistList()
                 }}>
                 <Text style={styles.buttonText}>
                     位置
