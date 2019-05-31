@@ -237,7 +237,7 @@ export default class HomePage extends Component<Props> {
                 </View>
                 <View style={styles.listBox}>
                     <View style={styles.item}>
-                        <Text style={styles.itemLabel}>商品名称</Text>
+                        <Text style={styles.itemLabel}>客户名称</Text>
                         <Text style={styles.itemText}>{item.buyer_department}</Text>
                     </View>
                     <View style={styles.item}>
