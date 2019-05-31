@@ -33,7 +33,7 @@ export default class HomePage extends Component<Props> {
         constructor(props) {
             super(props)
             this.state = {
-                appVersion:'1.1.5'
+                appVersion:'1.1.6'
             }
         }
         async componentDidMount() {
