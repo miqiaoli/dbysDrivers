@@ -3495,6 +3495,11 @@ istanbul-reports@^1.5.1:
   dependencies:
     handlebars "^4.0.3"
 
+jcore-react-native@^1.3.2:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/jcore-react-native/-/jcore-react-native-1.5.0.tgz#ae67309e9ef3c4281fdcbca2f28773c2956d0de0"
+  integrity sha512-4WBiyq4aScewqrsUPjMr3FFRZfB87b4YFSO3IYl56nmuvbIl7dA44x6uCzkI3ht0UeVl/wuzEntlk7Dy4isOwg==
+
 jest-changed-files@^23.4.2:
   version "23.4.2"
   resolved "http://registry.npm.taobao.org/jest-changed-files/download/jest-changed-files-23.4.2.tgz#1eed688370cd5eebafe4ae93d34bb3b64968fe83"
@@ -3857,6 +3862,11 @@ jest@23.6.0:
     import-local "^1.0.0"
     jest-cli "^23.6.0"
 
+jpush-react-native@^2.5.3:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/jpush-react-native/-/jpush-react-native-2.6.1.tgz#6d1a8cd4fe7207406325a83c24f5fae8dd396a56"
+  integrity sha512-dDy9/Gqz1PdNCMPCcePyDRrCiSAKoQBw6FkoOPgEIFGwwC4lixybYHCllqgiCAQAQDosfvJlp0G5r/VXFQHocQ==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "http://registry.npm.taobao.org/js-tokens/download/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -4109,9 +4119,9 @@ lodash.throttle@^4.1.1:
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
 lodash@^4.0.0, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.6.1:
-  version "4.17.11"
-  resolved "http://registry.npm.taobao.org/lodash/download/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
-  integrity sha1-s56mIp72B+zYniyN8SU2iRysm40=
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1:
   version "1.4.0"
