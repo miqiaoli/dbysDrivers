@@ -111,7 +111,7 @@ export default class HomePage extends Component<Props> {
         Geolocation.start()
         // 开启后台定时器
         BackgroundTimer.runBackgroundTimer(() => {
-            console.log('定时器： ' + this.state.locations);
+            console.log('定时器： ' + JSON.stringify(this.state.locations));
             if(this.state.locations.length > 0) {
                 this.SaveLocations()
                 console.log('上传定位');

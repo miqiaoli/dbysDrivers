@@ -179,6 +179,9 @@ export default class HomePage extends Component<Props> {
                 } onEndReachedThreshold='0.1' onEndReached="onEndReached" {() => {
                 this.loadData(this.state.page_start)
             }}/> */}
+            <View style={styles.item}>
+                <Text style={styles.button1}>Version1 1.1.7</Text>
+            </View>
             <View style={styles.buttonBot}>
                 <TouchableOpacity style={styles.button1} onPress={() => {
                     this.getLogout()
@@ -252,7 +255,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 20
+        paddingVertical: 20,
+        textAlign: 'center'
     },
     buttonText: {
         color: '#0078DD'

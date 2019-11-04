@@ -19,7 +19,8 @@ import {
     TouchableOpacity,
     Alert,
     Linking,
-    Dimensions
+    Dimensions,
+    Keyboard
 } from 'react-native';
 import HttpUtils from '../../utils/HttpUtils'
 import NavigatorUtils from '../../utils/NavigatorUtils'
@@ -69,7 +70,7 @@ export default class Login extends Component<Props> {
     }
     render() {
         const {navigation} = this.props
-        return (<View style={styles.container}>
+        return (<TouchableOpacity style={styles.container} onPress={() => { Keyboard.dismiss() }} activeOpacity={1}>
             <Image style={styles.loginBg} source={require('../../../res/images/login-bg.png')}/>
             <View style={styles.loginBox}>
                 <Text style={styles.text}>手机号：</Text>
@@ -110,7 +111,7 @@ export default class Login extends Component<Props> {
                     <Text style={styles.footText}>400-888-9383</Text>
                 </TouchableOpacity>
             </View>
-        </View>);
+        </TouchableOpacity>);
     }
 }
 const width = Dimensions.get('window').width
