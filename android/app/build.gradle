@@ -101,8 +101,8 @@ android {
         applicationId "com.dbysdriver"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "1.1.7"
+        versionCode 12
+        versionName "2.0.312"
         manifestPlaceholders = [
                 JPUSH_APPKEY: "ebd4f2236b5698a95bd55257",
                 APP_CHANNEL : "default"
