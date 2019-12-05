@@ -33,13 +33,15 @@ export default class HomePage extends Component<Props> {
         constructor(props) {
             super(props)
             this.state = {
-                appVersion:'2.0.312'
+                appVersion:'2.0.313'
             }
         }
         async componentDidMount() {
             // global.storage.clearMapForKey('user');
             if(Platform.OS === "android") {
-              this.requestLocationPermission()
+              await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+              await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
+              // this.requestLocationPermission()
             }
             this.getAppVersion()
 

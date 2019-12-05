@@ -37,7 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
             new SplashScreenReactPackage(),
             new ImagePickerPackage(),
             new BackgroundTimerPackage(),
-            new JPushPackage(!BuildConfig.DEBUG, !BuildConfig.DEBUG),
+            new JPushPackage(!BuildConfig.DEBUG, !BuildConfig.DEBUG)
       );
     }
 

@@ -28,6 +28,7 @@ import {_getLogout, _tokenCheck, _getTodoList, _saveLocation, _mapIDIos, _mapIDA
 import HttpUtils from '../utils/HttpUtils'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import Icon from 'react-native-vector-icons/Ionicons'
+import {Toast} from '../utils/ToastUtils'
 import BasicUtils from '../utils/BasicUtils'
 // import LocationUtil from '../utils/LocationUtil'
 
@@ -118,13 +119,17 @@ export default class HomePage extends Component<Props> {
         }
     }
     updateLocationState(location) {
-        if (location) {
+        if(location.errorCode !== 0) {
+            Toast.show('请确认已开启app的定位权限')
+            console.log(location.locationDetail);
+        } else if (location.latitude) {
             location.timestamp = Date.now();
             if(location.timestamp!==this.state.timestamp) {
                 this.setState({ location, locations: [...this.state.locations,location] });
             }
-            console.log(location)
         }
+            console.log(location)
+
     }
     async getLogistList() {
         let res = await HttpUtils.GET(_getTodoList, {

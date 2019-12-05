@@ -180,7 +180,7 @@ export default class HomePage extends Component<Props> {
                 this.loadData(this.state.page_start)
             }}/> */}
             <View style={styles.item}>
-                <Text style={styles.button1}>Version1 2.0.312</Text>
+                <Text style={styles.button1}>Version1 2.0.313</Text>
             </View>
             <View style={styles.buttonBot}>
                 <TouchableOpacity style={styles.button1} onPress={() => {
