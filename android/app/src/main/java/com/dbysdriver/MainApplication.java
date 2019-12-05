@@ -3,17 +3,12 @@ package com.dbysdriver;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
-import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
 import cn.jpush.reactnativejpush.JPushPackage;
-import com.ocetnik.timer.BackgroundTimerPackage;
-import cn.qiuxiang.react.geolocation.AMapGeolocationPackage;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -35,14 +30,14 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-              new UpgradePackage(),
-          new MainReactPackage(),
+            new UpgradePackage(),
+            new MainReactPackage(),
+            new AMapGeolocationPackage(),
             new VectorIconsPackage(),
             new SplashScreenReactPackage(),
             new ImagePickerPackage(),
             new BackgroundTimerPackage(),
-            new AMapGeolocationPackage(),
-            new JPushPackage(!BuildConfig.DEBUG, !BuildConfig.DEBUG)
+            new JPushPackage(!BuildConfig.DEBUG, !BuildConfig.DEBUG),
       );
     }
 

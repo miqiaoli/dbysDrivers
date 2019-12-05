@@ -47,6 +47,8 @@
 	<string>我们需要获取您的位置信息用于记录物流路线，若不允许，将无法记录您的路线</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>我们需要访问相册用于您上传物流回单，若不允许，将无法记录您的状态</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>我们需要获取您的后台位置信息用于记录物流路线，若不允许，将无法记录您的路线</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

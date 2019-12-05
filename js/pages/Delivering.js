@@ -16,6 +16,7 @@ import CameraBtnUtils from '../utils/CameraBtnUtils'
 import {_getOrderWarningDetails} from '../servers/getData'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import HttpUtils from '../utils/HttpUtils'
+import { Geolocation, setNeedAddress, setLocatingWithReGeocode } from "react-native-amap-geolocation"
 
 const abnormalsTypeArr = [
     {
@@ -50,14 +51,16 @@ export default class Delivering extends Component {
         }
     }
     componentWillMount() {
+        setNeedAddress(true);
+        setLocatingWithReGeocode(true);
+
+        // if (Platform.OS === 'android') {
+        // await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
+        // }
         const {params} = this.props.navigation.state;
         this.setState({token: params.token, list_num: params.list_num})
         // 获取定位点
-        Geolocation = params.geolocation
-        Geolocation.addLocationListener(location => {
-            this.updateLocationState(location)
-        });
-        Geolocation.start();
+        this.updateLocationState()
     }
     handleChangeAbnormalImg(type, val) {
         if (type) {
@@ -142,7 +145,14 @@ export default class Delivering extends Component {
                 }
             ])
             return
+        } 
+        if(!param.location.latitude) {
+            this.updateLocationState()
+            console.log("无定位点");
+            // return
         }
+        console.log("有定位点");
+
         const params = "token=" + param.token + "&list_num=" + param.list_num + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&point=" + JSON.stringify(this.state.location);
         console.log(params);
         // return
@@ -159,12 +169,15 @@ export default class Delivering extends Component {
             ])
         }
     }
-    updateLocationState(location) {
-        if (location) {
-            location.timestamp = Date.now();
-            this.setState({ location });
-            // console.log(location)
-        }
+    updateLocationState() {
+        Geolocation.getCurrentPosition(({ location }) => {
+            if (location) {
+                location.timestamp = Date.now();
+                this.setState({ location });
+            }
+            console.log('获取仓库地理位置:', JSON.stringify(this.state.location))
+          });
+        
     }
 
     render() {
@@ -176,7 +189,6 @@ export default class Delivering extends Component {
         </ScrollView>);
     }
     componentWillUnmount() {
-        Geolocation.stop()
         this.setState = (state,callback)=>{
          return
        }

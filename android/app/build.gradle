@@ -153,6 +153,12 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-amap-geolocation')
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-splash-screen')
+    compile project(':react-native-image-picker')
+    compile project(':react-native-background-timer')
+    compile project(':jpush-react-native')
     implementation project(':jcore-react-native')
     implementation project(':jpush-react-native')
     implementation project(':react-native-background-timer')

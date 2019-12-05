@@ -31,7 +31,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import BasicUtils from '../utils/BasicUtils'
 // import LocationUtil from '../utils/LocationUtil'
 
-import { Geolocation } from "react-native-amap-geolocation"
+// import { Geolocation } from "react-native-amap-geolocation"
+import { Geolocation, init, addLocationListener, start, stop, setAllowsBackgroundLocationUpdates, setInterval, setDistanceFilter, setNeedAddress, setLocatingWithReGeocode} from "react-native-amap-geolocation"
 import BackgroundTimer from 'react-native-background-timer'
 
 type Props = {};
@@ -72,22 +73,17 @@ export default class HomePage extends Component<Props> {
         let user= await global.storage.load({
             key:'user'
         })
-        // Geolocation = await global.storage.load({
-        //     key:'geolocation'
-        // })
-        // Geolocation = this.props.navigation.state.params.geolocation
-
         // 初始化定位功能
-        await Geolocation.init({
+        await init({
           ios: _mapIDIos,
           android: _mapIDAndroid
         });
-        await Geolocation.setOptions({
-          interval: 600000,  //600000
-          distanceFilter: 1000,  //200
-          background: true,
-          reGeocode: true
-        });
+
+        setInterval(60000);
+        setDistanceFilter(100)
+        setAllowsBackgroundLocationUpdates(true)
+        setNeedAddress(true);
+        setLocatingWithReGeocode(true);
 
         this.props.navigation.setParams({ headerToken:user.token })
 
@@ -97,18 +93,12 @@ export default class HomePage extends Component<Props> {
             this.getLogistList()
         })
 
-        Geolocation.addLocationListener(location => {
-          this.updateLocationState(location)
+        addLocationListener(location => {
+            this.updateLocationState(location)
         });
-        // let location = LocationUtil.locationListener()
-        // LocationUtil.geolocation.addLocationListener(location => {
-        //   this.updateLocationState(location)
-        // })
-
-        // console.log(location);
     }
     startGeolocation(){
-        Geolocation.start()
+        start()
         // 开启后台定时器
         BackgroundTimer.runBackgroundTimer(() => {
             console.log('定时器： ' + JSON.stringify(this.state.locations));
@@ -154,7 +144,7 @@ export default class HomePage extends Component<Props> {
             if(listNumArr.length>0) {
                 this.startGeolocation()
             } else {
-                Geolocation.stop()
+                stop()
                 BackgroundTimer.stopBackgroundTimer()
             }
             this.setState({list: data, listNumArr: listNumArr})
@@ -163,7 +153,7 @@ export default class HomePage extends Component<Props> {
 
     async btnNext(str, list_num){
         let {navigation} = this.props;
-        Geolocation.stop();
+        stop();
         navigation.navigate(str, {
                 token: this.state.token,
                 list_num: list_num,

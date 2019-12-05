@@ -16,6 +16,7 @@ import CameraBtnUtils from '../utils/CameraBtnUtils'
 import {_getOrderDoneDetails} from '../servers/getData'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import HttpUtils from '../utils/HttpUtils'
+import { Geolocation, setNeedAddress, setLocatingWithReGeocode } from "react-native-amap-geolocation"
 
 const abnormalsTypeArr = [
     {
@@ -26,7 +27,6 @@ const abnormalsTypeArr = [
         name: '其他'
     }
 ]
-let Geolocation
 export default class ConfirmReceipt extends Component {
     constructor(props) {
         super(props)
@@ -41,19 +41,17 @@ export default class ConfirmReceipt extends Component {
             charges_detail: '', //费用明细
             imgPathArr: [], //回单图片
             ticketArr: [], //额外费用图片
-            geolocation: '',
             location: {}
         }
     }
     componentWillMount() {
+        setNeedAddress(true);
+        setLocatingWithReGeocode(true);
+
         const {params} = this.props.navigation.state;
         this.setState({token: params.token, list_num: params.list_num})
         // 获取定位点
-        Geolocation = params.geolocation
-        Geolocation.addLocationListener(location => {
-            this.updateLocationState(location)
-        });
-        Geolocation.start();
+        this.updateLocationState()
     }
     handleChangeImgPath(type, val) {
         if (type) {
@@ -232,12 +230,14 @@ export default class ConfirmReceipt extends Component {
             </View>
         </View>)
     }
-    updateLocationState(location) {
-        if (location) {
-            location.timestamp = Date.now();
-            this.setState({location});
-            console.log(location)
-        }
+    updateLocationState() {
+        Geolocation.getCurrentPosition(({ location }) => {
+            if (location) {
+                location.timestamp = Date.now();
+                this.setState({ location });
+            }
+            console.log('获取仓库地理位置:', JSON.stringify(this.state.location))
+          });
     }
 
     async getOrderDoneDetails() {
@@ -246,6 +246,10 @@ export default class ConfirmReceipt extends Component {
         const additional_charges = param.additional_charges
             ? param.additional_charges
             : 0;
+
+        if(!param.location.latitude) {
+            this.updateLocationState()
+        }
 
         const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=4" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',') + "&ticket=" + param.ticketArr.join(',') + "&point=" + JSON.stringify(this.state.location);
         console.log(params);
@@ -273,7 +277,6 @@ export default class ConfirmReceipt extends Component {
         </ScrollView>);
     }
     componentWillUnmount() {
-        Geolocation.stop()
         this.setState = (state, callback) => {
             return
         }

@@ -16,6 +16,7 @@ import CameraBtnUtils from '../utils/CameraBtnUtils'
 import {_getOrderDoingDetails} from '../servers/getData'
 import NavigatorUtils from '../utils/NavigatorUtils'
 import HttpUtils from '../utils/HttpUtils'
+import { Geolocation, setNeedAddress, setLocatingWithReGeocode } from "react-native-amap-geolocation"
 
 const abnormalsTypeArr = [
     {
@@ -26,7 +27,6 @@ const abnormalsTypeArr = [
         name: '其他'
     }
 ];
-let Geolocation;
 export default class Delivery extends Component {
     constructor(props) {
         super(props)
@@ -46,16 +46,14 @@ export default class Delivery extends Component {
         }
     }
     componentWillMount() {
+        setNeedAddress(true);
+        setLocatingWithReGeocode(true);
+
         const {params} = this.props.navigation.state;
         this.setState({token: params.token, list_num: params.list_num})
 
         // 定位发货地
-        Geolocation = params.geolocation
-        Geolocation.addLocationListener(location => {
-            this.updateLocationState(location)
-        });
-
-        Geolocation.start();
+        this.updateLocationState()
     }
     //图片上传
     handleChangeAbnormalImg(type, val) {
@@ -151,12 +149,14 @@ export default class Delivery extends Component {
         </View>)
     }
 
-    updateLocationState(location) {
-        if (location) {
-            location.timestamp = Date.now();
-            // location.timestamp = new Date(location.timestamp).toLocaleString();
-            this.setState({location});
-        }
+    updateLocationState() {
+        Geolocation.getCurrentPosition(({ location }) => {
+            if (location) {
+                location.timestamp = Date.now();
+                this.setState({ location });
+            }
+            console.log('获取仓库地理位置:', JSON.stringify(this.state.location))
+          });
     }
     async getOrderDoingDetails() {
         const param = this.state;
@@ -168,6 +168,9 @@ export default class Delivery extends Component {
                 }
             ])
             return
+        }
+        if(!param.location.latitude) {
+            this.updateLocationState()
         }
 
         const params = "token=" + param.token + "&list_num=" + param.list_num + "&state=2" + "&abnormals_type=" + param.abnormals_type + "&abnormals_describef=" + param.abnormals_describef + "&abnormals_describe=" + param.abnormals_describe + "&abnormal_img=" + param.abnormalImgArr.join(',') + "&additional_charges=" + param.additional_charges + "&charges_detail=" + param.charges_detail + "&img_path=" + param.imgPathArr.join(',') + "&point=" + JSON.stringify(this.state.location);
@@ -193,7 +196,6 @@ export default class Delivery extends Component {
         </ScrollView>);
     }
     componentWillUnmount() {
-        Geolocation.stop()
         this.setState = (state,callback)=>{
          return
        }

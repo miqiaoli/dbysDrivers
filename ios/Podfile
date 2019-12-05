@@ -24,7 +24,6 @@ target 'DbysDriver' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'react-native-amap-geolocation', path: '../node_modules/react-native-amap-geolocation/lib/ios'
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
 
   pod 'JCoreRN', :path => '../node_modules/jcore-react-native'

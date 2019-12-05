@@ -133,7 +133,7 @@ export default class ListDetails extends Component<Props> {
                     <Text styles={styles.listTop}>异常</Text>
                     <FlatList data={item.abnormals}
                         renderItem={(data) => this._renderFlatListItem(data.item)}
-                        keyExtractor={(item, index) => item.abnormal_describe}
+                        keyExtractor={(item, index) => index + item.abnormal_describe}
                         ListEmptyComponent={this._createEmptyView}
                     />
                 </View>
