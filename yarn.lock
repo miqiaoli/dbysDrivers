@@ -682,9 +682,9 @@ acorn-walk@^6.0.1:
   integrity sha1-yVf0oUYNpGr0oDiM4otMmTVbDLw=
 
 acorn@^5.5.3:
-  version "5.7.3"
-  resolved "http://registry.npm.taobao.org/acorn/download/acorn-5.7.3.tgz#67aa231bf8812974b85235a96771eb6bd07ea279"
-  integrity sha1-Z6ojG/iBKXS4UjWpZ3Hra9B+onk=
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
+  integrity sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==
 
 acorn@^6.0.1:
   version "6.0.4"
@@ -3495,6 +3495,11 @@ istanbul-reports@^1.5.1:
   dependencies:
     handlebars "^4.0.3"
 
+jcore-react-native@^1.3.2:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/jcore-react-native/-/jcore-react-native-1.7.5.tgz#bac30edca51d0072d59c1d9582fc2aabdda42869"
+  integrity sha512-8IQ2MAes87KUF5dFs+bp7NUCn4dI4+YJC18xGHcGYHCG+7Z/gTHAzcMQy6LvHPHE1QHwUiaRE/RLW1v2tnXwlA==
+
 jest-changed-files@^23.4.2:
   version "23.4.2"
   resolved "http://registry.npm.taobao.org/jest-changed-files/download/jest-changed-files-23.4.2.tgz#1eed688370cd5eebafe4ae93d34bb3b64968fe83"
@@ -3856,6 +3861,11 @@ jest@23.6.0:
   dependencies:
     import-local "^1.0.0"
     jest-cli "^23.6.0"
+
+jpush-react-native@^2.5.3:
+  version "2.7.5"
+  resolved "https://registry.yarnpkg.com/jpush-react-native/-/jpush-react-native-2.7.5.tgz#3d6666ba5d8062f79a6c5ae5fee3d29dc8a11027"
+  integrity sha512-8WjYki/Q+JU482/Gi4mO8JYYBPGxCJh9rBVsj1A7wixces8DMJG9/Kh/tYHoPsHiSDoeDNrwnOhBBGv7zPQMZQ==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
