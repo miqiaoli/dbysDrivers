@@ -182,7 +182,7 @@ export default class Login extends Component {
             </View>
             <View style={styles.loginFoot}>
                 <Icon name="old-phone" size={20} style={{marginRight: 20}} color="#0078DD"/>
-                <Text>客服热线：400-888-9383</Text>
+                <Text>客服热线：0755-83227395</Text>
             </View>
         </ScrollView>);
     }

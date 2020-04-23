@@ -102,13 +102,13 @@ export default class Login extends Component<Props> {
             <View style={styles.loginFoot}>
                 <TouchableOpacity
                     onPress={() => {
-                        Linking.openURL(`tel:${`400-888-9383`}`)
+                        Linking.openURL(`tel:${`0755-83227395`}`)
                     }}>
                     <View style={styles.footPhone}>
                         <Icon name="old-phone" size={20} style={{marginRight: 20}} color="#0078DD"/>
                         <Text>内部使用系统，如有疑问，请拨打客服热线</Text>
                     </View>
-                    <Text style={styles.footText}>400-888-9383</Text>
+                    <Text style={styles.footText}>0755-83227395</Text>
                 </TouchableOpacity>
             </View>
         </TouchableOpacity>);
