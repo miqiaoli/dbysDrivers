@@ -1,7 +1,4 @@
 PODS:
-  - AMapFoundation (1.5.5)
-  - AMapLocation (2.6.1):
-    - AMapFoundation (~> 1.4)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - Folly (2016.10.31.00):
@@ -15,9 +12,6 @@ PODS:
     - React
   - React (0.57.4):
     - React/Core (= 0.57.4)
-  - react-native-amap-geolocation (0.3.2):
-    - AMapLocation (~> 2.6.0)
-    - React
   - react-native-background-timer (2.1.1):
     - React
   - React/Core (0.57.4):
@@ -60,7 +54,6 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - JCoreRN (from `../node_modules/jcore-react-native`)
   - JPushRN (from `../node_modules/jpush-react-native`)
-  - react-native-amap-geolocation (from `../node_modules/react-native-amap-geolocation/lib/ios`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
@@ -72,9 +65,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - AMapFoundation
-    - AMapLocation
+  https://github.com/CocoaPods/Specs.git:
     - boost-for-react-native
 
 EXTERNAL SOURCES:
@@ -90,16 +81,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/jpush-react-native"
   React:
     :path: "../node_modules/react-native"
-  react-native-amap-geolocation:
-    :path: "../node_modules/react-native-amap-geolocation/lib/ios"
   react-native-background-timer:
     :path: "../node_modules/react-native-background-timer"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AMapFoundation: 652bd70ba579f48a98bdf0c74d6e62a89a06ca58
-  AMapLocation: cf024b53dc03663efb4ea4bcce27d4cce58bb97a
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
@@ -107,10 +94,9 @@ SPEC CHECKSUMS:
   JCoreRN: 4b0ad270209c0e1ab2ec92b33f19774ee15f3c25
   JPushRN: 24d74b712a1cc214be8e62dc356b7c331180472d
   React: 1f4ca35c4aeac2b47e42e8be98bb9188f48fba84
-  react-native-amap-geolocation: af509ba5aaea6bc3abdfe0232a2d1486855e590f
   react-native-background-timer: 0d34748e53a972507c66963490c775321a88f6f2
   yoga: ac0f4c6ff31ac05bad1bd166fec5204c19de0277
 
-PODFILE CHECKSUM: 1eb1f48c9bc35904de85c4c6cb069f18bcc141b0
+PODFILE CHECKSUM: c2e1270e9d58f9bd42f43af164db322209a96250
 
-COCOAPODS: 1.6.0.beta.2
+COCOAPODS: 1.9.1

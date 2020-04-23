@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -41,6 +42,7 @@
 		3A714881AA6D491FADC6F4EA /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ED3B7D7456464EB2926365C8 /* FontAwesome.ttf */; };
 		4943AF592C3F445482A062F7 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1B6CE74357E4556AD17C948 /* MaterialIcons.ttf */; };
 		5B262A0EF7EE4D74A3C0A74C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ABC05EE54AD5485D93CD0C3F /* Octicons.ttf */; };
+		62786C6C58324B17B83B5EDC /* libAMapGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 248B80D8DC584D50B0643C71 /* libAMapGeolocation.a */; };
 		6C36742033A442DC9E9CCA1D /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B714B3EB4CF2450882A96645 /* Entypo.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8D04E217B5154C2F8AEDB5CB /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7601E3393A9946A6BFFC666E /* Ionicons.ttf */; };
@@ -53,15 +55,14 @@
 		CC09C717222938F9001C3C4F /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC616064219985D80072EA0E /* libRNImagePicker.a */; };
 		CC09C71822293909001C3C4F /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC08BBD321A25211001DEDDC /* libSplashScreen.a */; };
 		CC13BDFC222CF87800C9B6E7 /* libPods-DbysDriver.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC13BDFB222CF87800C9B6E7 /* libPods-DbysDriver.a */; };
-		CC5E508A224DEC4E009A5ECB /* upgrade.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5E505F224DEC4E009A5ECB /* upgrade.m */; };
 		CC6F27732397A29D00417CD0 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC6F27722397A29C00417CD0 /* ExternalAccessory.framework */; };
 		CC6F27772397A4B800417CD0 /* AMapLocationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC6F27762397A4B800417CD0 /* AMapLocationKit.framework */; };
 		CC6F27792397A4C500417CD0 /* AMapFoundationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC6F27782397A4C500417CD0 /* AMapFoundationKit.framework */; };
 		CC8F3698226972AC00447529 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC8F3697226972AC00447529 /* UserNotifications.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		CCF67503219DAB880028D83B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCF67502219DAB880028D83B /* Images.xcassets */; };
+		CCFBA3DE24516DB6001779C8 /* upgrade.m in Sources */ = {isa = PBXBuildFile; fileRef = CCFBA3DD24516DB6001779C8 /* upgrade.m */; };
 		CFAF5E6D80B344709A960BCF /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3CEDE19B024D4026AD9EB307 /* Feather.ttf */; };
 		F471FBCCA78F4BA1840ACD5A /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 314F578D65A14A40B2642A26 /* Foundation.ttf */; };
-		62786C6C58324B17B83B5EDC /* libAMapGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 248B80D8DC584D50B0643C71 /* libAMapGeolocation.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -366,6 +367,13 @@
 			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
 			remoteInfo = RNImagePicker;
 		};
+		CCFBA3DA24516C29001779C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 14F4E14FC3AE435C89EEB869 /* AMapGeolocation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 832C81801AAF6DEF007FA2F7;
+			remoteInfo = AMapGeolocation;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -389,6 +397,8 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = DbysDriver/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = DbysDriver/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		14F4E14FC3AE435C89EEB869 /* AMapGeolocation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = AMapGeolocation.xcodeproj; path = "../node_modules/react-native-amap-geolocation/lib/ios/AMapGeolocation.xcodeproj"; sourceTree = "<group>"; };
+		248B80D8DC584D50B0643C71 /* libAMapGeolocation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAMapGeolocation.a; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* DbysDriver-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DbysDriver-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* DbysDriver-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DbysDriver-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -419,8 +429,6 @@
 		CC09C71B22293945001C3C4F /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC09C71D22293B84001C3C4F /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC13BDFB222CF87800C9B6E7 /* libPods-DbysDriver.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-DbysDriver.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CC5E505F224DEC4E009A5ECB /* upgrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = upgrade.m; path = "../../react-native-app-upgrade/ios_upgrade/upgrade.m"; sourceTree = "<group>"; };
-		CC5E5089224DEC4E009A5ECB /* upgrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upgrade.h; path = "../../react-native-app-upgrade/ios_upgrade/upgrade.h"; sourceTree = "<group>"; };
 		CC6F27722397A29C00417CD0 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		CC6F27742397A32100417CD0 /* AMapFoundationKit */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = AMapFoundationKit; path = AMapFoundationKit.framework/AMapFoundationKit; sourceTree = "<group>"; };
 		CC6F27762397A4B800417CD0 /* AMapLocationKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AMapLocationKit.framework; sourceTree = "<group>"; };
@@ -429,12 +437,12 @@
 		CC8F3697226972AC00447529 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		CCD2364E22A0C177009C3D7A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		CCF67502219DAB880028D83B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DbysDriver/Images.xcassets; sourceTree = "<group>"; };
+		CCFBA3DC24516DB6001779C8 /* upgrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = upgrade.h; path = ../../upgrade.h; sourceTree = "<group>"; };
+		CCFBA3DD24516DB6001779C8 /* upgrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = upgrade.m; path = ../../upgrade.m; sourceTree = "<group>"; };
 		D161C22B58724CEEB4E0625C /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		EC56ABECFDE24EB19604B2F4 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		ED3B7D7456464EB2926365C8 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		F1B6CE74357E4556AD17C948 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		14F4E14FC3AE435C89EEB869 /* AMapGeolocation.xcodeproj */ = {isa = PBXFileReference; name = "AMapGeolocation.xcodeproj"; path = "../node_modules/react-native-amap-geolocation/lib/ios/AMapGeolocation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		248B80D8DC584D50B0643C71 /* libAMapGeolocation.a */ = {isa = PBXFileReference; name = "libAMapGeolocation.a"; path = "libAMapGeolocation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -470,7 +478,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				145BFE6C4B1949CAB097DA93 /* libAMapGeolocation.a in Frameworks */,
 				62786C6C58324B17B83B5EDC /* libAMapGeolocation.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -584,9 +591,9 @@
 		13B07FAE1A68108700A75B9A /* DbysDriver */ = {
 			isa = PBXGroup;
 			children = (
+				CCFBA3DC24516DB6001779C8 /* upgrade.h */,
+				CCFBA3DD24516DB6001779C8 /* upgrade.m */,
 				CC8F36962269720100447529 /* DbysDriver.entitlements */,
-				CC5E5089224DEC4E009A5ECB /* upgrade.h */,
-				CC5E505F224DEC4E009A5ECB /* upgrade.m */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -772,7 +779,7 @@
 				8B859A0DEA864C60BD456A5C /* libRNVectorIcons-tvOS.a */,
 				EC56ABECFDE24EB19604B2F4 /* libRNImagePicker.a */,
 				876A9915DF764302B71C7EFA /* libSplashScreen.a */,
-				F04F955E109B41B493142A77 /* libAMapGeolocation.a */,
+				248B80D8DC584D50B0643C71 /* libAMapGeolocation.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -790,6 +797,14 @@
 			isa = PBXGroup;
 			children = (
 				CC616064219985D80072EA0E /* libRNImagePicker.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CCFBA3D724516C29001779C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CCFBA3DB24516C29001779C8 /* libAMapGeolocation.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -921,6 +936,10 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = CCFBA3D724516C29001779C8 /* Products */;
+					ProjectRef = 14F4E14FC3AE435C89EEB869 /* AMapGeolocation.xcodeproj */;
+				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
@@ -1280,6 +1299,13 @@
 			remoteRef = CC616063219985D80072EA0E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		CCFBA3DB24516C29001779C8 /* libAMapGeolocation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libAMapGeolocation.a;
+			remoteRef = CCFBA3DA24516C29001779C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1396,7 +1422,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC5E508A224DEC4E009A5ECB /* upgrade.m in Sources */,
+				CCFBA3DE24516DB6001779C8 /* upgrade.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
